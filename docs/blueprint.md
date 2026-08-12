@@ -1,6 +1,6 @@
 # BDJG — System Blueprint
 
-**Dokumen:** Blueprint Perancangan Website & Studio Management System BDGJ  
+**Dokumen:** Blueprint Perancangan Website & Studio Management System BDJG  
 **Versi:** 1.0  
 **Status:** Baseline Perancangan  
 **Fokus:** Perancangan produk, role, alur bisnis, halaman, hak akses, data, status, notifikasi, keuangan, preview/revisi, dan aturan operasional.  
@@ -10,17 +10,17 @@
 
 ## 1. Ringkasan Konsep
 
-BDGJ dirancang bukan hanya sebagai website company profile, tetapi sebagai **sistem operasional studio kreatif** yang menghubungkan tiga area utama:
+BDJG dirancang bukan hanya sebagai website company profile, tetapi sebagai **sistem operasional studio kreatif** yang menghubungkan tiga area utama:
 
 1. **Public Website** — media branding, portfolio, layanan, dan akuisisi client.
 2. **Client Portal** — area client untuk quotation, project, jadwal, pembayaran, preview, revisi, dan final files.
-3. **Studio Workspace** — area internal BDGJ untuk admin dan worker dalam mengelola inquiry, project, produksi, tugas, timeline, file, revisi, dan finance.
+3. **Studio Workspace** — area internal BDJG untuk admin dan worker dalam mengelola inquiry, project, produksi, tugas, timeline, file, revisi, dan finance.
 
 Struktur produk utama:
 
 ```mermaid
 flowchart TD
-    A[BDGJ] --> B[Public Website]
+    A[BDJG] --> B[Public Website]
     A --> C[Client Portal]
     A --> D[Studio Workspace]
     D --> E[Admin]
@@ -42,7 +42,7 @@ Prinsip utama rancangan:
 
 # 2. Tujuan Sistem
 
-Sistem BDGJ harus dapat mendukung seluruh perjalanan bisnis studio dari calon client sampai project selesai.
+Sistem BDJG harus dapat mendukung seluruh perjalanan bisnis studio dari calon client sampai project selesai.
 
 Alur besar yang dituju:
 
@@ -82,7 +82,7 @@ Tujuan operasional:
 
 # 3. Model Akses Sistem
 
-BDGJ menggunakan empat level akses utama.
+BDJG menggunakan empat level akses utama.
 
 | Role | Scope Data | Fungsi Utama |
 |---|---|---|
@@ -145,7 +145,7 @@ Tidak disarankan menggunakan akun Super Admin untuk pekerjaan operasional sehari
 
 ## 4.2 Admin
 
-Admin bertindak sebagai pusat operasional BDGJ.
+Admin bertindak sebagai pusat operasional BDJG.
 
 Admin dapat:
 
@@ -175,7 +175,7 @@ Admin tidak harus memiliki seluruh permission sensitif milik Owner.
 
 ## 4.3 Client
 
-Client adalah pihak pemesan jasa BDGJ.
+Client adalah pihak pemesan jasa BDJG.
 
 Client dapat:
 
@@ -203,7 +203,7 @@ Client tidak dapat:
 - melihat project client lain;
 - melihat harga internal;
 - melihat cost worker;
-- melihat profit BDGJ;
+- melihat profit BDJG;
 - melihat internal note;
 - melihat database worker secara penuh;
 - mengubah status produksi secara langsung;
@@ -253,7 +253,7 @@ Worker dapat:
 
 Worker tidak dapat:
 
-- melihat semua project BDGJ;
+- melihat semua project BDJG;
 - melihat client database umum;
 - melihat total revenue;
 - melihat profit;
@@ -337,7 +337,7 @@ Isi utama:
 Contoh arah headline:
 
 ```text
-BDGJ
+BDJG
 PHOTO — FILM — POST PRODUCTION
 
 WE CAPTURE STORIES.
@@ -346,7 +346,7 @@ WE CAPTURE STORIES.
 atau:
 
 ```text
-BDGJ VISUAL STUDIO
+BDJG VISUAL STUDIO
 PHOTOGRAPHY / FILM / VFX / POST
 ```
 
@@ -782,7 +782,7 @@ REFUNDED
 
 ## 11.3 Internal Payment Status
 
-Gateway eksternal dapat memiliki banyak status. Sistem BDGJ menggunakan status internal yang lebih konsisten:
+Gateway eksternal dapat memiliki banyak status. Sistem BDJG menggunakan status internal yang lebih konsisten:
 
 ```text
 UNPAID
@@ -794,7 +794,7 @@ REFUNDED
 PARTIALLY_REFUNDED
 ```
 
-Mapping status gateway ke status internal menjadi tanggung jawab layer integrasi, sedangkan dashboard BDGJ tetap memakai status internal.
+Mapping status gateway ke status internal menjadi tanggung jawab layer integrasi, sedangkan dashboard BDJG tetap memakai status internal.
 
 ## 11.4 Payment Rules
 
@@ -826,7 +826,7 @@ Tidak semua project harus memiliki aturan DP yang sama; dapat disesuaikan per qu
 Project ID contoh:
 
 ```text
-BDGJ-2026-0048
+BDJG-2026-0048
 ```
 
 ## 12.1 Data Project
@@ -926,7 +926,7 @@ Tab tertentu hanya muncul sesuai role dan permission.
 ## 15.1 Sidebar Client
 
 ```text
-BDGJ
+BDJG
 
 Dashboard
 My Projects
@@ -963,7 +963,7 @@ Recent Files
 Contoh project card:
 
 ```text
-BDGJ-2026-0048
+BDJG-2026-0048
 Graduation Film
 
 PRE-PRODUCTION   ✓
@@ -1046,7 +1046,7 @@ Admin Activity Sensitif
 ## 16.1 Sidebar Admin
 
 ```text
-BDGJ ADMIN
+BDJG ADMIN
 
 Dashboard
 
@@ -1316,7 +1316,7 @@ Jika assignment berakhir atau worker dilepas, akses project dapat dicabut sesuai
 ## 21.1 Sidebar Worker
 
 ```text
-BDGJ WORKSPACE
+BDJG WORKSPACE
 
 Dashboard
 My Projects
@@ -2506,7 +2506,7 @@ ON_LEAVE
 
 # 45. Security & Access Design Principles
 
-Perancangan authorization BDGJ mengikuti prinsip:
+Perancangan authorization BDJG mengikuti prinsip:
 
 ```text
 DENY BY DEFAULT
@@ -2566,7 +2566,7 @@ PENDING_APPROVAL
 
 # 47. Payment Integration Boundary
 
-Blueprint tidak mengikat BDGJ pada satu vendor payment gateway.
+Blueprint tidak mengikat BDJG pada satu vendor payment gateway.
 
 Sistem hanya membutuhkan interface konseptual:
 
@@ -2585,7 +2585,7 @@ Gateway eksternal berkomunikasi dengan module payment, kemudian module payment m
 ```mermaid
 flowchart LR
     C[Client] --> PG[Payment Gateway]
-    PG --> PM[BDGJ Payment Module]
+    PG --> PM[BDJG Payment Module]
     PM --> INV[Invoice]
     INV --> PR[Project Rule]
 ```
@@ -2758,7 +2758,7 @@ Timeline berfungsi sebagai histori, bukan sekadar jadwal.
 
 ```mermaid
 flowchart TD
-    A[Visitor Opens BDGJ] --> B[View Video Angkatan Portfolio]
+    A[Visitor Opens BDJG] --> B[View Video Angkatan Portfolio]
     B --> C[Open Service]
     C --> D[Choose Package]
     D --> E[Add Drone + Extra Camera]
@@ -3113,7 +3113,7 @@ SYSTEM-WIDE
 
 # 59. Baseline Decision
 
-Blueprint BDGJ menetapkan bahwa produk ini bukan sekadar ecommerce photography atau portfolio website.
+Blueprint BDJG menetapkan bahwa produk ini bukan sekadar ecommerce photography atau portfolio website.
 
 Model utamanya adalah:
 
@@ -3178,15 +3178,15 @@ Blueprint ini menggunakan beberapa prinsip eksternal sebagai acuan konseptual:
 - **Midtrans HTTP(S) Notifications / Webhooks** — acuan bahwa status pembayaran dapat berubah dan sistem harus mampu menerima pembaruan status transaksi.
 - **Midtrans Transaction Status Cycle** — acuan normalisasi status payment internal.
 - **Meta WhatsApp Business Platform Webhooks** — acuan event-based notification dan message delivery/status.
-- **Framer Marketplace / Mondragon creative portfolio direction** — referensi gaya visual website publik BDGJ: creative studio, portfolio-first, visual-led.
+- **Framer Marketplace / Mondragon creative portfolio direction** — referensi gaya visual website publik BDJG: creative studio, portfolio-first, visual-led.
 
-Referensi tersebut hanya memengaruhi **prinsip perancangan**, bukan menentukan teknologi implementasi BDGJ.
+Referensi tersebut hanya memengaruhi **prinsip perancangan**, bukan menentukan teknologi implementasi BDJG.
 
 ---
 
 # 61. Penutup Blueprint
 
-Dokumen ini menjadi **baseline perancangan BDGJ**.
+Dokumen ini menjadi **baseline perancangan BDJG**.
 
 Setiap penambahan fitur selanjutnya sebaiknya tetap menjaga lima batas utama:
 
@@ -3210,4 +3210,4 @@ Apakah perubahan perlu dicatat?
 Apakah fitur ini terkait project?
 ```
 
-Jika jawaban pertanyaan tersebut jelas, struktur BDGJ akan tetap konsisten meskipun sistem berkembang menjadi lebih besar.
+Jika jawaban pertanyaan tersebut jelas, struktur BDJG akan tetap konsisten meskipun sistem berkembang menjadi lebih besar.
