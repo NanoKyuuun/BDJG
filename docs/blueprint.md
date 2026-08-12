@@ -1,4 +1,4 @@
-# BDGJ — System Blueprint
+# BDJG — System Blueprint
 
 **Dokumen:** Blueprint Perancangan Website & Studio Management System BDGJ  
 **Versi:** 1.0  
