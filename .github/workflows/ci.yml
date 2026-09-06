@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: bdjg_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psecret"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, redis
+          coverage: none
+
+      - name: Composer validate
+        run: composer validate --no-check-all --no-check-publish
+        working-directory: apps/api
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+        working-directory: apps/api
+
+      - name: Prepare environment
+        working-directory: apps/api
+        run: |
+          cp .env.example .env
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql/' .env
+          sed -i 's/DB_DATABASE=bdjg/DB_DATABASE=bdjg_test/' .env
+          sed -i 's/REDIS_HOST=127.0.0.1/REDIS_HOST=redis/' .env
+          php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate:fresh --force
+        working-directory: apps/api
+
+      - name: Run tests (Pest)
+        run: vendor/bin/pest
+        working-directory: apps/api
+
+      - name: Check formatting (Pint)
+        run: vendor/bin/pint --test
+        working-directory: apps/api
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Enable corepack (pnpm)
+        run: corepack enable
+
+      - name: Install pnpm dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build

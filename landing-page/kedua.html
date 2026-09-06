@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDJG — Photo, Film & Post Production Studio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-mono@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/space-mono@latest/latin-700-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/archivo-black@latest/latin-400-normal.css">
+    <style>
+        :root {
+            --bg: #0e0d0b;
+            --ink: #f2efe9;
+            --mut: #9b968c;
+            --red: #ff4438;
+            --cream: #f3ead8;
+            --card: #191713;
+            --line: #2a2724;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 96px
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden
+        }
+
+        ::selection {
+            background: var(--red);
+            color: #140b0a
+        }
+
+        img {
+            display: block;
+            max-width: 100%
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        [hidden] {
+            display: none !important
+        }
+
+        .disp {
+            font-family: 'Archivo Black', sans-serif;
+            font-weight: 400
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace
+        }
+
+        .mut {
+            color: var(--mut)
+        }
+
+        .u-red {
+            background: linear-gradient(transparent 60%, rgba(255, 68, 56, .85) 60% 92%, transparent 92%)
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, .4);
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--ink);
+            transition: .25s;
+            font-family: 'Space Mono', monospace
+        }
+
+        .pill:hover {
+            background: var(--ink);
+            color: #111
+        }
+
+        .pill.red {
+            background: var(--red);
+            border-color: var(--red);
+            color: #140b0a;
+            font-weight: 700
+        }
+
+        .pill.red:hover {
+            background: #ff6a5e;
+            border-color: #ff6a5e;
+            color: #140b0a
+        }
+
+        .pill.ghost {
+            opacity: .7
+        }
+
+        /* ============ NAV ============ */
+        .nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 60;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 4vw;
+            background: rgba(14, 13, 11, .72);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        .logo {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 20px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 2px
+        }
+
+        .logo b {
+            color: var(--red)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end
+        }
+
+        .nav-links .pill {
+            padding: 6px 16px
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden
+        }
+
+        .corner {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-left: 2px solid #ffffff88;
+            border-top: 2px solid #ffffff88;
+            z-index: 8
+        }
+
+        .corner.tl {
+            left: 4vw;
+            top: 96px
+        }
+
+        .corner.tr {
+            right: 4vw;
+            top: 96px;
+            transform: rotate(90deg)
+        }
+
+        .corner.bl {
+            left: 4vw;
+            bottom: 6vh;
+            transform: rotate(-90deg)
+        }
+
+        .corner.br {
+            right: 4vw;
+            bottom: 6vh;
+            transform: rotate(180deg)
+        }
+
+        .hero-meta {
+            position: absolute;
+            right: 5vw;
+            top: 110px;
+            font-size: 15px;
+            z-index: 8;
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .hero-title {
+            position: absolute;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(64px, 13.5vw, 215px);
+            line-height: .95;
+            letter-spacing: -.01em;
+            z-index: 7;
+            user-select: none
+        }
+
+        .hero-title.top {
+            left: 4vw;
+            top: 12vh
+        }
+
+        .hero-title.bottom {
+            right: 3vw;
+            bottom: 7vh
+        }
+
+        .hero-list {
+            position: absolute;
+            left: 4vw;
+            bottom: 13vh;
+            z-index: 8;
+            font-size: clamp(14px, 1.4vw, 19px);
+            line-height: 2.1
+        }
+
+        .collage {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(980px, 94vw);
+            height: min(700px, 84vh);
+            z-index: 5
+        }
+
+        .ccard {
+            position: absolute;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+            animation: floaty 6s ease-in-out infinite alternate
+        }
+
+        .ccard img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .ccard.solid {
+            display: flex;
+            align-items: flex-end;
+            padding: 14px
+        }
+
+        .ccard .tag {
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #ffffffcc
+        }
+
+        .wA {
+            width: clamp(120px, 16vw, 190px);
+            aspect-ratio: 3/4
+        }
+
+        .wB {
+            width: clamp(130px, 18vw, 210px);
+            aspect-ratio: 3/4
+        }
+
+        @keyframes floaty {
+            from {
+                transform: translateY(0) rotate(var(--r, 0deg))
+            }
+
+            to {
+                transform: translateY(-12px) rotate(var(--r, 0deg))
+            }
+        }
+
+        .chat {
+            position: absolute;
+            right: 3.5vw;
+            top: 46%;
+            z-index: 8;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 330px
+        }
+
+        .chat-bub {
+            background: var(--red);
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.5;
+            padding: 10px 12px;
+            border-radius: 12px 12px 12px 2px;
+            transform: rotate(-2deg)
+        }
+
+        .chat-card {
+            background: #0b0a09;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .chat-card img {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            object-fit: cover
+        }
+
+        .chat-card p {
+            font-size: 12px;
+            line-height: 1.5
+        }
+
+        .scroll-down {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 2.5vh;
+            z-index: 8;
+            text-align: center;
+            font-size: 13px
+        }
+
+        .scroll-down svg {
+            margin: 4px auto 0;
+            animation: bob 1.4s ease-in-out infinite
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(6px)
+            }
+        }
+
+        /* ============ STATEMENT ============ */
+        .statement {
+            padding: 16vh 6vw;
+            text-align: center
+        }
+
+        .statement p {
+            font-size: clamp(20px, 3vw, 34px);
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto
+        }
+
+        /* ============ SECTION HEAD ============ */
+        .sec-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            padding: 0 5vw;
+            margin-bottom: 48px;
+            flex-wrap: wrap
+        }
+
+        .h2 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(28px, 4vw, 44px)
+        }
+
+        .sec-side {
+            font-size: 15px
+        }
+
+        /* ============ SERVICE WHEEL ============ */
+        .wheel-sec {
+            padding: 8vh 0 4vh
+        }
+
+        .wheel-wrap {
+            position: relative;
+            height: 620px;
+            max-width: 960px;
+            margin: 0 auto;
+            perspective: 1400px;
+            -webkit-mask-image: linear-gradient(transparent, black 16% 84%, transparent);
+            mask-image: linear-gradient(transparent, black 16% 84%, transparent)
+        }
+
+        .wheel {
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+            animation: wspin 28s linear infinite
+        }
+
+        .wheel-wrap:hover .wheel {
+            animation-play-state: paused
+        }
+
+        @keyframes wspin {
+            from {
+                transform: rotateX(0deg)
+            }
+
+            to {
+                transform: rotateX(-360deg)
+            }
+        }
+
+        .witem {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotateX(var(--a)) translateZ(310px);
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .witem img {
+            width: 78px;
+            height: 78px;
+            border-radius: 18px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .5)
+        }
+
+        .wlabel {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(30px, 5.4vw, 60px);
+            letter-spacing: .01em;
+            white-space: nowrap
+        }
+
+        .wt-r {
+            color: var(--red)
+        }
+
+        .wt-w {
+            color: var(--ink)
+        }
+
+        /* ============ CLIENT MARQUEE ============ */
+        .marquee {
+            overflow: hidden;
+            padding: 6vh 0
+        }
+
+        .mq-track {
+            display: flex;
+            gap: 22px;
+            width: max-content;
+            animation: marq 30s linear infinite
+        }
+
+        .marquee:hover .mq-track {
+            animation-play-state: paused
+        }
+
+        @keyframes marq {
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        .lpill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 92px;
+            padding: 0 44px;
+            border-radius: 999px;
+            font-size: 22px;
+            white-space: nowrap
+        }
+
+        .lg-cream {
+            background: var(--cream);
+            color: #141414
+        }
+
+        .lg-red {
+            background: #e2372b;
+            color: #fff
+        }
+
+        .lg-black {
+            background: #0b0a09;
+            border: 1px solid #33302c;
+            color: #eee;
+            font-size: 15px
+        }
+
+        .lg-white {
+            background: #fff;
+            color: #141414
+        }
+
+        /* ============ WORKS ============ */
+        .works-sec {
+            padding: 10vh 0
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 34px;
+            padding: 0 5vw
+        }
+
+        .work {
+            cursor: pointer
+        }
+
+        .work-img {
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 16/11;
+            position: relative;
+            border: 1px solid var(--line)
+        }
+
+        .work-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .8s cubic-bezier(.2, .7, .2, 1)
+        }
+
+        .work:hover .work-img img {
+            transform: scale(1.06)
+        }
+
+        .work-img .cat {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            background: #0b0a09cc;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 11px;
+            letter-spacing: 1px
+        }
+
+        .work-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 6px 0;
+            align-items: baseline
+        }
+
+        .work-info h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(16px, 1.8vw, 22px)
+        }
+
+        .work-info span {
+            font-size: 13px;
+            color: var(--mut)
+        }
+
+        /* ============ STUDIO / CAPABILITY ============ */
+        .studio-sec {
+            padding: 12vh 5vw
+        }
+
+        .studio-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 60px;
+            align-items: start
+        }
+
+        .studio-copy p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--mut);
+            margin-top: 18px;
+            max-width: 420px
+        }
+
+        .cap-col {
+            margin-bottom: 34px
+        }
+
+        .cap-col h4 {
+            font-family: 'Archivo Black', sans-serif;
+            color: var(--red);
+            font-size: 18px;
+            margin-bottom: 12px;
+            letter-spacing: 1px
+        }
+
+        .cap-col ul {
+            list-style: none;
+            columns: 2;
+            gap: 30px
+        }
+
+        .cap-col li {
+            font-size: 15px;
+            line-height: 2;
+            color: var(--ink)
+        }
+
+        .cap-col li::before {
+            content: "→ ";
+            color: var(--mut)
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 70px;
+            border-top: 1px solid var(--line);
+            padding-top: 44px
+        }
+
+        .stat b {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(28px, 4vw, 52px);
+            display: block
+        }
+
+        .stat span {
+            font-size: 13px;
+            color: var(--mut)
+        }
+
+        /* ============ MANIFESTO MARQUEE ============ */
+        .bigmarq {
+            overflow: hidden;
+            padding: 8vh 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .bigmarq .mq-track {
+            animation: marq 24s linear infinite
+        }
+
+        .bigmarq span {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(40px, 7vw, 92px);
+            color: transparent;
+            -webkit-text-stroke: 1px #ffffff66;
+            padding-right: 60px;
+            white-space: nowrap
+        }
+
+        .bigmarq em {
+            font-style: normal;
+            color: var(--red);
+            -webkit-text-stroke: 0
+        }
+
+        /* ============ TESTIMONIALS ============ */
+        .testi-sec {
+            padding: 12vh 0 6vh;
+            text-align: center
+        }
+
+        .testi-sec .sub {
+            max-width: 560px;
+            margin: 18px auto 0;
+            color: var(--mut);
+            font-size: 15px;
+            line-height: 1.8
+        }
+
+        .tring-wrap {
+            position: relative;
+            height: 580px;
+            perspective: 1700px;
+            margin-top: 30px
+        }
+
+        .tring {
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+            animation: tring 34s linear infinite
+        }
+
+        .tring-wrap:hover .tring {
+            animation-play-state: paused
+        }
+
+        @keyframes tring {
+            from {
+                transform: rotateY(0deg)
+            }
+
+            to {
+                transform: rotateY(360deg)
+            }
+        }
+
+        .tcard {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: min(340px, 86vw);
+            transform: translate(-50%, -50%) rotateY(var(--y)) translateZ(440px);
+            backface-visibility: hidden;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 36px 28px
+        }
+
+        .stars {
+            color: #ffa028;
+            font-size: 22px;
+            letter-spacing: 6px
+        }
+
+        .tcard q {
+            display: block;
+            font-size: 14px;
+            line-height: 1.9;
+            margin: 22px 0 26px;
+            quotes: "“" "”";
+            color: #d9d4cb
+        }
+
+        .tcard img {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 14px;
+            border: 2px solid #33302c
+        }
+
+        .tcard h5 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 18px
+        }
+
+        .tcard small {
+            display: block;
+            margin-top: 6px;
+            color: var(--mut);
+            font-size: 12px
+        }
+
+        /* ============ BOOK A PROJECT ============ */
+        .book-sec {
+            padding: 12vh 5vw
+        }
+
+        .stepper {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 34px
+        }
+
+        .schip {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--mut);
+            transition: .3s
+        }
+
+        .schip.on {
+            background: var(--red);
+            border-color: var(--red);
+            color: #140b0a;
+            font-weight: 700
+        }
+
+        .schip.done {
+            border-color: var(--red);
+            color: var(--red)
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 34px;
+            align-items: start
+        }
+
+        .bk-panel {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 34px
+        }
+
+        .bk-panel h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 20px;
+            margin-bottom: 6px
+        }
+
+        .bk-panel .hint {
+            font-size: 13px;
+            color: var(--mut);
+            margin-bottom: 24px
+        }
+
+        .opt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 14px
+        }
+
+        .opt {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: .25s;
+            display: block
+        }
+
+        .opt:hover {
+            border-color: #4a463f
+        }
+
+        .opt input {
+            display: none
+        }
+
+        .opt .t {
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px
+        }
+
+        .opt .d {
+            font-size: 12px;
+            color: var(--mut);
+            line-height: 1.6;
+            margin-top: 6px
+        }
+
+        .opt .p {
+            font-size: 12px;
+            color: var(--red);
+            margin-top: 8px;
+            display: block
+        }
+
+        .opt.sel {
+            border-color: var(--red);
+            background: rgba(255, 68, 56, .08)
+        }
+
+        .opt.sel .t::after {
+            content: "✓";
+            color: var(--red)
+        }
+
+        .frow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px
+        }
+
+        .frow.one {
+            grid-template-columns: 1fr
+        }
+
+        label.fl {
+            font-size: 12px;
+            color: var(--mut);
+            display: block;
+            margin-bottom: 8px
+        }
+
+        .inp {
+            width: 100%;
+            background: #12100d;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 13px 14px;
+            color: var(--ink);
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            outline: none;
+            transition: .25s
+        }
+
+        .inp:focus {
+            border-color: var(--red)
+        }
+
+        textarea.inp {
+            min-height: 110px;
+            resize: vertical
+        }
+
+        .avail {
+            display: inline-flex;
+            margin-top: 10px;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12px;
+            border: 1px solid var(--line);
+            color: var(--mut)
+        }
+
+        .book-side {
+            position: sticky;
+            top: 110px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 28px
+        }
+
+        .book-side h4 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 16px;
+            margin-bottom: 18px
+        }
+
+        .sumrow {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 13px;
+            padding: 10px 0;
+            border-bottom: 1px dashed #33302c
+        }
+
+        .sumrow b {
+            color: var(--red)
+        }
+
+        .sum-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0 6px;
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .sum-note {
+            font-size: 11px;
+            color: var(--mut);
+            line-height: 1.7;
+            margin-top: 10px
+        }
+
+        .book-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 26px;
+            gap: 14px
+        }
+
+        .err {
+            color: var(--red);
+            font-size: 13px
+        }
+
+        /* success */
+        .success {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 56px 40px;
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto
+        }
+
+        .success .ok {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: var(--red);
+            color: #140b0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin: 0 auto 22px;
+            font-weight: 700
+        }
+
+        .success h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(24px, 3vw, 36px)
+        }
+
+        .success .inq {
+            font-size: 15px;
+            color: var(--red);
+            margin: 10px 0 20px;
+            letter-spacing: 1px
+        }
+
+        .flowline {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 26px 0
+        }
+
+        .flowline span {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 12px
+        }
+
+        .flowline span.cur {
+            border-color: var(--red);
+            color: var(--red)
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 10vh 5vw 4vh;
+            position: relative;
+            overflow: hidden
+        }
+
+        .cta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 8vh
+        }
+
+        .cta-row h2 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(28px, 4.4vw, 56px);
+            max-width: 700px;
+            line-height: 1.15
+        }
+
+        .foot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            font-size: 14px;
+            line-height: 2.1;
+            color: var(--mut)
+        }
+
+        .foot-grid b {
+            color: var(--ink);
+            display: block;
+            margin-bottom: 6px
+        }
+
+        .foot-grid a:hover {
+            color: var(--red)
+        }
+
+        .foot-big {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(90px, 22vw, 340px);
+            line-height: 1;
+            text-align: center;
+            color: transparent;
+            -webkit-text-stroke: 1px #ffffff33;
+            margin: 8vh 0 0;
+            user-select: none
+        }
+
+        .foot-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--mut);
+            margin-top: 20px
+        }
+
+        /* reveal */
+        .rv {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity .8s ease, transform .8s ease
+        }
+
+        .rv.in {
+            opacity: 1;
+            transform: none
+        }
+
+        @media(max-width:960px) {
+            .chat {
+                display: none
+            }
+
+            .works-grid {
+                grid-template-columns: 1fr
+            }
+
+            .studio-grid {
+                grid-template-columns: 1fr
+            }
+
+            .book-grid {
+                grid-template-columns: 1fr
+            }
+
+            .book-side {
+                position: static
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .foot-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero-list {
+                bottom: 16vh
+            }
+
+            .nav-links .pill {
+                padding: 5px 12px;
+                font-size: 12px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <a class="logo" href="#home">BDJG<b>✳</b></a>
+        <nav class="nav-links">
+            <a class="pill" href="#home">Home</a>
+            <a class="pill" href="#works">Works</a>
+            <a class="pill" href="#services">Services</a>
+            <a class="pill" href="#studio">Studio</a>
+            <a class="pill" href="#contact">Contact</a>
+            <a class="pill red" href="#book">Book a Project</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span
+            class="corner br"></span>
+        <div class="hero-meta mono">Based in Jakarta <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20M12 2c3 3.5 3 16.5 0 20-3-3.5-3-16.5 0-20z" />
+            </svg></div>
+        <h1 class="hero-title top">BDJG</h1>
+        <div class="collage">
+            <div class="ccard solid wA"
+                style="left:38%;top:0%;--r:1deg;z-index:2;background:#e8a11c;animation-delay:.4s"><span class="tag">FILM
+                    UNIT</span></div>
+            <div class="ccard wA" style="left:44%;top:2%;--r:-2deg;z-index:3;animation-delay:.1s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/173f00531-6b49-49d6-a921-68c80b45a0fd.png"
+                    alt="VFX render" loading="lazy"></div>
+            <div class="ccard wA" style="left:26%;top:6%;--r:-3deg;z-index:4;animation-delay:.7s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1a4971005-7edc-4157-9eb7-0d5980634e1d.png"
+                    alt="Wedding film" loading="lazy"></div>
+            <div class="ccard wA" style="left:60%;top:10%;--r:3deg;z-index:4;animation-delay:.2s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/169697db6-0b19-4252-ba37-31bdbf8cabf8.png"
+                    alt="Portrait 3D" loading="lazy"></div>
+            <div class="ccard solid wA"
+                style="left:12%;top:48%;--r:-4deg;z-index:3;background:#2740c8;animation-delay:.9s"><span
+                    class="tag">POST PRO</span></div>
+            <div class="ccard wB" style="left:7%;top:33%;--r:-2deg;z-index:6;animation-delay:0s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/15f827950-225e-4f6b-a35e-dbcb2a4b3d66.png"
+                    alt="BDJG videographer" loading="lazy"></div>
+            <div class="ccard solid wA"
+                style="left:47%;top:54%;--r:-3deg;z-index:5;background:#ff5a36;animation-delay:.5s"><span
+                    class="tag">CREW</span></div>
+            <div class="ccard wA" style="left:55%;top:40%;--r:2deg;z-index:6;animation-delay:.3s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/17e86ca90-a50f-48ed-9d48-fe53e3d88ded.png"
+                    alt="Graduation film" loading="lazy"></div>
+            <div class="ccard wA" style="left:73%;top:26%;--r:4deg;z-index:5;animation-delay:.8s"><img
+                    src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1be299fa2-569a-42f0-b5bf-e829b8da08f9.png"
+                    alt="Drone shot" loading="lazy"></div>
+        </div>
+        <h1 class="hero-title bottom">STUDIO</h1>
+        <div class="hero-list mono">Photography<br>Film<br>Post Production</div>
+        <div class="chat">
+            <div class="chat-bub mono">Hi!<br>Ada cerita<br>buat kami?</div>
+            <div class="chat-card">
+                <img src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/11e78c459-817e-43ed-8042-09566de2bcc9.png"
+                    alt="Producer BDJG">
+                <p class="mono">Konsultasikan project-mu — gratis, tanpa akun dulu.</p>
+            </div>
+        </div>
+        <div class="scroll-down mono">Scroll Down
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#ff4438" stroke-width="2">
+                <path d="M1 1l7 7 7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- STATEMENT -->
+    <section class="statement rv">
+        <p class="mono">Kami menangkap <span class="u-red">cerita</span> — visual yang enerjik, <span
+                class="u-red">sinematik</span>, dan jujur — untuk brand, sekolah, dan pasangan yang ingin momen
+            terbaiknya hidup selamanya.</p>
+    </section>
+
+    <!-- SERVICES WHEEL -->
+    <section class="wheel-sec" id="services">
+        <div class="sec-head rv">
+            <h2 class="h2"><span class="u-red">Our</span> Services</h2>
+            <span class="sec-side mono mut">Since 2020</span>
+        </div>
+        <div class="wheel-wrap">
+            <div class="wheel">
+                <div class="witem" style="--a:0deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/15f827950-225e-4f6b-a35e-dbcb2a4b3d66.png"
+                        alt=""><span class="wlabel wt-w">PHOTOGRAPHY</span></div>
+                <div class="witem" style="--a:45deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1a4971005-7edc-4157-9eb7-0d5980634e1d.png"
+                        alt=""><span class="wlabel wt-r">WEDDING FILM</span></div>
+                <div class="witem" style="--a:90deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/17e86ca90-a50f-48ed-9d48-fe53e3d88ded.png"
+                        alt=""><span class="wlabel wt-w">GRADUATION</span></div>
+                <div class="witem" style="--a:135deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1998e6750-3704-4b53-a593-b7cfd4ae32a2.png"
+                        alt=""><span class="wlabel wt-r">COMMERCIAL</span></div>
+                <div class="witem" style="--a:180deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1462af059-fbc2-45a9-ac7e-f5cb681f953e.png"
+                        alt=""><span class="wlabel wt-w">MUSIC VIDEO</span></div>
+                <div class="witem" style="--a:225deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/173f00531-6b49-49d6-a921-68c80b45a0fd.png"
+                        alt=""><span class="wlabel wt-r">VFX &amp; 3D</span></div>
+                <div class="witem" style="--a:270deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1be299fa2-569a-42f0-b5bf-e829b8da08f9.png"
+                        alt=""><span class="wlabel wt-w">DRONE SHOT</span></div>
+                <div class="witem" style="--a:315deg"><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/176ff14e1-12b3-4cfe-8828-5ff803cc51cc.png"
+                        alt=""><span class="wlabel wt-r">POST-PRODUCTION</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLIENT MARQUEE -->
+    <div class="marquee">
+        <div class="mq-track" id="mqClients">
+            <span class="lpill lg-black mono">Our Clients</span>
+            <span class="lpill lg-cream disp">Aula</span>
+            <span class="lpill lg-red disp">Toga+</span>
+            <span class="lpill lg-black disp">Vows&amp;Co</span>
+            <span class="lpill lg-white disp">Svarna</span>
+            <span class="lpill lg-cream mono">proma</span>
+            <span class="lpill lg-black mono">Our Clients</span>
+            <span class="lpill lg-cream disp">Nara</span>
+            <span class="lpill lg-black disp">Orbit</span>
+            <span class="lpill lg-white disp">Kita</span>
+            <span class="lpill lg-cream mono">lumina</span>
+            <span class="lpill lg-red disp">Arsa</span>
+        </div>
+    </div>
+
+    <!-- WORKS -->
+    <section class="works-sec" id="works">
+        <div class="sec-head rv">
+            <h2 class="h2"><span class="u-red">Featured</span> Works</h2>
+            <a class="pill" href="#works">View All</a>
+        </div>
+        <div class="works-grid">
+            <article class="work rv">
+                <div class="work-img"><span class="cat mono">WEDDING FILM</span><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/135f14b50-8a4a-42ed-b824-883134ec522a.png"
+                        alt="Wedding of Raka and Sinta" loading="lazy"></div>
+                <div class="work-info">
+                    <h3>Wedding of Raka &amp; Sinta</h3><span class="mono">2025 · Full Day Coverage</span>
+                </div>
+            </article>
+            <article class="work rv">
+                <div class="work-img"><span class="cat mono">GRADUATION FILM</span><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/176ff14e1-12b3-4cfe-8828-5ff803cc51cc.png"
+                        alt="Video Angkatan" loading="lazy"></div>
+                <div class="work-info">
+                    <h3>Angkatan 47 — “Sudut”</h3><span class="mono">2025 · Video Angkatan</span>
+                </div>
+            </article>
+            <article class="work rv">
+                <div class="work-img"><span class="cat mono">COMMERCIAL</span><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1998e6750-3704-4b53-a593-b7cfd4ae32a2.png"
+                        alt="Svarna sneaker campaign" loading="lazy"></div>
+                <div class="work-info">
+                    <h3>Svarna Sneaker — “Float”</h3><span class="mono">2026 · Commercial + Photo</span>
+                </div>
+            </article>
+            <article class="work rv">
+                <div class="work-img"><span class="cat mono">MUSIC VIDEO</span><img
+                        src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1462af059-fbc2-45a9-ac7e-f5cb681f953e.png"
+                        alt="NARA Senja music video" loading="lazy"></div>
+                <div class="work-info">
+                    <h3>NARA — “Senja” Official MV</h3><span class="mono">2024 · Film + Color Grade</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- STUDIO -->
+    <section class="studio-sec" id="studio">
+        <div class="studio-grid">
+            <div class="studio-copy rv">
+                <h2 class="h2"><span class="u-red">Studio</span></h2>
+                <p>BDJG adalah studio visual full-service: satu atap untuk foto, film, dan post-production. Dari brief
+                    sampai final delivery — quotation, preview, revisi, dan file final berjalan rapi lewat satu sistem
+                    project.</p>
+                <p style="margin-top:14px">Satu project, satu tim, satu timeline yang bisa kamu pantau.</p>
+            </div>
+            <div class="rv">
+                <div class="cap-col">
+                    <h4>PHOTOGRAPHY</h4>
+                    <ul>
+                        <li>Wedding</li>
+                        <li>Graduation</li>
+                        <li>Event</li>
+                        <li>Portrait</li>
+                        <li>Commercial</li>
+                    </ul>
+                </div>
+                <div class="cap-col">
+                    <h4>VIDEOGRAPHY &amp; FILM</h4>
+                    <ul>
+                        <li>Wedding Film</li>
+                        <li>Video Angkatan</li>
+                        <li>Company Profile</li>
+                        <li>Music Video</li>
+                        <li>Short Film / Film TA</li>
+                    </ul>
+                </div>
+                <div class="cap-col">
+                    <h4>POST-PRODUCTION</h4>
+                    <ul>
+                        <li>Video Editing</li>
+                        <li>Color Grading</li>
+                        <li>Sound Design</li>
+                        <li>Motion Graphics</li>
+                        <li>VFX &amp; 3D</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="stats rv">
+            <div class="stat"><b>120+</b><span class="mono">Projects Delivered</span></div>
+            <div class="stat"><b>40+</b><span class="mono">Clients &amp; Institutions</span></div>
+            <div class="stat"><b>12</b><span class="mono">Crew In-House</span></div>
+            <div class="stat"><b>6</b><span class="mono">Years of Craft</span></div>
+        </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <div class="bigmarq">
+        <div class="mq-track" id="mqBig">
+            <span>WE CAPTURE STORIES <em>✺</em> PHOTO — FILM — POST PRODUCTION <em>✺</em> BDJG VISUAL STUDIO
+                <em>✺</em>&nbsp;</span>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <section class="testi-sec">
+        <h2 class="h2 rv"><span class="u-red">Testimonials</span></h2>
+        <p class="sub mono rv">Kata mereka yang sudah bekerja sama dengan BDJG — dari panitia angkatan sampai brand.</p>
+        <div class="tring-wrap">
+            <div class="tring">
+                <div class="tcard" style="--y:0deg">
+                    <div class="stars">★★★★★</div>
+                    <q>Prosesnya rapi banget — preview online, revisi jelas per timestamp, dan hasil final melebihi
+                        ekspektasi. Video angkatan kami keren!</q>
+                    <img src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1d132db69-5b32-4204-ad39-56458069729c.png"
+                        alt="">
+                    <h5>Maulida R.</h5><small class="mono">Ketua Panitia Angkatan</small>
+                </div>
+                <div class="tcard" style="--y:90deg">
+                    <div class="stars">★★★★★</div>
+                    <q>Wedding film-nya bikin kami nangis tiap nonton. Tim profesional, santai di hari H, dan
+                        deliverable tepat waktu.</q>
+                    <img src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/1e19fb3a0-07fd-4593-beee-d04da14a3380.png"
+                        alt="">
+                    <h5>Raka &amp; Sinta</h5><small class="mono">Couple — Wedding Film</small>
+                </div>
+                <div class="tcard" style="--y:180deg">
+                    <div class="stars">★★★★★</div>
+                    <q>Brief kami diterjemahkan jadi visual yang kuat. Quotation transparan, jadwal jelas, dan
+                        komunikasi cepat.</q>
+                    <img src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/11e78c459-817e-43ed-8042-09566de2bcc9.png"
+                        alt="">
+                    <h5>Bagus P.</h5><small class="mono">Brand Manager — Svarna</small>
+                </div>
+                <div class="tcard" style="--y:270deg">
+                    <div class="stars">★★★★★</div>
+                    <q>Color grading dan sound design-nya kelas festival. Internal review mereka bikin hasil akhir
+                        bersih sebelum ke klien.</q>
+                    <img src="https://image.qwenlm.ai/public_source/23266ab7-86a5-4a0f-83ce-75073353e14f/18ba11018-1415-4f81-bae9-caeb0ca3d35a.png"
+                        alt="">
+                    <h5>Nadia K.</h5><small class="mono">Sutradara — Film TA</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOK A PROJECT -->
+    <section class="book-sec" id="book">
+        <div class="sec-head rv">
+            <h2 class="h2"><span class="u-red">Book</span> a Project</h2>
+            <span class="sec-side mono mut">Inquiry → Quotation → Project. Tanpa akun dulu.</span>
+        </div>
+
+        <div id="bkWrap">
+            <div class="stepper" id="bkStepper">
+                <span class="schip">1 Service</span><span class="schip">2 Package</span><span class="schip">3
+                    Add-ons</span>
+                <span class="schip">4 Brief</span><span class="schip">5 Date</span><span class="schip">6 Contact</span>
+            </div>
+            <form id="bkForm" novalidate>
+                <div class="book-grid">
+                    <div>
+                        <!-- STEP 1 : SERVICE -->
+                        <div class="bk-panel" data-step="0">
+                            <h3>Choose Service</h3>
+                            <p class="hint">Pilih jenis layanan utama project-mu.</p>
+                            <div class="opt-grid">
+                                <label class="opt"><input type="radio" name="svc" value="Photography"><span
+                                        class="t">Photography</span><span class="d">Wedding · Graduation · Event ·
+                                        Portrait · Commercial</span></label>
+                                <label class="opt"><input type="radio" name="svc" value="Videography"><span
+                                        class="t">Videography</span><span class="d">Wedding Film · Graduation · Event ·
+                                        Company Profile · Music Video</span></label>
+                                <label class="opt"><input type="radio" name="svc" value="Film Production"><span
+                                        class="t">Film Production</span><span class="d">Short Film · Film TA ·
+                                        Commercial · Custom</span></label>
+                                <label class="opt"><input type="radio" name="svc" value="Post Production"><span
+                                        class="t">Post Production</span><span class="d">Editing · Color Grading · Sound
+                                        Design · Photo Editing</span></label>
+                                <label class="opt"><input type="radio" name="svc" value="VFX & Animation"><span
+                                        class="t">VFX &amp; Animation</span><span class="d">Motion Graphics · 2D · 3D ·
+                                        CGI</span></label>
+                            </div>
+                        </div>
+                        <!-- STEP 2 : PACKAGE -->
+                        <div class="bk-panel" data-step="1" hidden>
+                            <h3>Choose Package</h3>
+                            <p class="hint">Starting price — angka final mengikuti quotation.</p>
+                            <div class="opt-grid">
+                                <label class="opt"><input type="radio" name="pkg" value="Basic"><span
+                                        class="t">Basic</span><span class="d">Produksi sederhana · 1 ronde
+                                        revisi</span><span class="p">from Rp 1.500.000</span></label>
+                                <label class="opt"><input type="radio" name="pkg" value="Cinematic"><span
+                                        class="t">Cinematic</span><span class="d">Crew &amp; output lebih lengkap · 2
+                                        ronde revisi</span><span class="p">from Rp 3.500.000</span></label>
+                                <label class="opt"><input type="radio" name="pkg" value="Premium"><span
+                                        class="t">Premium</span><span class="d">Produksi besar · 3 ronde
+                                        revisi</span><span class="p">from Rp 7.500.000</span></label>
+                                <label class="opt"><input type="radio" name="pkg" value="Custom"><span
+                                        class="t">Custom</span><span class="d">Kebutuhan khusus — harga via
+                                        quotation</span><span class="p">Contact</span></label>
+                            </div>
+                        </div>
+                        <!-- STEP 3 : ADDONS -->
+                        <div class="bk-panel" data-step="2" hidden>
+                            <h3>Add-Ons</h3>
+                            <p class="hint">Opsional — centak yang kamu butuhkan.</p>
+                            <div class="opt-grid">
+                                <label class="opt"><input type="checkbox" name="addon" value="Drone"
+                                        data-price="800000"><span class="t">Drone</span><span class="p">+ Rp
+                                        800.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Extra Camera"
+                                        data-price="500000"><span class="t">Extra Camera</span><span class="p">+ Rp
+                                        500.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Extra Photographer"
+                                        data-price="600000"><span class="t">Extra Photographer</span><span class="p">+
+                                        Rp 600.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Extra Videographer"
+                                        data-price="600000"><span class="t">Extra Videographer</span><span class="p">+
+                                        Rp 600.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Motion Graphics"
+                                        data-price="750000"><span class="t">Motion Graphics</span><span class="p">+ Rp
+                                        750.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Express Editing"
+                                        data-price="1000000"><span class="t">Express Editing</span><span class="p">+ Rp
+                                        1.000.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Raw Files"
+                                        data-price="400000"><span class="t">Raw Files</span><span class="p">+ Rp
+                                        400.000</span></label>
+                                <label class="opt"><input type="checkbox" name="addon" value="Additional Revision"
+                                        data-price="300000"><span class="t">Additional Revision</span><span class="p">+
+                                        Rp 300.000</span></label>
+                            </div>
+                        </div>
+                        <!-- STEP 4 : BRIEF -->
+                        <div class="bk-panel" data-step="3" hidden>
+                            <h3>Project Brief</h3>
+                            <p class="hint">Ceritakan project-mu sekilas — cukup gambaran, detail menyusul.</p>
+                            <div class="frow">
+                                <div><label class="fl">Project Name *</label><input class="inp" name="pname"
+                                        placeholder="cth: Video Angkatan 47"></div>
+                                <div><label class="fl">Institution / Company</label><input class="inp" name="pinst"
+                                        placeholder="cth: SMA Negeri 3"></div>
+                            </div>
+                            <div class="frow one">
+                                <div><label class="fl">Project Brief *</label><textarea class="inp" name="pbrief"
+                                        placeholder="Konsep, momen kunci, referensi gaya, deliverable yang diharapkan..."></textarea>
+                                </div>
+                            </div>
+                            <div class="frow">
+                                <div><label class="fl">Reference Links</label><input class="inp" name="pref"
+                                        placeholder="URL Instagram / YouTube / drive"></div>
+                                <div><label class="fl">Estimated Budget</label><select class="inp" name="pbudget">
+                                        <option value="">— pilih —</option>
+                                        <option>&lt; Rp 2 jt</option>
+                                        <option>Rp 2–5 jt</option>
+                                        <option>Rp 5–10 jt</option>
+                                        <option>Rp 10–25 jt</option>
+                                        <option>&gt; Rp 25 jt</option>
+                                        <option>Belum tahu</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                        <!-- STEP 5 : DATE -->
+                        <div class="bk-panel" data-step="4" hidden>
+                            <h3>Date Preference</h3>
+                            <p class="hint">Tanggal belum final sampai disetujui admin.</p>
+                            <div class="frow">
+                                <div><label class="fl">Preferred Date *</label><input class="inp" type="date"
+                                        name="date1" id="bkDate1"></div>
+                                <div><label class="fl">Alternative Date</label><input class="inp" type="date"
+                                        name="date2"></div>
+                            </div>
+                            <div class="frow one">
+                                <div><label class="fl">Location</label><input class="inp" name="loc"
+                                        placeholder="cth: Gedung Aula Universitas, Jakarta"></div>
+                            </div>
+                            <span class="avail mono" id="bkAvail">Status ketersediaan: —</span>
+                        </div>
+                        <!-- STEP 6 : CONTACT -->
+                        <div class="bk-panel" data-step="5" hidden>
+                            <h3>Contact Data</h3>
+                            <p class="hint">Admin akan menghubungi lewat WhatsApp / Email.</p>
+                            <div class="frow">
+                                <div><label class="fl">Name *</label><input class="inp" name="cname"
+                                        placeholder="Nama kamu"></div>
+                                <div><label class="fl">Email *</label><input class="inp" type="email" name="cemail"
+                                        placeholder="nama@email.com"></div>
+                            </div>
+                            <div class="frow">
+                                <div><label class="fl">Phone / WhatsApp *</label><input class="inp" name="cwa"
+                                        placeholder="08xxxxxxxxxx"></div>
+                                <div><label class="fl">Notes</label><input class="inp" name="cnotes"
+                                        placeholder="Opsional"></div>
+                            </div>
+                        </div>
+
+                        <div class="book-nav">
+                            <button type="button" class="pill ghost" id="bkBack">← Back</button>
+                            <span class="err mono" id="bkErr"></span>
+                            <button type="button" class="pill red" id="bkNext">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <aside class="book-side">
+                        <h4>Ringkasan Inquiry</h4>
+                        <div class="sumrow"><span class="mut">Service</span><b id="sumSvc">—</b></div>
+                        <div class="sumrow"><span class="mut">Package</span><b id="sumPkg">—</b></div>
+                        <div class="sumrow"><span class="mut">Add-ons</span><b id="sumAdd">0 dipilih</b></div>
+                        <div class="sumrow"><span class="mut">Revisi termasuk</span><b id="sumRev">—</b></div>
+                        <div class="sum-total"><span>Estimasi mulai</span><span id="sumTotal">Rp —</span></div>
+                        <p class="sum-note mono">* Harga final mengikuti <b>quotation</b> setelah review admin.
+                            Quotation yang kamu terima bisa di-accept, direvisi, atau ditolak — tanpa tekanan.</p>
+                        <p class="sum-note mono">Alur: Inquiry → Admin Review → Quotation → DP Invoice → Project
+                            Activated.</p>
+                    </aside>
+                </div>
+            </form>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success" id="bkSuccess" hidden>
+            <div class="ok">✓</div>
+            <h3>Inquiry Terkirim!</h3>
+            <p class="inq mono" id="succId">BDJG-2026-0000</p>
+            <p class="mono mut" id="succTxt" style="font-size:14px;line-height:1.8"></p>
+            <div class="flowline mono">
+                <span class="cur">Admin Review</span><span>Quotation</span><span>DP Invoice</span><span>Project
+                    Activated</span>
+            </div>
+            <p class="mono mut" style="font-size:12px">Admin akan menghubungi via WhatsApp / Email dalam 1×24 jam.</p>
+            <br>
+            <button class="pill" id="bkReset">Buat Inquiry Lain</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div class="cta-row rv">
+            <h2>Punya cerita untuk ditangkap? <span class="u-red">Mulai project-mu.</span></h2>
+            <a class="pill red" href="#book" style="padding:14px 30px;font-size:16px">Book a Project →</a>
+        </div>
+        <div class="foot-grid">
+            <div><b class="mono">Contact</b>
+                <a href="mailto:hello@bdjg.studio">hello@bdjg.studio</a><br>
+                <a href="#">+62 812-3456-7890 (WhatsApp)</a><br>
+                Jakarta — Indonesia<br>
+                <span class="mono mut">Response &lt; 24 jam kerja</span>
+            </div>
+            <div><b class="mono">Social</b>
+                <a href="#">Instagram — @bdjg.studio</a><br>
+                <a href="#">YouTube — BDJG Visual</a><br>
+                <a href="#">TikTok — @bdjgstudio</a><br>
+                <a href="#">Behance — bdjg</a>
+            </div>
+            <div><b class="mono">Studio</b>
+                Mon–Sat, 10.00–19.00 WIB<br>
+                By appointment for meeting<br>
+                <span class="mono mut">Client Portal &amp; Studio Workspace tersedia untuk project aktif.</span>
+            </div>
+        </div>
+        <div class="foot-big">BDJG</div>
+        <div class="foot-bar mono">
+            <span>© 2026 BDJG Visual Studio — We Capture Stories.</span>
+            <span>PHOTO — FILM — POST PRODUCTION</span>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            "use strict";
+            /* ---------- reveal on scroll ---------- */
+            var rvObs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); rvObs.unobserve(en.target); } });
+            }, { threshold: .12 });
+            document.querySelectorAll('.rv').forEach(function (el) { rvObs.observe(el); });
+
+            /* ---------- duplicate marquees for seamless loop ---------- */
+            ['mqClients', 'mqBig'].forEach(function (mid) {
+                var tr = document.getElementById(mid);
+                if (tr) { tr.innerHTML += tr.innerHTML; }
+            });
+
+            /* ---------- booking state ---------- */
+            var PKG = {
+                Basic: { price: 1500000, rev: '1 ronde' },
+                Cinematic: { price: 3500000, rev: '2 ronde' },
+                Premium: { price: 7500000, rev: '3 ronde' },
+                Custom: { price: 0, rev: 'custom' }
+            };
+            var bkStep = 0, bkService = null, bkPkg = null;
+            var panels = document.querySelectorAll('.bk-panel');
+            var chips = document.querySelectorAll('#bkStepper .schip');
+            var btnBack = document.getElementById('bkBack');
+            var btnNext = document.getElementById('bkNext');
+            var errEl = document.getElementById('bkErr');
+            var form = document.getElementById('bkForm');
+
+            function fmtRp(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+            function val(name) { var el = form.elements[name]; return el ? el.value.trim() : ''; }
+
+            function renderSummary() {
+                document.getElementById('sumSvc').textContent = bkService || '—';
+                document.getElementById('sumPkg').textContent = bkPkg || '—';
+                document.getElementById('sumRev').textContent = bkPkg ? PKG[bkPkg].rev : '—';
+                var adds = form.querySelectorAll('input[name="addon"]:checked');
+                document.getElementById('sumAdd').textContent = adds.length + ' dipilih';
+                var total = 0, custom = (bkPkg === 'Custom');
+                if (bkPkg && !custom) { total += PKG[bkPkg].price; }
+                adds.forEach(function (a) { total += parseInt(a.dataset.price, 10) || 0; });
+                document.getElementById('sumTotal').textContent = (!bkPkg || custom) ? (custom ? 'Custom' : 'Rp —') : fmtRp(total) + '+';
+            }
+
+            function renderStep() {
+                panels.forEach(function (p) { p.hidden = (parseInt(p.dataset.step, 10) !== bkStep); });
+                chips.forEach(function (c, i) {
+                    c.classList.toggle('on', i === bkStep);
+                    c.classList.toggle('done', i < bkStep);
+                });
+                btnBack.style.visibility = bkStep === 0 ? 'hidden' : 'visible';
+                btnNext.textContent = bkStep === 5 ? 'Submit Inquiry ✓' : 'Next →';
+                errEl.textContent = '';
+            }
+
+            function validate() {
+                if (bkStep === 0 && !bkService) return 'Pilih service dulu.';
+                if (bkStep === 1 && !bkPkg) return 'Pilih package dulu.';
+                if (bkStep === 3) {
+                    if (!val('pname') || !val('pbrief')) return 'Isi nama & brief project.';
+                }
+                if (bkStep === 4 && !val('date1')) return 'Isi tanggal preferensi.';
+                if (bkStep === 5) {
+                    if (!val('cname')) return 'Isi nama.';
+                    if (val('cemail').indexOf('@') < 1) return 'Email tidak valid.';
+                    if (val('cwa').replace(/\D/g, '').length < 9) return 'No. WhatsApp tidak valid.';
+                }
+                return '';
+            }
+
+            btnNext.addEventListener('click', function () {
+                var msg = validate();
+                if (msg) { errEl.textContent = msg; return; }
+                if (bkStep < 5) { bkStep++; renderStep(); return; }
+                /* submit */
+                var inqNum = String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0');
+                document.getElementById('succId').textContent = 'BDJG-2026-' + inqNum;
+                var adds = Array.prototype.map.call(form.querySelectorAll('input[name="addon"]:checked'), function (a) { return a.value; });
+                document.getElementById('succTxt').innerHTML =
+                    'Terima kasih, <b style="color:var(--ink)">' + val('cname') + '</b>! Inquiry <b style="color:var(--ink)">' + (val('pname') || 'project') + '</b> (' + bkService + ' · ' + bkPkg +
+                    (adds.length ? ' · ' + adds.length + ' add-on' : '') + ') sudah kami terima dengan status <b style="color:var(--red)">NEW</b>.';
+                document.getElementById('bkWrap').hidden = true;
+                var sc = document.getElementById('bkSuccess');
+                sc.hidden = false;
+                sc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            btnBack.addEventListener('click', function () { if (bkStep > 0) { bkStep--; renderStep(); } });
+
+            document.getElementById('bkReset').addEventListener('click', function () {
+                form.reset(); bkStep = 0; bkService = null; bkPkg = null;
+                form.querySelectorAll('.opt').forEach(function (o) { o.classList.remove('sel'); });
+                renderSummary(); renderStep();
+                document.getElementById('bkSuccess').hidden = true;
+                document.getElementById('bkWrap').hidden = false;
+                document.getElementById('bkAvail').textContent = 'Status ketersediaan: —';
+                document.getElementById('book').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            form.addEventListener('change', function (ev) {
+                var t = ev.target;
+                if (t.name === 'svc') { bkService = t.value; }
+                if (t.name === 'pkg') { bkPkg = t.value; }
+                /* highlight selected opt cards */
+                if (t.name === 'svc' || t.name === 'pkg') {
+                    form.querySelectorAll('input[name="' + t.name + '"]').forEach(function (r) {
+                        r.closest('.opt').classList.toggle('sel', r.checked);
+                    });
+                }
+                if (t.name === 'addon') { t.closest('.opt').classList.toggle('sel', t.checked); }
+                if (t.id === 'bkDate1') { updateAvail(t.value); }
+                renderSummary();
+            });
+
+            function updateAvail(v) {
+                var chip = document.getElementById('bkAvail');
+                if (!v) { chip.textContent = 'Status ketersediaan: —'; return; }
+                var d = new Date(v); var h = d.getDate() + (d.getMonth() + 1);
+                var st = [['AVAILABLE', '#39d98a'], ['LIMITED', '#ffb020'], ['UNAVAILABLE', '#ff4438']][h % 3];
+                chip.innerHTML = 'Status tanggal: <b style="color:' + st[1] + '">' + st[0] + '</b>' + (st[0] === 'UNAVAILABLE' ? ' — coba tanggal alternatif' : '');
+            }
+
+            renderStep(); renderSummary();
+        })();
+    </script>
+</body>
+
+</html>

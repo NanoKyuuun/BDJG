@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDJG — Studio Workspace (Admin)</title>
+<!-- Ganti LOGO_URL di JS dengan file asset logo asli (bdjg-blue.png) bila tersedia lokal -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-800.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-600.css">
+<style>
+:root{
+  --bg:#090909; --s1:#111111; --s2:#171717; --s3:#1d1d1f;
+  --bd:#2A2A2A; --bd2:#3a3a3a;
+  --tx:#F2F1ED; --tx2:#A3A3A3; --tx3:#6B6B6B;
+  --ac:#5C7CFF; --ac2:#7d97ff;
+  --ok:#4CC38A; --warn:#E8A33D; --err:#E5484D;
+  --r:12px;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(92,124,255,.35)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-track{background:transparent}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:13px;color:var(--tx);background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--ac)}
+input::placeholder{color:var(--tx3)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);letter-spacing:.06em}
+.micro{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3)}
+.muted{color:var(--tx2)}
+
+/* ============ LAYOUT ============ */
+#app{display:flex;min-height:100vh}
+#sidebar{width:264px;flex:0 0 264px;background:#0b0b0b;border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:60;transition:transform .25s ease}
+.main{flex:1;margin-left:264px;min-width:0;display:flex;flex-direction:column}
+#content{padding:24px 28px 64px;max-width:1600px;width:100%;margin:0 auto}
+
+/* sidebar */
+.logo-wrap{padding:20px 18px 14px;border-bottom:1px solid var(--bd)}
+.logo-tile{display:flex;align-items:center;gap:12px}
+.logo-img{height:44px;width:64px;object-fit:contain;filter:invert(1) hue-rotate(-14deg) saturate(1.5);border-radius:8px}
+.logo-meta .micro{display:block}
+.logo-meta .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
+#nav{flex:1;overflow-y:auto;padding:12px 10px 20px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:9px;color:var(--tx2);font-weight:600;font-size:13px;transition:background .15s,color .15s;text-align:left}
+.nav-item svg{width:16px;height:16px;flex:0 0 16px}
+.nav-item:hover{background:var(--s2);color:var(--tx)}
+.nav-item.active{background:var(--s2);color:var(--tx);box-shadow:inset 2px 0 0 var(--ac)}
+.nav-group{margin-top:14px}
+.nav-group>button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:6px 10px;color:var(--tx3);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.nav-group>button svg{width:12px;height:12px;transition:transform .2s}
+.nav-group.closed>button svg{transform:rotate(-90deg)}
+.nav-group.closed .nav-sub{display:none}
+.nav-sub{padding:2px 0 2px 0}
+.nav-sub .nav-item{padding-left:26px;font-size:12.5px;font-weight:500}
+.side-foot{border-top:1px solid var(--bd);padding:14px 16px;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--s3);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--ac2);flex:0 0 34px}
+.side-foot .who{flex:1;min-width:0}
+.side-foot .who b{display:block;font-size:12.5px}
+.side-foot .who span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--tx3)}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--bd);background:var(--s2);display:flex;align-items:center;justify-content:center;color:var(--tx2);transition:.15s;position:relative}
+.icon-btn:hover{color:var(--tx);border-color:var(--bd2)}
+.icon-btn svg{width:15px;height:15px}
+.dot{position:absolute;top:7px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 0 2px var(--s2)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:14px 28px;background:rgba(9,9,9,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+#burger{display:none}
+.crumb{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--tx3);text-transform:uppercase;white-space:nowrap}
+.crumb b{color:var(--tx2)}
+.top-date{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--tx3);margin-left:auto;white-space:nowrap}
+.searchbox{position:relative;width:min(380px,38vw)}
+.searchbox input{width:100%;padding-left:34px}
+.searchbox>svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--tx3);pointer-events:none}
+#searchRes{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:none;box-shadow:0 18px 50px rgba(0,0,0,.5);max-height:340px;overflow-y:auto}
+#searchRes.open{display:block}
+#searchRes .sr-h{padding:8px 12px 4px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--tx3);text-transform:uppercase}
+#searchRes button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;text-align:left;font-size:13px}
+#searchRes button:hover{background:var(--s2)}
+#searchRes .sr-meta{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--tx3);letter-spacing:.1em}
+.bell-wrap{position:relative}
+#notifPanel{position:absolute;right:0;top:calc(100% + 8px);width:340px;background:var(--s1);border:1px solid var(--bd);border-radius:14px;display:none;box-shadow:0 18px 50px rgba(0,0,0,.5);overflow:hidden;z-index:70}
+#notifPanel.open{display:block}
+#notifPanel .np-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--bd)}
+#notifPanel .np-item{display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid var(--bd);font-size:12.5px}
+#notifPanel .np-item:last-child{border-bottom:none}
+#notifPanel .np-item.unread{box-shadow:inset 2px 0 0 var(--ac)}
+#notifPanel .np-item .t{flex:1}
+#notifPanel .np-item .t b{display:block;font-size:12.5px}
+#notifPanel .np-item .t span{color:var(--tx2)}
+#notifPanel .np-item time{font-family:var(--mono);font-size:9.5px;color:var(--tx3);white-space:nowrap}
+
+/* page header (pattern 97) */
+.phead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:6px 0 22px;flex-wrap:wrap}
+.phead .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ac2);text-transform:uppercase;margin-bottom:6px}
+.phead h1{font-size:clamp(22px,2.4vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.phead p{color:var(--tx2);font-size:13px;margin-top:5px;max-width:60ch}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ac);color:#0a0a0a;font-weight:800;font-size:12px;letter-spacing:.06em;padding:10px 16px;border-radius:10px;transition:.15s;text-transform:uppercase}
+.btn:hover{background:var(--ac2)}
+.btn.ghost{background:transparent;color:var(--tx2);border:1px solid var(--bd)}
+.btn.ghost:hover{color:var(--tx);border-color:var(--bd2)}
+.btn svg{width:13px;height:13px}
+.btn.sm{padding:7px 12px;font-size:11px}
+
+/* cards & grids */
+.grid-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;transition:border-color .15s}
+.mcard:hover{border-color:var(--bd2)}
+.mcard .micro{display:block;margin-bottom:8px}
+.mcard .val{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.mcard .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--tx3);margin-top:7px;display:flex;align-items:center;gap:6px}
+.mcard .sub .up{color:var(--ok)} .mcard .sub .dn{color:var(--err)} .mcard .sub .wn{color:var(--warn)}
+.mcard.alert{border-color:rgba(232,163,61,.4)}
+.sec{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;margin-top:12px}
+.panel{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:16px 16px 12px;min-width:0}
+.panel>.p-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel>.p-h h3{font-size:13px;font-weight:800;letter-spacing:.02em}
+.panel>.p-h .micro{color:var(--tx3)}
+.link{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ac2);text-transform:uppercase;display:inline-flex;align-items:center;gap:5px}
+.link:hover{color:var(--tx)}
+
+/* attention queue */
+.att-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 6px;border-bottom:1px solid var(--bd);text-align:left;font-size:13px;color:var(--tx2);border-radius:6px}
+.att-item:last-child{border-bottom:none}
+.att-item:hover{color:var(--tx);background:var(--s2)}
+.att-item .txt{flex:1;min-width:0}
+.att-item .txt b{color:var(--tx)}
+.att-item svg{width:13px;height:13px;color:var(--tx3);flex:0 0 13px}
+
+/* schedule */
+.sch-item{display:flex;gap:12px;padding:10px 4px;border-bottom:1px solid var(--bd)}
+.sch-item:last-child{border-bottom:none}
+.sch-item time{font-family:var(--mono);font-size:11px;color:var(--ac2);width:44px;flex:0 0 44px;padding-top:2px}
+.sch-item .t{flex:1;min-width:0}
+.sch-item .t b{display:block;font-size:13px}
+.sch-item .t span{font-size:11.5px;color:var(--tx2)}
+.sch-item .meta{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--tx3)}
+
+/* activity */
+.act-item{position:relative;padding:0 0 14px 18px;border-left:1px solid var(--bd);margin-left:4px;font-size:12.5px;color:var(--tx2)}
+.act-item::before{content:"";position:absolute;left:-3.5px;top:5px;width:6px;height:6px;border-radius:50%;background:var(--bd2)}
+.act-item:first-child::before{background:var(--ac)}
+.act-item time{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--tx3);display:block}
+.act-item b{color:var(--tx)}
+
+/* pipeline strip */
+.pipe{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pipe .st{flex:1;min-width:120px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.pipe .st .micro{display:block;margin-bottom:6px}
+.pipe .st .n{font-size:18px;font-weight:800}
+.pipe .st .bar{height:3px;background:var(--bd);border-radius:2px;margin-top:8px;overflow:hidden}
+.pipe .st .bar i{display:block;height:100%;background:var(--ac);border-radius:2px}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;border:1px solid var(--bd);font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);background:var(--s3);white-space:nowrap}
+.badge i{width:5px;height:5px;border-radius:50%;background:currentColor;flex:0 0 5px}
+.b-info{color:var(--ac2);background:rgba(92,124,255,.1);border-color:rgba(92,124,255,.35)}
+.b-success{color:var(--ok);background:rgba(76,195,138,.08);border-color:rgba(76,195,138,.35)}
+.b-warning{color:var(--warn);background:rgba(232,163,61,.08);border-color:rgba(232,163,61,.4)}
+.b-error{color:var(--err);background:rgba(229,72,77,.08);border-color:rgba(229,72,77,.4)}
+.b-neutral{color:var(--tx3);background:var(--s2);border-color:var(--bd)}
+
+/* tables */
+.tscroll{overflow:auto;border:1px solid var(--bd);border-radius:14px;background:var(--s1)}
+table.tbl{width:100%;border-collapse:collapse;min-width:820px}
+.tbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);text-align:left;padding:12px 14px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--s1);z-index:1}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--bd);font-size:13px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{transition:background .12s}
+.tbl tbody tr:hover{background:var(--s2)}
+.tbl tbody tr[data-act]{cursor:pointer}
+.cell-p{display:flex;align-items:center;gap:10px;min-width:0}
+.cell-p img{width:44px;height:30px;object-fit:cover;border-radius:6px;border:1px solid var(--bd);flex:0 0 44px}
+.cell-p b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell-p .mono{font-size:9px;color:var(--tx3);letter-spacing:.1em}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.toolbar .sp{flex:1}
+.toolbar select{padding:8px 10px;border-radius:9px;font-size:12px}
+
+/* kanban */
+.kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;align-items:flex-start}
+.kcol{flex:0 0 272px;background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:10px}
+.khead{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 10px}
+.khead .mono{font-size:10px;letter-spacing:.14em;color:var(--tx2)}
+.kcount{font-family:var(--mono);font-size:9.5px;color:var(--tx3);background:var(--s2);border:1px solid var(--bd);padding:2px 8px;border-radius:999px}
+.kcard{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:10px;cursor:pointer;transition:border-color .15s,transform .15s}
+.kcard:hover{border-color:var(--bd2);transform:translateY(-2px)}
+.kcard:last-child{margin-bottom:2px}
+.kcard img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid var(--bd);margin-bottom:10px}
+.kcard b{font-size:13px;display:block}
+.kcard .cl{font-size:11.5px;color:var(--tx2);margin:2px 0 8px}
+.kcard .row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+.kcard .dl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--tx3)}
+.avstack{display:flex}
+.avstack .avatar{width:24px;height:24px;flex:0 0 24px;font-size:8.5px;margin-left:-6px;border-color:var(--s2);background:var(--s3)}
+.avstack .avatar:first-child{margin-left:0}
+.alert-ic{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;letter-spacing:.08em}
+.alert-ic svg{width:11px;height:11px}
+.alert-ic.w{color:var(--warn)} .alert-ic.e{color:var(--err)}
+
+/* calendar */
+.cal-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.cal-title{font-size:16px;font-weight:800;letter-spacing:-.01em;min-width:170px}
+.seg{display:flex;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.seg button{padding:7px 14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--tx3)}
+.seg button.on{background:var(--s2);color:var(--tx)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-dow{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--tx3);text-transform:uppercase;padding:4px 6px}
+.cal-cell{min-height:96px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:7px;overflow:hidden}
+.cal-cell.dim{opacity:.38}
+.cal-cell.today{border-color:var(--ac)}
+.cal-cell .d{font-family:var(--mono);font-size:10px;color:var(--tx2);margin-bottom:6px}
+.ev{display:block;width:100%;text-align:left;font-size:10px;font-family:var(--mono);letter-spacing:.04em;padding:3px 6px;border-radius:6px;margin-bottom:4px;border:1px solid var(--bd);background:var(--s2);color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.shoot{border-color:rgba(92,124,255,.45);color:var(--ac2)}
+.ev.meet{border-color:rgba(76,195,138,.4);color:var(--ok)}
+.ev.dead{border-color:rgba(229,72,77,.45);color:var(--err)}
+.ev.rev{border-color:rgba(232,163,61,.45);color:var(--warn)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase}
+.legend i{width:8px;height:8px;border-radius:3px}
+
+/* revision cards */
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.rev-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.rev-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.rev-card h4{font-family:var(--mono);font-size:12px;letter-spacing:.12em}
+.rev-card .proj{font-size:13px;font-weight:700;margin-bottom:2px}
+.rev-card .sub2{font-size:11.5px;color:var(--tx2)}
+.prog{height:4px;background:var(--bd);border-radius:3px;overflow:hidden;margin:12px 0 6px}
+.prog i{display:block;height:100%;background:var(--ac)}
+.prog-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--tx3)}
+
+/* charts */
+.chart-row{display:grid;grid-template-columns:1.7fr 1fr;gap:12px;margin-top:12px}
+svg text{font-family:var(--mono)}
+.donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.dlegend{flex:1;min-width:150px}
+.dlegend .li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx2);padding:4px 0}
+.dlegend .li i{width:9px;height:9px;border-radius:3px;flex:0 0 9px}
+.dlegend .li .pc{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--tx3)}
+
+/* availability */
+.avail-grid{display:grid;grid-template-columns:200px repeat(6,1fr);gap:6px;align-items:center}
+.avail-grid .hd{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase;padding:6px}
+.avail-grid .wn{font-size:12.5px;font-weight:700;padding:6px}
+.avail-grid .wn span{display:block;font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:.08em}
+.chip{height:34px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em}
+.chip.A{color:var(--ok);border-color:rgba(76,195,138,.35)}
+.chip.L{color:var(--warn);border-color:rgba(232,163,61,.4)}
+.chip.U{color:var(--tx3)}
+.chip.P{color:var(--ac2);border-color:rgba(92,124,255,.4)}
+
+/* portfolio / content */
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pf-card{border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:var(--s1);cursor:pointer;transition:border-color .15s}
+.pf-card:hover{border-color:var(--bd2)}
+.pf-card img{width:100%;height:190px;object-fit:cover;display:block;transition:transform .4s ease}
+.pf-card:hover img{transform:scale(1.03)}
+.pf-card .bd{padding:12px 14px}
+.pf-card b{font-size:14px}
+.pf-card .mono{font-size:9px;color:var(--tx3);letter-spacing:.12em;display:block;margin-top:4px}
+.svc-row{display:flex;gap:18px;align-items:baseline;padding:16px 6px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.svc-row:last-child{border-bottom:none}
+.svc-row .idx{font-family:var(--mono);font-size:11px;color:var(--ac2)}
+.svc-row h4{font-size:17px;font-weight:800;letter-spacing:-.01em;min-width:220px}
+.svc-row .tags{flex:1;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--tx2);border:1px solid var(--bd);border-radius:999px;padding:3px 9px}
+
+/* messages */
+.msg-wrap{display:grid;grid-template-columns:280px 1fr;gap:12px;height:calc(100vh - 240px);min-height:420px}
+.thread-list{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow-y:auto}
+.thread{display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid var(--bd);width:100%;text-align:left;align-items:center}
+.thread.on{background:var(--s2);box-shadow:inset 2px 0 0 var(--ac)}
+.thread b{font-size:12.5px;display:block}
+.thread span{font-size:11px;color:var(--tx3);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.chat{background:var(--s1);border:1px solid var(--bd);border-radius:14px;display:flex;flex-direction:column}
+.chat-h{padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.chat-b{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.bub{max-width:70%;padding:10px 13px;border-radius:12px;font-size:13px;background:var(--s2);border:1px solid var(--bd)}
+.bub.me{align-self:flex-end;background:rgba(92,124,255,.12);border-color:rgba(92,124,255,.35)}
+.bub time{display:block;font-family:var(--mono);font-size:8.5px;color:var(--tx3);margin-top:5px;letter-spacing:.1em}
+.chat-f{display:flex;gap:8px;padding:12px;border-top:1px solid var(--bd)}
+.chat-f input{flex:1}
+
+/* empty state */
+.empty{border:1px dashed var(--bd2);border-radius:16px;padding:64px 24px;text-align:center;color:var(--tx2)}
+.empty svg{width:22px;height:22px;color:var(--tx3);margin-bottom:12px}
+.empty .micro{color:var(--ac2);display:block;margin-bottom:8px}
+.empty h4{font-size:16px;font-weight:800;color:var(--tx);margin-bottom:6px}
+.empty p{font-size:12.5px;max-width:46ch;margin:0 auto 16px}
+
+/* drawer */
+#drawerWrap{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s}
+#drawerWrap.open{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,94vw);background:var(--s1);border-left:1px solid var(--bd);z-index:81;transform:translateX(102%);transition:transform .25s ease;overflow-y:auto;padding:20px}
+#drawer.open{transform:none}
+#drawer img.cover{width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid var(--bd);margin:14px 0}
+.drow{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd);font-size:12.5px}
+.drow .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase;padding-top:2px}
+.psteps{margin:14px 0}
+.pstep{display:flex;align-items:center;gap:10px;padding:6px 0;font-family:var(--mono);font-size:10px;letter-spacing:.12em}
+.pstep i{width:8px;height:8px;border-radius:50%;background:var(--bd2);flex:0 0 8px}
+.pstep.done{color:var(--tx2)} .pstep.done i{background:var(--ok)}
+.pstep.active{color:var(--ac2)} .pstep.active i{background:var(--ac);box-shadow:0 0 0 3px rgba(92,124,255,.2)}
+.pstep.next{color:var(--tx3)}
+
+/* modal */
+#modalWrap{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+#modalWrap.open{display:flex}
+#modal{width:min(480px,100%);background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px}
+#modal h3{font-size:17px;font-weight:800;margin-bottom:4px}
+#modal .msub{font-size:12px;color:var(--tx2);margin-bottom:16px}
+.f-row{margin-bottom:12px}
+.f-row label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:6px}
+.f-row input,.f-row select{width:100%}
+.m-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.success-box{text-align:center;padding:26px 10px}
+.success-box .ok-ic{width:46px;height:46px;border-radius:50%;background:rgba(76,195,138,.12);border:1px solid rgba(76,195,138,.4);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.success-box .ok-ic svg{width:20px;height:20px}
+.success-box h4{font-family:var(--mono);letter-spacing:.16em;font-size:12px;color:var(--ok);margin-bottom:8px}
+.success-box p{font-size:12.5px;color:var(--tx2);margin-bottom:18px}
+
+/* toasts */
+#toasts{position:fixed;right:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--s1);border:1px solid var(--bd);border-left:2px solid var(--ac);border-radius:10px;padding:10px 14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;box-shadow:0 12px 34px rgba(0,0,0,.5);animation:tin .25s ease}
+@keyframes tin{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+/* responsive */
+@media(max-width:1200px){.grid-metrics{grid-template-columns:repeat(2,1fr)}.sec,.chart-row{grid-template-columns:1fr}.pf-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1023px){
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:none}
+  .main{margin-left:0}
+  #burger{display:flex}
+  #backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;display:none}
+  #backdrop.open{display:block}
+  .top-date{display:none}
+  .msg-wrap{grid-template-columns:1fr;height:auto}
+  .chat-b{min-height:280px}
+}
+@media(max-width:640px){
+  #content{padding:16px 14px 60px}
+  .topbar{padding:12px 14px}
+  .grid-metrics{grid-template-columns:1fr 1fr}
+  .mcard .val{font-size:20px}
+  .pf-grid{grid-template-columns:1fr}
+  .searchbox{width:100%}
+  .avail-grid{grid-template-columns:140px repeat(6,minmax(44px,1fr));overflow-x:auto}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar" aria-label="Navigasi admin">
+    <div class="logo-wrap">
+      <div class="logo-tile">
+        <img class="logo-img" id="logoImg" alt="Logo BDJG">
+        <div class="logo-meta">
+          <span class="brand">BDJG®</span>
+          <span class="micro">Studio Workspace</span>
+        </div>
+      </div>
+    </div>
+    <nav id="nav"></nav>
+    <div class="side-foot">
+      <div class="avatar">SN</div>
+      <div class="who"><b>Sinta Admin</b><span>ADMIN / OPERATIONAL</span></div>
+      <button class="icon-btn" data-act="demo" data-msg="LOGOUT — DEMO" title="Logout" aria-label="Logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5v16h4"/><path d="M14 8l4 4-4 4"/><path d="M8 12h10"/></svg></button>
+    </div>
+  </aside>
+  <div id="backdrop" data-act="close-nav"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn" id="burger" data-act="burger" aria-label="Buka menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <span class="crumb" id="crumb">ADMIN / <b>DASHBOARD</b></span>
+      <span class="top-date">SEL — 08 SEP 2026 / 09:00 WIB</span>
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg>
+        <input id="searchIn" type="text" placeholder="Cari project, client, invoice, worker…" aria-label="Pencarian global">
+        <div id="searchRes" role="listbox"></div>
+      </div>
+      <div class="bell-wrap">
+        <button class="icon-btn" data-act="bell" aria-label="Notifikasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot" id="bellDot"></span></button>
+        <div id="notifPanel"></div>
+      </div>
+    </header>
+    <main id="content"></main>
+  </div>
+</div>
+
+<div id="drawerWrap" data-act="close-drawer"></div>
+<aside id="drawer" aria-label="Detail project"></aside>
+
+<div id="modalWrap"><div id="modal"></div></div>
+<div id="toasts"></div>
+
+<script>
+/* ================= ASSETS ================= */
+var LOGO="https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/1e6894bff-2f26-4d5c-af41-7252da208210.png";
+var CV={
+ wed:"https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/17c083144-fb51-43f2-a2ce-efeaa365d1b3.png",
+ grad:"https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/165ebad1e-6293-422e-ab20-3bfd19c1df22.png",
+ cop:"https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/10bd7f274-7bef-466b-b602-55559ade0ea0.png",
+ drone:"https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/1123da7be-a569-4c8a-aa68-122bf988b916.png",
+ mus:"https://image.qwenlm.ai/public_source/9329af39-ec42-413e-b610-ec556cade7be/1e8533529-6332-4f8f-8e2f-af6c64e3a25c.png"
+};
+document.getElementById("logoImg").src=LOGO;
+
+/* ================= DATA ================= */
+var PROJECTS=[
+ {id:"BDJG-2026-0048",name:"Graduation Film",client:"SMAN 3 Bandung",service:"Video Angkatan",status:"POST-PRODUCTION",due:"20 SEP 2026",cover:CV.grad,admin:"Sinta",team:["Budi","Andi","Fajar"],pay:"DP PAID",paySt:"success",revOpen:1},
+ {id:"BDJG-2026-0047",name:"Wedding Film",client:"Alya & Raka",service:"Wedding Film",status:"CLIENT REVIEW",due:"14 SEP 2026",cover:CV.wed,admin:"Sinta",team:["Budi","Rama","Rizky","Akbar"],pay:"FINAL DUE",paySt:"warning",revOpen:0},
+ {id:"BDJG-2026-0051",name:"Company Profile",client:"Kopi Arunika",service:"Commercial",status:"PRODUCTION",due:"05 OKT 2026",cover:CV.cop,admin:"Yoga",team:["Andi","Rama"],pay:"DP PAID",paySt:"success",revOpen:0},
+ {id:"BDJG-2026-0052",name:"Video Angkatan",client:"Universitas Telkom",service:"Video Angkatan",status:"PRE-PRODUCTION",due:"12 OKT 2026",cover:CV.drone,admin:"Yoga",team:["Budi"],pay:"DP UNPAID",paySt:"error",revOpen:0},
+ {id:"BDJG-2026-0053",name:"Music Video — Senja",client:"Senja Collective",service:"Music Video",status:"REVISION",due:"22 SEP 2026",cover:CV.mus,admin:"Sinta",team:["Budi","Fajar","Akbar"],pay:"DP PAID",paySt:"success",revOpen:2},
+ {id:"BDJG-2026-0054",name:"Short Film TA",client:"Larasati — ITB",service:"Short Film",status:"POST-PRODUCTION",due:"30 SEP 2026",cover:CV.mus,admin:"Yoga",team:["Andi","Fajar"],pay:"PAID",paySt:"success",revOpen:0},
+ {id:"BDJG-2026-0055",name:"Graduation Photo",client:"UNPAD 2026",service:"Graduation Photography",status:"PRODUCTION",due:"08 OKT 2026",cover:CV.grad,admin:"Sinta",team:["Rama"],pay:"DP PAID",paySt:"success",revOpen:0},
+ {id:"BDJG-2026-0045",name:"Wedding Photo",client:"Nadia & Dimas",service:"Wedding Photography",status:"COMPLETED",due:"01 SEP 2026",cover:CV.wed,admin:"Sinta",team:["Rama","Akbar"],pay:"PAID",paySt:"success",revOpen:0}
+];
+var INQUIRIES=[
+ {st:"NEW",c:"Bagus W.",svc:"Wedding Film",bud:"Rp 12.000.000",date:"17 OKT 2026",src:"WEBSITE",adm:"—",last:"08 SEP 08:12"},
+ {st:"NEW",c:"OSIS SMA 5",svc:"Video Angkatan",bud:"Rp 9.500.000",date:"24 OKT 2026",src:"INSTAGRAM",adm:"—",last:"08 SEP 07:40"},
+ {st:"CONTACTED",c:"Hotel Aruna",svc:"Company Profile",bud:"Rp 25.000.000",date:"NOV 2026",src:"REFERRAL",adm:"Yoga",last:"07 SEP 16:20"},
+ {st:"QUALIFIED",c:"Fak. Hukum UNPAD",svc:"Event Coverage",bud:"Rp 7.000.000",date:"03 OKT 2026",src:"WEBSITE",adm:"Sinta",last:"07 SEP 11:05"},
+ {st:"QUOTATION",c:"Brand Lokakarya",svc:"Commercial",bud:"Rp 18.000.000",date:"28 SEP 2026",src:"WEBSITE",adm:"Sinta",last:"06 SEP 14:44"},
+ {st:"QUOTATION",c:"Pernikahan Intan",svc:"Wedding Photo",bud:"Rp 8.500.000",date:"15 NOV 2026",src:"INSTAGRAM",adm:"Yoga",last:"05 SEP 09:30"},
+ {st:"WON",c:"SMAN 3 Bandung",svc:"Video Angkatan",bud:"Rp 15.000.000",date:"DONE",src:"REFERRAL",adm:"Sinta",last:"14 AGU 10:15"},
+ {st:"LOST",c:"Startup Nusa",svc:"Motion Graphics",bud:"Rp 6.000.000",date:"—",src:"WEBSITE",adm:"Yoga",last:"30 AGU 13:00"}
+];
+var QUOTATIONS=[
+ {no:"QT-2026-096",c:"Brand Lokakarya",p:"Commercial Film",tot:"Rp 18.500.000",st:"SENT",val:"12 SEP 2026"},
+ {no:"QT-2026-095",c:"Pernikahan Intan",p:"Wedding Photo",tot:"Rp 8.500.000",st:"VIEWED",val:"10 SEP 2026"},
+ {no:"QT-2026-094",c:"Hotel Aruna",p:"Company Profile",tot:"Rp 27.000.000",st:"REVISION_REQUESTED",val:"08 SEP 2026"},
+ {no:"QT-2026-093",c:"SMAN 3 Bandung",p:"Video Angkatan",tot:"Rp 15.000.000",st:"ACCEPTED",val:"—"},
+ {no:"QT-2026-092",c:"Fak. Hukum UNPAD",p:"Event Coverage",tot:"Rp 7.200.000",st:"DRAFT",val:"15 SEP 2026"},
+ {no:"QT-2026-090",c:"Startup Nusa",p:"Motion Graphics",tot:"Rp 6.400.000",st:"DECLINED",val:"—"}
+];
+var CLIENTS=[
+ {n:"SMAN 3 Bandung",i:"School",k:"Dewi — 0812-201-xx",tp:3,ap:1,out:"Rp 7.500.000",st:"ACTIVE"},
+ {n:"Alya & Raka",i:"Wedding",k:"Alya — 0813-887-xx",tp:1,ap:1,out:"Rp 7.500.000",st:"ACTIVE"},
+ {n:"Kopi Arunika",i:"Commercial",k:"Bagus — 0811-902-xx",tp:2,ap:1,out:"—",st:"ACTIVE"},
+ {n:"Universitas Telkom",i:"School",k:"Humas — 022-xxx",tp:4,ap:1,out:"Rp 7.500.000",st:"ACTIVE"},
+ {n:"Nadia & Dimas",i:"Wedding",k:"Nadia — 0857-118-xx",tp:1,ap:0,out:"—",st:"ACTIVE"},
+ {n:"Senja Collective",i:"Music",k:"Manajer — 0819-776-xx",tp:1,ap:1,out:"—",st:"ACTIVE"}
+];
+var WORKERS=[
+ {n:"Budi Santoso",p:"Director",t:"INTERNAL",ap:3,wl:70,av:"ACTIVE"},
+ {n:"Andi Wijaya",p:"Videographer",t:"INTERNAL",ap:4,wl:92,av:"ACTIVE"},
+ {n:"Rama Putra",p:"Photographer",t:"FREELANCE",ap:3,wl:55,av:"ACTIVE"},
+ {n:"Rizky Fauzi",p:"Drone Pilot",t:"FREELANCE",ap:1,wl:25,av:"ON_LEAVE"},
+ {n:"Fajar Hidayat",p:"Editor",t:"INTERNAL",ap:4,wl:86,av:"ACTIVE"},
+ {n:"Akbar Nugraha",p:"Colorist",t:"PARTNER",ap:3,wl:40,av:"ACTIVE"}
+];
+var INVOICES=[
+ {no:"INV-2026-118",p:"Wedding Film",c:"Alya & Raka",amt:"Rp 7.500.000",due:"12 SEP 2026",st:"ISSUED",pay:"PENDING"},
+ {no:"INV-2026-117",p:"Video Angkatan",c:"Universitas Telkom",amt:"Rp 7.500.000",due:"06 SEP 2026",st:"OVERDUE",pay:"UNPAID"},
+ {no:"INV-2026-116",p:"Graduation Film",c:"SMAN 3 Bandung",amt:"Rp 7.500.000",due:"05 SEP 2026",st:"PARTIALLY_PAID",pay:"PENDING"},
+ {no:"INV-2026-114",p:"Company Profile",c:"Kopi Arunika",amt:"Rp 9.000.000",due:"28 AGU 2026",st:"PAID",pay:"PAID"},
+ {no:"INV-2026-112",p:"Wedding Photo",c:"Nadia & Dimas",amt:"Rp 8.500.000",due:"25 AGU 2026",st:"PAID",pay:"PAID"},
+ {no:"INV-2026-110",p:"Music Video",c:"Senja Collective",amt:"Rp 6.000.000",due:"20 AGU 2026",st:"PAID",pay:"PAID"}
+];
+var EXPENSES=[
+ {d:"07 SEP 2026",p:"Company Profile",cat:"Equipment Rental",amt:"Rp 850.000",st:"APPROVED"},
+ {d:"06 SEP 2026",p:"Graduation Film",cat:"Crew",amt:"Rp 1.500.000",st:"PAID"},
+ {d:"05 SEP 2026",p:"Music Video",cat:"Music / License",amt:"Rp 1.200.000",st:"SUBMITTED"},
+ {d:"04 SEP 2026",p:"Company Profile",cat:"Transportation",amt:"Rp 450.000",st:"PAID"},
+ {d:"02 SEP 2026",p:"Graduation Film",cat:"Drone Pilot",amt:"Rp 800.000",st:"PAID"},
+ {d:"01 SEP 2026",p:"Wedding Film",cat:"Meals",amt:"Rp 380.000",st:"REJECTED"}
+];
+var REVISIONS=[
+ {r:"REVISION #02",p:"Music Video — Senja",prev:"V2",st:"IN_PROGRESS",done:2,tot:4,due:"10 SEP 2026",w:"Fajar"},
+ {r:"REVISION #01",p:"Graduation Film",prev:"V1",st:"READY_FOR_CLIENT",done:3,tot:3,due:"09 SEP 2026",w:"Fajar"},
+ {r:"REVISION #01",p:"Company Profile",prev:"V1",st:"REQUESTED",done:0,tot:2,due:"15 SEP 2026",w:"—"},
+ {r:"REVISION #03",p:"Wedding Film",prev:"V3",st:"CLOSED",done:2,tot:2,due:"02 SEP 2026",w:"Akbar"}
+];
+var SCHEDULE_TODAY=[
+ {t:"09:00",n:"Pre-Production Meeting",p:"BDJG-2026-0052",ty:"MEETING",loc:"Studio BDJG",tm:"Budi, Yoga"},
+ {t:"13:00",n:"Shooting — Outlet COP",p:"BDJG-2026-0051",ty:"SHOOT",loc:"Kopi Arunika, Bandung",tm:"Andi, Rama"},
+ {t:"18:00",n:"Deadline Rough Cut",p:"BDJG-2026-0048",ty:"DEADLINE",loc:"Internal",tm:"Fajar"},
+ {t:"20:00",n:"Client Review Session",p:"BDJG-2026-0047",ty:"REVIEW",loc:"Online",tm:"Sinta, Client"}
+];
+var EVENTS={
+ "2026-09-08":[{t:"09:00 Pre-Prod Meeting",ty:"meet"},{t:"13:00 Shoot COP",ty:"shoot"},{t:"18:00 Rough Cut Due",ty:"dead"}],
+ "2026-09-09":[{t:"20:00 Review Alya&Raka",ty:"meet"}],
+ "2026-09-10":[{t:"Rev #2 Senja Due",ty:"rev"}],
+ "2026-09-12":[{t:"Shoot Graduation UNPAD",ty:"shoot"}],
+ "2026-09-14":[{t:"Final Delivery 0047",ty:"dead"}],
+ "2026-09-16":[{t:"Pre-Prod 0052",ty:"meet"}],
+ "2026-09-20":[{t:"Final Delivery 0048",ty:"dead"}],
+ "2026-09-22":[{t:"Delivery Music Video",ty:"dead"}],
+ "2026-09-24":[{t:"Shoot Event FH UNPAD",ty:"shoot"}],
+ "2026-08-21":[{t:"Shoot 0048",ty:"shoot"}],
+ "2026-08-29":[{t:"Client Preview V1",ty:"meet"}],
+ "2026-08-30":[{t:"Revision #1",ty:"rev"}]
+};
+var ATTENTION=[
+ {sev:"URGENT",tx:"<b>1 shoot</b> belum punya videographer — 12 SEP (0052)",go:"calendar"},
+ {sev:"URGENT",tx:"<b>1 revision</b> deadline hari ini — Music Video #02",go:"revisions"},
+ {sev:"NEEDS ACTION",tx:"<b>3 quotations</b> belum dijawab &gt; 3 hari",go:"quotations"},
+ {sev:"NEEDS ACTION",tx:"<b>2 client</b> menunggu preview release",go:"production"},
+ {sev:"OVERDUE",tx:"<b>2 task</b> overdue — Graduation Film",go:"projects"},
+ {sev:"OVERDUE",tx:"<b>4 invoice</b> jatuh tempo / overdue",go:"invoices"}
+];
+var ACTIVITY=[
+ {t:"14:02",tx:"<b>Sinta</b> mengubah project 0047: POST-PRODUCTION → CLIENT_REVIEW"},
+ {t:"13:46",tx:"<b>Fajar</b> mengunggah Wedding-V3.mp4 (Internal Preview)"},
+ {t:"12:30",tx:"<b>Client</b> Alya & Raka mengirim komentar preview (2)"},
+ {t:"10:15",tx:"Payment INV-2026-116: PENDING → <b>PARTIALLY_PAID</b>"},
+ {t:"09:02",tx:"<b>Yoga</b> menetapkan Andi Wijaya ke 0051 (Videographer)"},
+ {t:"08:12",tx:"Inquiry baru: Bagus W. — Wedding Film (WEBSITE)"}
+];
+var NOTIFS=[
+ {ti:"Invoice jatuh tempo",d:"INV-2026-117 — Universitas Telkom (OVERDUE)",tm:"08:00",ch:"WHATSAPP",un:true},
+ {ti:"Revision diminta",d:"Music Video — Senja #02 (4 item)",tm:"KEMARIN",ch:"IN-APP",un:true},
+ {ti:"Quotation dilihat",d:"QT-2026-095 oleh Pernikahan Intan",tm:"KEMARIN",ch:"EMAIL",un:true},
+ {ti:"Payment diterima",d:"INV-2026-114 — Kopi Arunika Rp 9.000.000",tm:"04 SEP",ch:"IN-APP",un:false},
+ {ti:"Worker assigned",d:"Rizky Fauzi → 0047 (Drone Pilot)",tm:"03 SEP",ch:"IN-APP",un:false}
+];
+var THREADS=[
+ {id:"T1",p:"Wedding Film",c:"Alya & Raka",last:"Baik, kami tunggu preview V3 ya.",msgs:[
+   {me:0,tx:"Halo, apakah preview V2 sudah bisa kami review?",tm:"09:12"},
+   {me:1,tx:"Halo Alya — V3 sedang final QC, akan kami rilis hari ini sebelum 20:00.",tm:"09:30"},
+   {me:0,tx:"Baik, kami tunggu preview V3 ya.",tm:"09:41"}]},
+ {id:"T2",p:"Graduation Film",c:"SMAN 3 Bandung",last:"Terima kasih, pembayaran kami proses.",msgs:[
+   {me:1,tx:"Selamat siang — invoice final INV-2026-116 sudah tersedia di portal.",tm:"KEMARIN"},
+   {me:0,tx:"Terima kasih, pembayaran kami proses.",tm:"KEMARIN"}]},
+ {id:"T3",p:"Video Angkatan",c:"Universitas Telkom",last:"Mohon dikirim ulang link invoice.",msgs:[
+   {me:0,tx:"Mohon dikirim ulang link invoice.",tm:"07 SEP"}]}
+];
+var PORTFOLIO=[
+ {t:"Wedding Film — Alya & Raka",cat:"WEDDING / 2026",img:CV.wed},
+ {t:"Graduation Film — SMAN 3",cat:"GRADUATION / 2026",img:CV.grad},
+ {t:"COP — Kopi Arunika",cat:"COMMERCIAL / 2026",img:CV.cop},
+ {t:"Aerial — Pangalengan",cat:"DRONE / 2025",img:CV.drone},
+ {t:"Music Video — Senja",cat:"MUSIC VIDEO / 2026",img:CV.mus},
+ {t:"Wedding Photo — Nadia",cat:"PHOTO / 2025",img:CV.wed}
+];
+var SERVICES=[
+ {i:"01",n:"Photography",tags:["Wedding","Graduation","Event","Portrait","Commercial"]},
+ {i:"02",n:"Videography",tags:["Wedding Film","Graduation","Video Angkatan","Event","Company Profile","Music Video"]},
+ {i:"03",n:"Film Production",tags:["Short Film","Film TA","Commercial","Custom"]},
+ {i:"04",n:"Post Production",tags:["Video Editing","Color Grading","Sound Design","Photo Editing"]},
+ {i:"05",n:"VFX & Animation",tags:["Motion Graphics","2D/3D Animation","CGI","Visual Effects"]}
+];
+var PACKAGES=[
+ {s:"Wedding Film",p:"Basic",pr:"Rp 6.500.000",rv:"1 round",st:"ACTIVE"},
+ {s:"Wedding Film",p:"Cinematic",pr:"Rp 9.500.000",rv:"2 rounds",st:"ACTIVE"},
+ {s:"Wedding Film",p:"Premium",pr:"Rp 14.000.000",rv:"3 rounds",st:"ACTIVE"},
+ {s:"Video Angkatan",p:"Basic",pr:"Rp 7.500.000",rv:"1 round",st:"ACTIVE"},
+ {s:"Video Angkatan",p:"Cinematic",pr:"Rp 12.000.000",rv:"2 rounds",st:"ACTIVE"},
+ {s:"Commercial",p:"Custom",pr:"Contact",rv:"Custom",st:"ACTIVE"}
+];
+var ADDONS=[
+ {n:"Drone",ty:"FIXED",pr:"Rp 800.000"},{n:"Extra Camera",ty:"FIXED",pr:"Rp 500.000"},
+ {n:"Extra Photographer",ty:"FIXED",pr:"Rp 700.000"},{n:"Motion Graphics",ty:"QUANTITY",pr:"Rp 350.000 / scene"},
+ {n:"Additional Revision",ty:"QUANTITY",pr:"Rp 300.000 / round"},{n:"Raw Files",ty:"FIXED",pr:"Rp 400.000"},
+ {n:"Express Editing",ty:"CUSTOM",pr:"Quotation"}
+];
+var USERS=[
+ {n:"Raka Pratama",e:"owner@bdjg.studio",r:"SUPER ADMIN",st:"ACTIVE",ll:"08 SEP 08:02"},
+ {n:"Sinta Admin",e:"sinta@bdjg.studio",r:"ADMIN",st:"ACTIVE",ll:"08 SEP 08:40"},
+ {n:"Yoga Admin",e:"yoga@bdjg.studio",r:"ADMIN",st:"ACTIVE",ll:"07 SEP 21:14"},
+ {n:"Budi Santoso",e:"budi@bdjg.studio",r:"WORKER",st:"ACTIVE",ll:"08 SEP 07:55"},
+ {n:"Fajar Hidayat",e:"fajar@bdjg.studio",r:"WORKER",st:"ACTIVE",ll:"08 SEP 01:12"},
+ {n:"Rizky Fauzi",e:"rizky@bdjg.studio",r:"WORKER",st:"SUSPENDED",ll:"29 AGU 18:20"}
+];
+var TESTIMONIALS=[
+ {q:"Prosesnya rapi dari booking sampai file final. Preview dan revisi lewat portal, bukan chat pribadi.",c:"Alya — Wedding Client"},
+ {q:"Kami selalu tahu status project dan jadwal. Sangat profesional untuk ukuran studio kreatif.",c:"Humas — Universitas Telkom"},
+ {q:"Hasil color grading-nya konsisten premium. Komunikasi internal mereka sangat teratur.",c:"Bagus — Kopi Arunika"}
+];
+var REV_MONTHS=[{m:"FEB",v:42},{m:"MAR",v:38},{m:"APR",v:51},{m:"MEI",v:47},{m:"JUN",v:63},{m:"JUL",v:58},{m:"AGU",v:71},{m:"SEP",v:66}];
+var EXP_CAT=[{n:"Crew",v:45,c:"#5C7CFF"},{n:"Equipment",v:20,c:"#8a8a8a"},{n:"Transport",v:15,c:"#555555"},{n:"Location",v:10,c:"#3a3a3a"},{n:"Lainnya",v:10,c:"#2a2a2a"}];
+
+/* ================= HELPERS ================= */
+var SC={"NEW":"info","CONTACTED":"info","QUALIFIED":"info","QUOTATION":"warning","WON":"success","LOST":"neutral","DRAFT":"neutral","SENT":"info","VIEWED":"info","REVISION_REQUESTED":"warning","ACCEPTED":"success","DECLINED":"error","EXPIRED":"neutral","CANCELLED":"neutral","ISSUED":"info","PARTIALLY_PAID":"warning","PAID":"success","OVERDUE":"error","VOID":"neutral","REFUNDED":"neutral","PRE-PRODUCTION":"info","PRODUCTION":"info","POST-PRODUCTION":"info","CLIENT REVIEW":"warning","REVISION":"warning","FINAL":"success","COMPLETED":"success","ARCHIVED":"neutral","TODO":"neutral","IN_PROGRESS":"info","REVIEW":"warning","BLOCKED":"error","DONE":"success","REQUESTED":"info","TRIAGE":"warning","INTERNAL_REVIEW":"warning","READY_FOR_CLIENT":"info","APPROVED":"success","CLOSED":"neutral","ACTIVE":"success","INACTIVE":"neutral","ON_LEAVE":"warning","INTERNAL":"info","FREELANCE":"warning","PARTNER":"success","UNPAID":"error","PENDING":"warning","SUBMITTED":"info","REJECTED":"error","SUPER ADMIN":"error","ADMIN":"info","WORKER":"neutral","NEEDS ACTION":"warning","URGENT":"error","SHOOT":"info","MEETING":"success","DEADLINE":"error"};
+function badge(t){return '<span class="badge b-'+(SC[t]||"neutral")+'"><i></i>'+t+"</span>"}
+function initials(n){return n.split(" ").map(function(x){return x[0]}).join("").slice(0,2).toUpperCase()}
+function avstack(arr){return '<span class="avstack">'+arr.map(function(w){return '<span class="avatar" title="'+w+'">'+initials(w)+"</span>"}).join("")+"</span>"}
+function ico(n){var P={grid:'<path d="M4 4h7v7H4z"/><path d="M13 4h7v7h-7z"/><path d="M4 13h7v7H4z"/><path d="M13 13h7v7h-7z"/>',inbox:'<path d="M4 13h4l2 3h4l2-3h4"/><path d="M4 13V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/><path d="M4 13v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>',file:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M4 20c0-3 2-5 5-5s5 2 5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 15.5c2.8.2 4.5 2 4.5 4.5"/>',cal:'<path d="M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1z"/><path d="M4 10h16"/><path d="M8 3v4"/><path d="M16 3v4"/>',refresh:'<path d="M4 10a8 8 0 0 1 14-4l2 2"/><path d="M20 4v4h-4"/><path d="M20 14a8 8 0 0 1-14 4l-2-2"/><path d="M4 20v-4h4"/>',wallet:'<path d="M4 7h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z"/><path d="M4 7V6a2 2 0 0 1 2-2h10"/><path d="M15 13h5"/>',image:'<path d="M4 5h16v14H4z"/><circle cx="9" cy="10" r="1.5"/><path d="M4 17l5-5 4 4 3-3 4 4"/>',chat:'<path d="M4 5h16v11H9l-5 4V5z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M19.1 4.9L17 7"/><path d="M7 17l-2.1 2.1"/>',kanban:'<path d="M5 4h4v12H5z"/><path d="M10.5 4h4v8h-4z"/><path d="M16 4h4v10h-4z"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v4"/><path d="M12 17.5v.5"/>',check:'<path d="M5 13l4 4L19 7"/>',arr:'<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',plus:'<path d="M12 5v14"/><path d="M5 12h14"/>',x:'<path d="M6 6l12 12"/><path d="M18 6L6 18"/>',film:'<path d="M4 5h16v14H4z"/><path d="M8 5v14"/><path d="M16 5v14"/><path d="M4 10h4"/><path d="M4 14h4"/><path d="M16 10h4"/><path d="M16 14h4"/>',trend:'<path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/>',chev:'<path d="M6 9l6 6 6-6"/>'}[n];return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+P+"</svg>"}
+function table(cols,rows){return '<div class="tscroll"><table class="tbl"><thead><tr>'+cols.map(function(c){return "<th>"+c+"</th>"}).join("")+"</tr></thead><tbody>"+rows.map(function(r){return "<tr"+(r.rowact||"")+">"+r.cells.map(function(c){return "<td>"+c+"</td>"}).join("")+"</tr>"}).join("")+"</tbody></table></div>"}
+function empty(ic,t,d,cta){return '<div class="empty">'+ico(ic)+'<span class="micro">MODULE / '+t.toUpperCase()+"</span><h4>"+t+"</h4><p>"+d+"</p>"+(cta?'<button class="btn ghost sm" data-act="demo" data-msg="'+cta.toUpperCase()+' — DEMO">'+cta+"</button>":"")+"</div>"}
+function toast(m){var el=document.createElement("div");el.className="toast";el.textContent=m;document.getElementById("toasts").appendChild(el);setTimeout(function(){el.remove()},2600)}
+function phead(ey,ti,de,act){return '<div class="phead"><div><div class="eyebrow">'+ey+'</div><h1>'+ti+"</h1><p>"+de+"</p></div>"+(act?'<button class="btn" data-act="'+(act.act||"demo")+'" '+(act.data||"")+'>'+ico("plus")+act.label+"</button>":"")+"</div>"}
+function progSteps(status){var steps=["PRE-PRODUCTION","PRODUCTION","POST","CLIENT REVIEW","FINAL"];var idx={"PRE-PRODUCTION":0,"PRODUCTION":1,"POST-PRODUCTION":2,"CLIENT REVIEW":3,"REVISION":3,"FINAL":4,"COMPLETED":5}[status];return steps.map(function(s,i){var st=(status==="COMPLETED"||i<idx)?"done":(i===idx?"active":"next");return '<div class="pstep '+st+'"><i></i>'+s+"</div>"}).join("")}
+
+/* ================= NAV ================= */
+var NAV=[
+ {v:"dashboard",l:"Dashboard",ic:"grid"},
+ {g:"Sales",items:[{v:"inquiries",l:"Inquiries",ic:"inbox"},{v:"quotations",l:"Quotations",ic:"file"},{v:"clients",l:"Clients",ic:"users"}]},
+ {g:"Projects",items:[{v:"projects",l:"All Projects",ic:"film"},{v:"production",l:"Production Board",ic:"kanban"},{v:"calendar",l:"Calendar",ic:"cal"},{v:"revisions",l:"Revisions",ic:"refresh"}]},
+ {g:"Team",items:[{v:"workers",l:"Workers",ic:"users"},{v:"availability",l:"Availability",ic:"cal"}]},
+ {g:"Finance",items:[{v:"finance",l:"Overview",ic:"trend"},{v:"invoices",l:"Invoices",ic:"wallet"},{v:"expenses",l:"Expenses",ic:"wallet"},{v:"transactions",l:"Transactions",ic:"arr"},{v:"reports",l:"Reports",ic:"file"}]},
+ {g:"Content",items:[{v:"portfolio",l:"Portfolio",ic:"image"},{v:"services",l:"Services",ic:"grid"},{v:"packages",l:"Packages",ic:"file"},{v:"addons",l:"Add-ons",ic:"plus"},{v:"testimonials",l:"Testimonials",ic:"chat"}]},
+ {g:"Communication",items:[{v:"messages",l:"Messages",ic:"chat"},{v:"notifications",l:"Notifications",ic:"alert"},{v:"templates",l:"Templates",ic:"file"}]},
+ {g:"System",items:[{v:"users",l:"Users & Roles",ic:"gear"},{v:"activity",l:"Activity Log",ic:"clock"},{v:"integrations",l:"Integrations",ic:"arr"},{v:"settings",l:"Settings",ic:"gear"}]}
+];
+function buildNav(){var h="";NAV.forEach(function(n){if(n.v){h+='<button class="nav-item" data-act="nav" data-view="'+n.v+'">'+ico(n.ic)+n.l+"</button>"}else{h+='<div class="nav-group" data-group="'+n.g+'"><button data-act="group">'+n.g+' '+ico("chev")+'</button><div class="nav-sub">'+n.items.map(function(it){return '<button class="nav-item" data-act="nav" data-view="'+it.v+'">'+ico(it.ic)+it.l+"</button>"}).join("")+"</div></div>"}});document.getElementById("nav").innerHTML=h}
+function setActiveNav(v){document.querySelectorAll(".nav-item").forEach(function(b){b.classList.toggle("active",b.dataset.view===v)})}
+
+/* ================= VIEWS ================= */
+var calState={mode:"month",y:2026,m:8};
+var projFilter={q:"",st:"ALL",sv:"ALL"};
+var curThread="T1";
+
+var VIEWS={
+dashboard:{crumb:"DASHBOARD",render:function(){
+ var mc=[["NEW INQUIRIES","2","HARI INI","up"],["QUOTATION WAITING","4","2 &gt; 3 HARI","wn"],["ACTIVE PROJECTS","7","+2 THIS MONTH","up"],["CLIENT REVIEW","2","MENUNGGU CLIENT","wn"],["REVISIONS OPEN","5","1 DUE TODAY","dn"],["INVOICES DUE","4","1 OVERDUE","dn"],["TODAY SHOOTS","1","13:00 — COP","up"],["WORKERS ACTIVE","5","1 ON LEAVE","wn"]];
+ return phead("STUDIO WORKSPACE","Dashboard","Ringkasan operasional BDJG hari ini — attention first, status, dan finance snapshot.",{label:"New Project",act:"new-project"})+
+ '<div class="grid-metrics">'+mc.map(function(m){return '<div class="mcard'+(m[3]==="dn"?" alert":"")+'"><span class="micro">'+m[0]+'</span><div class="val">'+m[1]+'</div><div class="sub"><span class="'+m[3]+'">●</span>'+m[2]+"</div></div>"}).join("")+"</div>"+
+ '<div class="sec"><div class="panel"><div class="p-h"><h3>Attention Queue</h3><span class="micro">NEEDS ACTION / URGENT / OVERDUE</span></div>'+ATTENTION.map(function(a){return '<button class="att-item" data-act="nav" data-view="'+a.go+'">'+badge(a.sev)+'<span class="txt">'+a.tx+'</span>'+ico("arr")+"</button>"}).join("")+"</div>"+
+ '<div class="panel"><div class="p-h"><h3>Today&#39;s Schedule</h3><button class="link" data-act="nav" data-view="calendar">CALENDAR '+ico("arr")+"</button></div>"+SCHEDULE_TODAY.map(function(s){return '<div class="sch-item"><time>'+s.t+'</time><div class="t"><b>'+s.n+'</b><span>'+s.p+" — "+s.loc+'</span></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+badge(s.ty)+'<span class="meta">'+s.tm+"</span></div></div>"}).join("")+"</div></div>"+
+ '<div class="sec"><div class="panel"><div class="p-h"><h3>Finance Snapshot</h3><button class="link" data-act="nav" data-view="finance">FINANCE '+ico("arr")+"</button></div>"+barChart()+
+ '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">'+finMini("CASH RECEIVED","Rp 214.0 JT","SEP 2026")+finMini("OUTSTANDING","Rp 22.5 JT","1 OVERDUE")+finMini("EST. GROSS PROFIT","Rp 148.0 JT","MARGIN ±69%")+"</div></div>"+
+ '<div class="panel"><div class="p-h"><h3>Recent Activity</h3><button class="link" data-act="nav" data-view="activity">LOG '+ico("arr")+"</button></div>"+ACTIVITY.map(function(a){return '<div class="act-item"><time>'+a.t+"</time>"+a.tx+"</div>"}).join("")+"</div></div>"+
+ '<div class="panel" style="margin-top:12px"><div class="p-h"><h3>Production Pipeline</h3><button class="link" data-act="nav" data-view="production">BOARD '+ico("arr")+"</button></div>"+pipelineStrip()+"</div>"}},
+inquiries:{crumb:"SALES / INQUIRIES",render:function(){var cols=["NEW","CONTACTED","QUALIFIED","QUOTATION","WON","LOST"];
+ return phead("SALES / CRM","Inquiry Pipeline","Pantau lead dari masuk sampai won / lost. Kartu inquiry menampilkan budget, tanggal preferensi, dan sumber.")+
+ '<div class="kanban">'+cols.map(function(c){var its=INQUIRIES.filter(function(i){return i.st===c});return '<div class="kcol"><div class="khead"><span class="mono">'+c+'</span><span class="kcount">'+its.length+"</span></div>"+its.map(function(i){return '<div class="kcard" data-act="demo" data-msg="INQUIRY — '+i.c.toUpperCase()+'"><b>'+i.c+'</b><div class="cl">'+i.svc+'</div><div class="row">'+badge(i.src)+"</div>"+'<div class="row"><span class="dl">'+i.bud+'</span><span class="dl">/ '+i.date+'</span></div><div class="row"><span class="dl">ADM: '+i.adm+"</span><span class=\"dl\">"+i.last+"</span></div></div>"}).join("")+"</div>"}).join("")+"</div>"}},
+quotations:{crumb:"SALES / QUOTATIONS",render:function(){return phead("SALES / CRM","Quotations","Penawaran komersial dengan version history. Perubahan harga selalu tercatat.",{label:"New Quotation"})+table(["NUMBER","CLIENT","PROJECT","TOTAL","STATUS","VALID UNTIL"],QUOTATIONS.map(function(q){return{cells:["<span class='mono' style='font-size:11px'>"+q.no+"</span>","<b>"+q.c+"</b>",q.p,"<b>"+q.tot+"</b>",badge(q.st),"<span class='mono' style='font-size:10px'>"+q.val+"</span>"]}}))}},
+clients:{crumb:"SALES / CLIENTS",render:function(){return phead("SALES / CRM","Client Directory","Data client hanya untuk internal. Client portal memakai pola akses OWN.",{label:"Add Client"})+table(["CLIENT","INSTITUTION","CONTACT","TOTAL","ACTIVE","OUTSTANDING","STATUS"],CLIENTS.map(function(c){return{cells:["<b>"+c.n+"</b>",c.i,c.c,"<span class='mono'>"+c.tp+"</span>","<span class='mono'>"+c.ap+"</span>","<b>"+c.out+"</b>",badge(c.st)]}}))}},
+projects:{crumb:"PROJECTS / ALL",render:function(){var list=PROJECTS.filter(function(p){return (projFilter.st==="ALL"||p.status===projFilter.st)&&(projFilter.sv==="ALL"||p.service===projFilter.sv)&&(!projFilter.q||(p.name+p.client+p.id).toLowerCase().includes(projFilter.q))});
+ return phead("PROJECTS","All Projects","Kelola project aktif dan selesai. Klik baris untuk snapshot project.",{label:"New Project",act:"new-project"})+
+ '<div class="toolbar"><input id="pfq" placeholder="Filter project / client / ID…" value="'+projFilter.q+'"><select id="pfs"><option>ALL</option><option>PRE-PRODUCTION</option><option>PRODUCTION</option><option>POST-PRODUCTION</option><option>CLIENT REVIEW</option><option>REVISION</option><option>COMPLETED</option></select><select id="pfv"><option>ALL</option><option>Video Angkatan</option><option>Wedding Film</option><option>Wedding Photography</option><option>Commercial</option><option>Music Video</option><option>Short Film</option><option>Graduation Photography</option></select><span class="sp"></span><span class="micro">'+list.length+" PROJECT</span></div>"+
+ table(["PROJECT","CLIENT","SERVICE","STATUS","DEADLINE","PAYMENT","REVISION","ADMIN"],list.map(function(p){return{rowact:' data-act="drawer" data-id="'+p.id+'"',cells:['<span class="cell-p"><img src="'+p.cover+'" alt=""><span><b>'+p.name+'</b><span class="mono">'+p.id+"</span></span></span>",p.client,p.service,badge(p.status),"<span class='mono' style='font-size:10px'>"+p.due+"</span>",'<span class="badge b-'+p.paySt+'"><i></i>'+p.pay+"</span>",(p.revOpen>0?badge("REVISION")+" <span class='mono' style='font-size:9px'>"+p.revOpen+" OPEN</span>":"<span class='muted'>—</span>"),p.admin]}}))}},
+production:{crumb:"PROJECTS / BOARD",render:function(){var cols=["PRE-PRODUCTION","PRODUCTION","POST-PRODUCTION","CLIENT REVIEW","REVISION","FINAL","COMPLETED"];var map={"FINAL":"FINAL APPROVAL"};
+ return phead("PROJECTS / PRODUCTION BOARD","Production Board","Kanban status produksi seluruh project. Stage utama dikendalikan Admin.")+
+ '<div class="kanban">'+cols.map(function(c){var key=(map[c]||c);var its=PROJECTS.filter(function(p){return p.status===key});return '<div class="kcol"><div class="khead"><span class="mono">'+c+'</span><span class="kcount">'+its.length+"</span></div>"+(its.length?its.map(function(p){return '<div class="kcard" data-act="drawer" data-id="'+p.id+'"><img src="'+p.cover+'" alt=""><b>'+p.name+'</b><div class="cl">'+p.client+'</div><div class="row"><span class="dl">DUE '+p.due+"</span></div>"+'<div class="row">'+avstack(p.team)+(p.paySt!=="success"?'<span class="alert-ic e">'+ico("alert")+p.pay+"</span>":"")+(p.revOpen?'<span class="alert-ic w">'+ico("refresh")+"REV "+p.revOpen+"</span>":"")+"</div></div>"}).join(""):'<div class="micro" style="padding:8px 6px">EMPTY</div>')+"</div>"}).join("")+"</div>"}},
+calendar:{crumb:"PROJECTS / CALENDAR",render:function(){return phead("PROJECTS / CALENDAR","Calendar","Shoot, meeting, deadline produksi, dan review client dalam satu tampilan.")+calHead()+calBody()}},
+revisions:{crumb:"PROJECTS / REVISIONS",render:function(){return phead("PROJECTS / REVISIONS","Revisions","Revision round per project dengan item, assignee, dan status resolusi.")+
+ '<div class="rev-grid">'+REVISIONS.map(function(r){return '<div class="rev-card"><div class="top"><h4>'+r.r+" — "+r.prev+"</h4>"+badge(r.st)+'</div><div class="proj">'+r.p+'</div><div class="sub2">Assigned: '+r.w+' · Due '+r.due+'</div><div class="prog"><i style="width:'+Math.round(r.done/r.tot*100)+'%"></i></div><div class="prog-lbl"><span>ITEMS</span><span>'+r.done+" / "+r.tot+" RESOLVED</span></div></div>"}).join("")+"</div>"}},
+workers:{crumb:"TEAM / WORKERS",render:function(){return phead("TEAM","Workers","Profesi adalah atribut assignment — role security tetap WORKER.",{label:"Add Worker"})+table(["WORKER","PROFESSION","TYPE","ACTIVE PROJECTS","WORKLOAD","STATUS"],WORKERS.map(function(w){return{cells:["<b>"+w.n+"</b>",w.p,badge(w.t),"<span class='mono'>"+w.ap+"</span>",'<div style="display:flex;align-items:center;gap:8px"><div class="prog" style="width:90px;margin:0"><i style="width:'+w.wl+'%;background:'+(w.wl>85?"var(--err)":w.wl>60?"var(--warn)":"var(--ac)")+'"></i></div><span class="mono" style="font-size:9px">'+w.wl+"%</span></div>",badge(w.av)]}}))}},
+availability:{crumb:"TEAM / AVAILABILITY",render:function(){var days=["SEN 07","SEL 08","RAB 09","KAM 10","JUM 11","SAB 12"];var M=[["Budi Santoso","Director",["P","P","A","A","P","A"]],["Andi Wijaya","Videographer",["A","P","P","A","P","P"]],["Rama Putra","Photographer",["A","A","P","P","A","P"]],["Rizky Fauzi","Drone Pilot",["L","L","L","L","L","L"]],["Fajar Hidayat","Editor",["P","P","P","P","P","A"]],["Akbar Nugraha","Colorist",["A","A","A","U","A","A"]]];
+ return phead("TEAM / AVAILABILITY","Availability","Ketersediaan worker minggu ini. P = assigned project, A = available, L = leave, U = unavailable.")+
+ '<div class="tscroll"><div class="avail-grid" style="min-width:760px;padding:12px"><span class="hd">WORKER</span>'+days.map(function(d){return '<span class="hd">'+d+"</span>"}).join("")+M.map(function(r){return '<span class="wn">'+r[0]+"<span>"+r[1]+"</span></span>"+r[2].map(function(c){return '<span class="chip '+c+'">'+c+"</span>"}).join("")}).join("")+"</div></div>"}},
+finance:{crumb:"FINANCE / OVERVIEW",render:function(){
+ return phead("FINANCE","Finance Overview","Nilai kontrak, cash masuk, biaya project, dan estimasi margin. Profit hanya untuk Owner / permission.",{label:"Export Report",data:'data-msg="EXPORT REPORT — DEMO"'})+
+ '<div class="grid-metrics">'+[["TOTAL CONTRACT VALUE","Rp 486.0 JT","8 ACTIVE + 4 DONE",""],["CASH RECEIVED","Rp 214.0 JT","SEP: Rp 66.0 JT","up"],["OUTSTANDING","Rp 22.5 JT","1 OVERDUE","dn"],["PROJECT EXPENSE","Rp 96.4 JT","SEP: Rp 4.4 JT",""],["EST. GROSS PROFIT","Rp 148.0 JT","OWNER ONLY","up"],["AVG PROJECT VALUE","Rp 12.9 JT","PER PROJECT",""]].map(function(m){return '<div class="mcard"><span class="micro">'+m[0]+'</span><div class="val" style="font-size:21px">'+m[1]+'</div><div class="sub"><span class="'+(m[3]||"")+'">'+(m[3]?"●":"")+"</span>"+m[2]+"</div></div>"}).join("")+"</div>"+
+ '<div class="chart-row"><div class="panel"><div class="p-h"><h3>Revenue by Month</h3><span class="micro">JT IDR / 2026</span></div>'+barChart(true)+"</div>"+
+ '<div class="panel"><div class="p-h"><h3>Expense by Category</h3><span class="micro">SHARE %</span></div>'+donut()+"</div></div>"+
+ '<div class="panel" style="margin-top:12px"><div class="p-h"><h3>Outstanding Invoice</h3><button class="link" data-act="nav" data-view="invoices">ALL INVOICES '+ico("arr")+"</button></div>"+table(["INVOICE","PROJECT","CLIENT","AMOUNT","DUE","STATUS","PAYMENT"],INVOICES.filter(function(i){return i.st!=="PAID"}).map(function(i){return{cells:["<span class='mono' style='font-size:11px'>"+i.no+"</span>",i.p,i.c,"<b>"+i.amt+"</b>","<span class='mono' style='font-size:10px'>"+i.due+"</span>",badge(i.st),badge(i.pay)]}}))+"</div>"}},
+invoices:{crumb:"FINANCE / INVOICES",render:function(){return phead("FINANCE / INVOICES","Invoices","Status invoice dan payment internal. Rekonsiliasi manual tercatat di audit log.",{label:"New Invoice"})+table(["INVOICE","PROJECT","CLIENT","AMOUNT","DUE DATE","STATUS","PAYMENT"],INVOICES.map(function(i){return{cells:["<span class='mono' style='font-size:11px'>"+i.no+"</span>",i.p,i.c,"<b>"+i.amt+"</b>","<span class='mono' style='font-size:10px'>"+i.due+"</span>",badge(i.st),badge(i.pay)]}}))}},
+expenses:{crumb:"FINANCE / EXPENSES",render:function(){return phead("FINANCE / EXPENSES","Expenses","Biaya per project. Worker claim tanpa melihat finance project.",{label:"Record Expense"})+table(["DATE","PROJECT","CATEGORY","AMOUNT","STATUS"],EXPENSES.map(function(e){return{cells:["<span class='mono' style='font-size:10px'>"+e.d+"</span>",e.p,e.cat,"<b>"+e.amt+"</b>",badge(e.st)]}}))}},
+transactions:{crumb:"FINANCE / TRANSACTIONS",render:function(){return phead("FINANCE / TRANSACTIONS","Transactions",empty("arr","Payment transactions","Transaksi payment gateway (create, status, expiry, refund) akan tersinkron ke status internal BDJG.","Hubungkan Gateway"))}},
+reports:{crumb:"FINANCE / REPORTS",render:function(){return phead("FINANCE / REPORTS","Reports",empty("file","Laporan keuangan","Revenue by service, by client type, profit per project — tersedia sesuai permission Owner.","Generate Report"))}},
+portfolio:{crumb:"CONTENT / PORTFOLIO",render:function(){return phead("CONTENT / PORTFOLIO","Portfolio","Project selesai tidak otomatis publik — perhatikan PORTFOLIO_PERMISSION.",{label:"Add Portfolio"})+
+ '<div class="pf-grid">'+PORTFOLIO.map(function(p){return '<div class="pf-card" data-act="demo" data-msg="PORTFOLIO — '+p.t.toUpperCase()+'"><img src="'+p.img+'" alt=""><div class="bd"><b>'+p.t+'</b><span class="mono">'+p.cat+" / PUBLIC</span></div></div>"}).join("")+"</div>"}},
+services:{crumb:"CONTENT / SERVICES",render:function(){return phead("CONTENT / SERVICES","Services","Struktur layanan fleksibel: service → package → add-ons.",{label:"New Service"})+
+ '<div class="panel">'+SERVICES.map(function(s){return '<div class="svc-row"><span class="idx">'+s.i+'</span><h4>'+s.n+'</h4><div class="tags">'+s.tags.map(function(t){return '<span class="tag">'+t+"</span>"}).join("")+"</div>"+'<button class="btn ghost sm" data-act="demo" data-msg="EDIT '+s.n.toUpperCase()+'">EDIT</button></div>'}).join("")+"</div>"}},
+packages:{crumb:"CONTENT / PACKAGES",render:function(){return phead("CONTENT / PACKAGES","Packages",emptyOk())+table(["SERVICE","PACKAGE","STARTING PRICE","REVISION LIMIT","STATUS"],PACKAGES.map(function(p){return{cells:[p.s,"<b>"+p.p+"</b>",p.pr,"<span class='mono' style='font-size:10px'>"+p.rv+"</span>",badge(p.st)]}}))}},
+addons:{crumb:"CONTENT / ADD-ONS",render:function(){return phead("CONTENT / ADD-ONS","Add-ons",emptyOk())+table(["ADD-ON","PRICING TYPE","PRICE"],ADDONS.map(function(a){return{cells:["<b>"+a.n+"</b>","<span class='mono' style='font-size:10px'>"+a.ty+"</span>",a.pr]}}))}},
+testimonials:{crumb:"CONTENT / TESTIMONIALS",render:function(){return phead("CONTENT / TESTIMONIALS","Testimonials",emptyOk())+'<div class="rev-grid">'+TESTIMONIALS.map(function(t){return '<div class="rev-card"><div class="sub2" style="margin-bottom:10px">“'+t.q+'”</div><div class="prog-lbl"><span>'+t.c+'</span><span class="mono">PUBLIC</span></div></div>'}).join("")+"</div>"}},
+messages:{crumb:"COMMUNICATION / MESSAGES",render:function(){return phead("COMMUNICATION","Messages","Thread Client ↔ Admin. Worker hanya melihat bila permission project mengizinkan.")+
+ '<div class="msg-wrap"><div class="thread-list">'+THREADS.map(function(t){return '<button class="thread'+(t.id===curThread?" on":"")+'" data-act="thread" data-id="'+t.id+'"><span class="avatar">'+initials(t.c)+'</span><span><b>'+t.p+'</b><span>'+t.last+"</span></span></button>"}).join("")+'</div><div class="chat"><div class="chat-h"><b id="chatTitle"></b><span class="sp" style="flex:1"></span>'+badge("CLIENT THREAD")+'</div><div class="chat-b" id="chatBody"></div><div class="chat-f"><input id="chatIn" placeholder="Tulis pesan sebagai Admin…"><button class="btn sm" data-act="send-msg">KIRIM</button></div></div></div>'}},
+notifications:{crumb:"COMMUNICATION / NOTIFICATIONS",render:function(){return phead("COMMUNICATION","Notifications","Channel IN-APP, EMAIL, WHATSAPP. Notifikasi mengarahkan ke resource, bukan menggantikan data.")+
+ '<div class="panel">'+NOTIFS.map(function(n){return '<div class="sch-item'+(n.un?'" style="background:var(--s2);border-radius:8px;padding:10px 8px;':'" style="')+'"><time>'+n.ch+'</time><div class="t"><b>'+n.ti+'</b><span>'+n.d+'</span></div><span class="meta">'+n.tm+(n.un?' &nbsp;'+badge("NEEDS ACTION"):"")+"</span></div>"}).join("")+"</div>"}},
+templates:{crumb:"COMMUNICATION / TEMPLATES",render:function(){return phead("COMMUNICATION / TEMPLATES","Templates",empty("file","Template komunikasi","Template WhatsApp / email per event (quotation sent, invoice issued, preview ready) dikelola di sini.","Buat Template"))}},
+users:{crumb:"SYSTEM / USERS",render:function(){return phead("SYSTEM","Users & Roles","Role baseline + permission. Aksi sensitif tercatat di audit log.",{label:"Invite User"})+table(["USER","EMAIL","ROLE","STATUS","LAST LOGIN"],USERS.map(function(u){return{cells:["<b>"+u.n+"</b>","<span class='mono' style='font-size:10px'>"+u.e+"</span>",badge(u.r),badge(u.st),"<span class='mono' style='font-size:10px'>"+u.ll+"</span>"]}}))}},
+activity:{crumb:"SYSTEM / ACTIVITY LOG",render:function(){return phead("SYSTEM","Activity Log","Seluruh perubahan penting: status, payment, file, revision, assignment, permission.")+
+ '<div class="panel">'+ACTIVITY.concat(ACTIVITY).map(function(a){return '<div class="act-item"><time>'+a.t+"</time>"+a.tx+"</div>"}).join("")+"</div>"}},
+integrations:{crumb:"SYSTEM / INTEGRATIONS",render:function(){return phead("SYSTEM / INTEGRATIONS","Integrations",empty("arr","Payment & channel integrations","Payment gateway, WhatsApp Business, dan email provider terhubung lewat module integrasi dengan status delivery.","Hubungkan"))}},
+settings:{crumb:"SYSTEM / SETTINGS",render:function(){return phead("SYSTEM / SETTINGS","Settings",empty("gear","Pengaturan sistem","Konfigurasi studio, payment rule per quotation, portfolio permission default, dan audit override.","Buka Settings"))}}
+};
+function emptyOk(){return "Kelola data konten sesuai permission content.manage."}
+
+/* charts */
+function barChart(big){var W=big?620:560,H=big?210:150,max=80,bw=(W-60)/REV_MONTHS.length;var s='<svg viewBox="0 0 '+W+" "+H+'" width="100%">';for(var g=0;g<4;g++){var y=14+g*((H-44)/3);s+='<line x1="34" y1="'+y+'" x2="'+(W-8)+'" y2="'+y+'" stroke="#222" stroke-width="1"/><text x="0" y="'+(y+3)+'" font-size="8" fill="#6B6B6B">'+(max-g*(max/3)).toFixed(0)+"</text>"}REV_MONTHS.forEach(function(d,i){var h=(d.v/max)*(H-44),x=40+i*bw+bw*0.22,y=H-30-h;var cur=i===REV_MONTHS.length-1;s+='<rect x="'+x+'" y="'+y+'" width="'+bw*0.56+'" height="'+h+'" rx="3" fill="'+(cur?"#5C7CFF":"#2e2e2e")+'"><title>'+d.m+" — Rp "+d.v+" JT</title></rect>";s+='<text x="'+(x+bw*0.28)+'" y="'+(H-16)+'" font-size="8" fill="'+(cur?"#7d97ff":"#6B6B6B")+'" text-anchor="middle">'+d.m+"</text>"});return s+"</svg>"}
+function donut(){var C=2*Math.PI*52,off=0,s='<svg viewBox="0 0 140 140" width="150"><circle cx="70" cy="70" r="52" fill="none" stroke="#1d1d1f" stroke-width="16"/>';EXP_CAT.forEach(function(c){var len=c.v/100*C;s+='<circle cx="70" cy="70" r="52" fill="none" stroke="'+c.c+'" stroke-width="16" stroke-dasharray="'+len+" "+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 70 70)"/>';off+=len});s+='<text x="70" y="66" text-anchor="middle" font-size="13" fill="#F2F1ED" font-weight="700">Rp 96.4</text><text x="70" y="82" text-anchor="middle" font-size="8" fill="#6B6B6B">JT / 2026</text></svg>';return '<div class="donut-wrap">'+s+'<div class="dlegend">'+EXP_CAT.map(function(c){return '<div class="li"><i style="background:'+c.c+'"></i>'+c.n+'<span class="pc">'+c.v+"%</span></div>"}).join("")+"</div></div>"}
+function finMini(l,v,s){return '<div class="mcard" style="flex:1;min-width:150px"><span class="micro">'+l+'</span><div class="val" style="font-size:19px">'+v+'</div><div class="sub">'+s+"</div></div>"}
+function pipelineStrip(){var cols=["PRE-PRODUCTION","PRODUCTION","POST-PRODUCTION","CLIENT REVIEW","REVISION","COMPLETED"];return '<div class="pipe">'+cols.map(function(c){var n=PROJECTS.filter(function(p){return p.status===c}).length;return '<div class="st"><span class="micro">'+c+'</span><span class="n">'+n+'</span><div class="bar"><i style="width:'+Math.min(n/3*100,100)+'%"></i></div></div>'}).join("")+"</div>"}
+
+/* calendar */
+function calHead(){var names=["JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI","JULI","AGUSTUS","SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"];return '<div class="cal-head"><button class="icon-btn" data-act="cal-prev" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="cal-title">'+names[calState.m]+" "+calState.y+'</span><button class="icon-btn" data-act="cal-next" aria-label="Berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button><div class="seg"><button class="'+(calState.mode==="month"?"on":"")+'" data-act="cal-mode" data-mode="month">MONTH</button><button class="'+(calState.mode==="week"?"on":"")+'" data-act="cal-mode" data-mode="week">WEEK</button><button class="'+(calState.mode==="agenda"?"on":"")+'" data-act="cal-mode" data-mode="agenda">AGENDA</button></div><div class="legend"><span><i style="background:var(--ac)"></i>SHOOT</span><span><i style="background:var(--ok)"></i>MEETING</span><span><i style="background:var(--err)"></i>DEADLINE</span><span><i style="background:var(--warn)"></i>REVISION</span></div></div>'}
+function key(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+function calBody(){
+ if(calState.mode==="agenda"){var ks=Object.keys(EVENTS).sort();return '<div class="panel">'+ks.map(function(k){return '<div class="sch-item"><time>'+k.slice(8)+"</time>"+EVENTS[k].map(function(e){return '<div class="t" style="margin-bottom:4px"><b class="ev '+e.ty+'" style="display:inline-block;width:auto">'+e.t+"</b> <span class='micro'>"+k.slice(0,7)+"</span></div>"}).join("")+"</div>"}).join("")+"</div>"}
+ var y=calState.y,m=calState.m,first=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),dow=["MIN","SEN","SEL","RAB","KAM","JUM","SAB"];
+ var cells="";for(var i=0;i<first;i++){var pd=new Date(y,m,-(first-1-i));cells+='<div class="cal-cell dim"><span class="d">'+pd.getDate()+"</span></div>"}
+ for(var d=1;d<=dim;d++){var k2=key(y,m,d),evs=EVENTS[k2]||[],today=(k2==="2026-09-08");cells+='<div class="cal-cell'+(today?" today":"")+'"><span class="d">'+d+"</span>"+evs.map(function(e){return '<button class="ev '+e.ty+'" data-act="demo" data-msg="EVENT — '+e.t.toUpperCase()+'">'+e.t+"</button>"}).join("")+"</div>"}
+ return '<div class="cal-grid">'+dow.map(function(d){return '<span class="cal-dow">'+d+"</span>"}).join("")+cells+"</div>"}
+
+/* messages render */
+function renderChat(){var t=THREADS.find(function(x){return x.id===curThread});var tt=document.getElementById("chatTitle"),bb=document.getElementById("chatBody");if(!t||!bb)return;if(tt)tt.textContent=t.p+" — "+t.c;bb.innerHTML=t.msgs.map(function(m){return '<div class="bub'+(m.me?" me":"")+'">'+m.tx+"<time>"+(m.me?"ADMIN":"CLIENT")+" / "+m.tm+"</time></div>"}).join("");bb.scrollTop=bb.scrollHeight}
+
+/* drawer */
+function openDrawer(id){var p=PROJECTS.find(function(x){return x.id===id});if(!p)return;var d=document.getElementById("drawer");
+ d.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between"><span class="micro">PROJECT SNAPSHOT</span><button class="icon-btn" data-act="close-drawer" aria-label="Tutup">'+ico("x")+"</button></div>"+
+ '<img class="cover" src="'+p.cover+'" alt="">'+
+ '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="font-size:17px;font-weight:800">'+p.name+"</h3>"+badge(p.status)+"</div>"+
+ '<span class="mono" style="font-size:10px;color:var(--tx3);letter-spacing:.12em">'+p.id+"</span>"+
+ '<div class="psteps">'+progSteps(p.status)+"</div>"+
+ '<div class="drow"><span class="k">Client</span><b>'+p.client+'</b></div><div class="drow"><span class="k">Service</span><span>'+p.service+'</span></div><div class="drow"><span class="k">Deadline</span><span class="mono" style="font-size:11px">'+p.due+'</span></div><div class="drow"><span class="k">Admin</span><span>'+p.admin+'</span></div><div class="drow"><span class="k">Team</span>'+avstack(p.team)+'</div><div class="drow"><span class="k">Payment</span><span class="badge b-'+p.paySt+'"><i></i>'+p.pay+"</span></div>"+
+ '<div style="display:flex;gap:8px;margin-top:18px"><button class="btn sm" data-act="demo" data-msg="OPEN PROJECT — '+p.id+'">OPEN PROJECT</button><button class="btn ghost sm" data-act="nav" data-view="calendar">SCHEDULE</button></div>';
+ d.classList.add("open");document.getElementById("drawerWrap").classList.add("open")}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawerWrap").classList.remove("open")}
+
+/* modal */
+function openModal(){var m=document.getElementById("modal");m.innerHTML='<h3>New Project</h3><div class="msub">Project aktif setelah quotation accepted + DP terpenuhi.</div><form id="npForm"><div class="f-row"><label>Project Name</label><input required placeholder="cth: Wedding Film — Intan & Bayu"></div><div class="f-row"><label>Client</label><select><option>Alya & Raka</option><option>SMAN 3 Bandung</option><option>Kopi Arunika</option><option>Client baru…</option></select></div><div class="f-row"><label>Service</label><select><option>Wedding Film</option><option>Video Angkatan</option><option>Commercial</option><option>Short Film</option></select></div><div class="f-row"><label>Deadline</label><input type="date" value="2026-10-15"></div><div class="m-foot"><button type="button" class="btn ghost sm" data-act="close-modal">BATAL</button><button class="btn sm" type="submit">AKTIFKAN PROJECT</button></div></form>';
+ document.getElementById("modalWrap").classList.add("open");
+ document.getElementById("npForm").addEventListener("submit",function(e){e.preventDefault();m.innerHTML='<div class="success-box"><div class="ok-ic">'+ico("check")+'</div><h4>PROJECT ACTIVATED</h4><p>Project dibuat dengan status DRAFT → PRE-PRODUCTION. Invoice DP dapat diterbitkan.</p><button class="btn sm" data-act="close-modal">SELESAI</button></div>';toast("PROJECT CREATED — BDJG-2026-0056")})}
+function closeModal(){document.getElementById("modalWrap").classList.remove("open")}
+
+/* router */
+function go(v){var view=VIEWS[v]||VIEWS.dashboard;document.getElementById("crumb").innerHTML="ADMIN / <b>"+view.crumb+"</b>";document.getElementById("content").innerHTML=view.render();setActiveNav(v);
+ if(v==="messages")renderChat();
+ if(v==="projects"){var s=document.getElementById("pfs");if(s){s.value=projFilter.st;document.getElementById("pfv").value=projFilter.sv;
+  document.getElementById("pfq").addEventListener("input",function(e){projFilter.q=e.target.value.toLowerCase();go("projects");document.getElementById("pfq").focus()});
+  s.addEventListener("change",function(e){projFilter.st=e.target.value==="ALL"?"ALL":e.target.value;go("projects")});
+  document.getElementById("pfv").addEventListener("change",function(e){projFilter.sv=e.target.value;go("projects")})}}
+ document.getElementById("sidebar").classList.remove("open");document.getElementById("backdrop").classList.remove("open");
+ window.scrollTo({top:0})}
+
+/* global events */
+document.addEventListener("click",function(e){
+ var t=e.target.closest("[data-act]");
+ if(!t){if(!e.target.closest(".searchbox"))document.getElementById("searchRes").classList.remove("open");if(!e.target.closest(".bell-wrap"))document.getElementById("notifPanel").classList.remove("open");return}
+ var a=t.dataset.act;
+ if(a==="nav")go(t.dataset.view);
+ else if(a==="group")t.closest(".nav-group").classList.toggle("closed");
+ else if(a==="burger"){document.getElementById("sidebar").classList.add("open");document.getElementById("backdrop").classList.add("open")}
+ else if(a==="close-nav"){document.getElementById("sidebar").classList.remove("open");document.getElementById("backdrop").classList.remove("open")}
+ else if(a==="bell"){var np=document.getElementById("notifPanel");if(!np.classList.contains("open")){np.innerHTML='<div class="np-h"><span class="micro">NOTIFICATIONS</span><button class="link" data-act="mark-read">MARK READ</button></div>'+NOTIFS.map(function(n){return '<div class="np-item'+(n.un?" unread":"")+'"><span class="avatar" style="width:28px;height:28px;flex:0 0 28px;font-size:9px">'+n.ch.slice(0,2)+'</span><div class="t"><b>'+n.ti+'</b><span>'+n.d+'</span></div><time>'+n.tm+"</time></div>"}).join("")}np.classList.toggle("open")}
+ else if(a==="mark-read"){NOTIFS.forEach(function(n){n.un=false});document.getElementById("bellDot").style.display="none";document.getElementById("notifPanel").classList.remove("open");toast("SEMUA NOTIFIKASI DIBACA")}
+ else if(a==="new-project")openModal();
+ else if(a==="close-modal")closeModal();
+ else if(a==="drawer")openDrawer(t.dataset.id);
+ else if(a==="close-drawer")closeDrawer();
+ else if(a==="cal-prev"){calState.m--;if(calState.m<0){calState.m=11;calState.y--}go("calendar")}
+ else if(a==="cal-next"){calState.m++;if(calState.m>11){calState.m=0;calState.y++}go("calendar")}
+ else if(a==="cal-mode"){calState.mode=t.dataset.mode;go("calendar")}
+ else if(a==="thread"){curThread=t.dataset.id;go("messages")}
+ else if(a==="send-msg"){var inp=document.getElementById("chatIn");var v=inp.value.trim();if(!v)return;var th=THREADS.find(function(x){return x.id===curThread});th.msgs.push({me:1,tx:v,tm:"09:45"});th.last=v;inp.value="";renderChat()}
+ else if(a==="demo")toast(t.dataset.msg||"DEMO");
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeModal();closeDrawer();document.getElementById("searchRes").classList.remove("open");document.getElementById("notifPanel").classList.remove("open")}});
+
+/* global search */
+document.getElementById("searchIn").addEventListener("input",function(e){var q=e.target.value.toLowerCase();var r=document.getElementById("searchRes");if(q.length<2){r.classList.remove("open");return}
+ var out="";var ps=PROJECTS.filter(function(p){return (p.name+p.client+p.id).toLowerCase().includes(q)});
+ if(ps.length)out+='<div class="sr-h">Projects</div>'+ps.map(function(p){return '<button data-act="drawer" data-id="'+p.id+'">'+ico("film")+"<span>"+p.name+"</span><span class='sr-meta'>"+p.id+"</span></button>"}).join("");
+ var cs=CLIENTS.filter(function(c){return c.n.toLowerCase().includes(q)});
+ if(cs.length)out+='<div class="sr-h">Clients</div>'+cs.map(function(c){return '<button data-act="nav" data-view="clients">'+ico("users")+"<span>"+c.n+"</span><span class='sr-meta'>CLIENT</span></button>"}).join("");
+ var ws=WORKERS.filter(function(w){return w.n.toLowerCase().includes(q)});
+ if(ws.length)out+='<div class="sr-h">Workers</div>'+ws.map(function(w){return '<button data-act="nav" data-view="workers">'+ico("users")+"<span>"+w.n+"</span><span class='sr-meta'>"+w.p.toUpperCase()+"</span></button>"}).join("");
+ var iv=INVOICES.filter(function(i){return i.no.toLowerCase().includes(q)});
+ if(iv.length)out+='<div class="sr-h">Invoices</div>'+iv.map(function(i){return '<button data-act="nav" data-view="invoices">'+ico("wallet")+"<span>"+i.no+"</span><span class='sr-meta'>"+i.amt+"</span></button>"}).join("");
+ r.innerHTML=out||'<div class="sr-h">TIDAK DITEMUKAN</div>';r.classList.add("open")});
+
+/* init */
+buildNav();
+go("dashboard");
+</script>
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDJG® — Visual Studio / Padang</title>
+<meta name="description" content="BDJG Creative Studio — Photo, Film, VFX & Post Production. We capture stories. Padang, Indonesia.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5/800.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5/900.css">
+<style>
+:root{
+  --black:#090909; --deep:#111111; --surface:#171717; --border:#2A2A2A;
+  --off:#F2F1ED; --soft:#E7E5DF; --muted:#A3A3A3; --dim:#6B6B6B;
+  --accent:#5C7CFF; --accent-h:#7590FF; --accent-a:#4463E0;
+  --success:#3E9B6C; --warning:#D9A13B; --error:#D9603E;
+  --disp:'Manrope',system-ui,sans-serif; --mono:'JetBrains Mono',monospace; --serif:'Playfair Display',serif;
+  --ease:cubic-bezier(.16,1,.3,1); --gut:clamp(20px,4vw,64px); --maxw:1600px;
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--off);font-family:var(--disp);font-size:17px;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--accent);color:var(--black)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+section{scroll-margin-top:90px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:120;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");}
+/* ---------- PRELOADER ---------- */
+#loader{position:fixed;inset:0;z-index:200;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:transform .8s var(--ease)}
+#loader.done{transform:translateY(-101%)}
+#loader svg{width:min(340px,60vw);color:var(--accent)}
+#loader svg path{fill:none;stroke:currentColor;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s var(--ease) forwards;animation-delay:calc(var(--i)*70ms)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.loader-meta{display:flex;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--dim)}
+/* ---------- CURSOR ---------- */
+#cursor{position:fixed;left:0;top:0;z-index:150;width:10px;height:10px;border-radius:50%;background:var(--off);pointer-events:none;transform:translate(-50%,-50%);display:none;align-items:center;justify-content:center;transition:width .35s var(--ease),height .35s var(--ease),background .3s,border .3s}
+#cursor span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--black);opacity:0;transition:opacity .2s}
+#cursor.big{width:74px;height:74px;background:var(--off)}
+#cursor.big span{opacity:1}
+@media (pointer:fine){#cursor{display:flex}}
+/* ---------- NAV ---------- */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gut);transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent}
+#nav.scrolled{background:rgba(9,9,9,.86);backdrop-filter:blur(10px);border-color:var(--border);padding:14px var(--gut)}
+.nav-logo{font-weight:800;font-size:20px;letter-spacing:.02em}
+.nav-logo sup{font-size:9px;font-family:var(--mono)}
+.nav-links{display:flex;gap:34px}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);position:relative;padding:4px 0;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);transition:width .35s var(--ease)}
+.nav-links a:hover{color:var(--off)}
+.nav-links a:hover::after{width:100%}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--black);border:1px solid var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:14px 22px;border-radius:4px;transition:background .3s,transform .2s,border-color .3s}
+.btn:hover{background:var(--accent-h);border-color:var(--accent-h)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--off);border-color:var(--border)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+#menuBtn{display:none;background:none;border:1px solid var(--border);color:var(--off);font-family:var(--mono);font-size:11px;letter-spacing:.16em;padding:10px 16px;border-radius:4px}
+#menu{position:fixed;inset:0;z-index:110;background:var(--black);display:flex;flex-direction:column;justify-content:center;padding:0 8vw;gap:6px;transform:translateY(-100%);transition:transform .7s var(--ease)}
+body.menu-open #menu{transform:none}
+#menu a{font-weight:800;font-size:clamp(40px,9vw,72px);letter-spacing:-.02em;line-height:1.12;color:var(--soft)}
+#menu a:hover{color:var(--accent)}
+#menu .mono{margin-top:28px}
+#menuClose{position:absolute;top:22px;right:var(--gut);background:none;border:1px solid var(--border);color:var(--off);font-family:var(--mono);font-size:11px;letter-spacing:.16em;padding:10px 16px;border-radius:4px}
+/* ---------- REVEALS ---------- */
+.rv{opacity:0;transform:translateY(30px);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+.lm .line{display:block;overflow:hidden}
+.lm .line-in{display:block;transform:translateY(112%);transition:transform 1.1s var(--ease)}
+.lm .line:nth-child(2) .line-in{transition-delay:.1s}
+.lm .line:nth-child(3) .line-in{transition-delay:.2s}
+.lm .line:nth-child(4) .line-in{transition-delay:.3s}
+.lm.in .line-in{transform:none}
+.no-js .rv,.no-js .lm .line-in{opacity:1;transform:none}
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:130px var(--gut) 0}
+.hero-meta{display:flex;justify-content:space-between;gap:16px;padding-bottom:24px}
+.hero-title{position:relative;z-index:2;font-weight:800;letter-spacing:-.03em;line-height:.92;font-size:clamp(64px,12.5vw,215px);text-transform:uppercase}
+.hero-title .ht-b{margin-left:clamp(40px,14vw,340px);color:var(--soft)}
+.hero-title .ht-b em{font-style:normal;color:var(--accent)}
+.hm{position:absolute;z-index:3;transform:rotate(var(--rot,0deg));pointer-events:none;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.hm-in{overflow:hidden}
+.hm img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.hm-a{right:4%;top:14%;width:clamp(200px,26vw,430px);aspect-ratio:4/3;--rot:3deg}
+.hm-b{left:6%;top:30%;width:clamp(160px,17vw,300px);aspect-ratio:3/4;--rot:-4deg}
+.hm-c{right:14%;bottom:16%;width:clamp(180px,22vw,360px);aspect-ratio:16/10;--rot:-2deg}
+.hero-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--border);margin-top:clamp(40px,7vh,90px);padding:16px 0 22px}
+/* ---------- MARQUEE ---------- */
+.marquee{overflow:hidden;border-block:1px solid var(--border);padding:18px 0}
+.mq-track{display:flex;width:max-content;animation:marq 30s linear infinite}
+.marquee:hover .mq-track{animation-play-state:paused}
+.mq-group{display:flex;flex-shrink:0}
+.mq-group span{font-weight:800;font-size:clamp(20px,3vw,40px);letter-spacing:.02em;text-transform:uppercase;color:var(--soft);padding:0 28px;white-space:nowrap}
+.mq-group i{color:var(--accent);font-style:normal;font-size:clamp(14px,2vw,24px);align-self:center}
+.marquee.rev .mq-track{animation-direction:reverse}
+.marquee.thin .mq-group span{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.22em;color:var(--dim)}
+@keyframes marq{to{transform:translateX(-50%)}}
+/* ---------- WORKS ---------- */
+#works{padding:clamp(90px,12vh,160px) 0 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:clamp(48px,7vh,90px)}
+.sec-title{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1;font-size:clamp(44px,6.5vw,110px)}
+.works-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(16px,2.5vw,40px)}
+.work{position:relative}
+.work figure{overflow:hidden;background:var(--surface)}
+.work img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease);transform:scale(1.001)}
+.work:hover img{transform:scale(1.06)}
+.work-cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:14px}
+.work-cap h3{font-weight:800;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(22px,2.4vw,40px);transition:transform .5s var(--ease),color .3s}
+.work:hover .work-cap h3{transform:translateX(10px);color:var(--accent-h)}
+.w1{grid-column:1/9}.w1 figure{aspect-ratio:16/9}
+.w2{grid-column:9/13;margin-top:clamp(40px,8vh,140px)}.w2 figure{aspect-ratio:4/5}
+.w3{grid-column:2/6;margin-top:clamp(30px,6vh,100px)}.w3 figure{aspect-ratio:4/5}
+.w4{grid-column:6/13;margin-top:clamp(60px,10vh,170px)}.w4 figure{aspect-ratio:16/10}
+.w5{grid-column:8/13;margin-top:clamp(30px,6vh,90px)}.w5 figure{aspect-ratio:3/4}
+/* ---------- STATEMENT ---------- */
+#statement{margin-top:clamp(100px,14vh,200px);background:var(--deep);border-radius:clamp(60px,8vw,180px) clamp(60px,8vw,180px) 0 0;padding:clamp(80px,11vh,150px) 0 clamp(70px,9vh,120px)}
+.stmt-grid{display:grid;grid-template-columns:1fr auto;gap:clamp(30px,5vw,90px);align-items:center}
+.stmt{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1.02;font-size:clamp(38px,5.6vw,96px)}
+.stmt .alt{color:var(--dim)}
+.monogram{font-family:var(--serif);font-weight:900;color:var(--soft);text-align:center;line-height:.78;user-select:none}
+.monogram .mg1{display:block;font-size:clamp(70px,8vw,140px);letter-spacing:-.06em}
+.monogram .mg2{display:block;font-size:clamp(70px,8vw,140px);letter-spacing:-.04em;margin-top:-.18em}
+.monogram .mg3{display:block;font-size:clamp(26px,2.6vw,44px);letter-spacing:.28em;margin-top:.35em;color:var(--accent)}
+.stmt-note{max-width:520px;color:var(--muted);margin-top:34px;font-size:16px}
+/* ---------- FEATURED ---------- */
+#featured{position:relative;margin-top:clamp(80px,10vh,140px)}
+.feat-media{position:relative;overflow:hidden;height:clamp(480px,92vh,900px);border-radius:0 0 clamp(60px,8vw,180px) clamp(60px,8vw,180px)}
+.feat-media img{width:100%;height:112%;object-fit:cover;will-change:transform}
+.feat-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,9,.55),transparent 30%,transparent 60%,rgba(9,9,9,.75))}
+.feat-ui{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(22px,3.5vw,54px)}
+.feat-top,.feat-bot{display:flex;justify-content:space-between;gap:16px}
+.feat-top .mono,.feat-bot .mono{color:var(--soft)}
+.playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:110px;height:110px;border-radius:50%;border:1px solid rgba(242,241,237,.5);background:rgba(9,9,9,.35);color:var(--off);display:flex;align-items:center;justify-content:center;gap:0;transition:background .3s,transform .4s var(--ease)}
+.playbtn:hover{background:var(--accent);color:var(--black);transform:translate(-50%,-50%) scale(1.06)}
+.playbtn svg{width:20px;height:20px;fill:currentColor}
+.feat-title{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(44px,7vw,120px);line-height:.95}
+/* ---------- SERVICES ---------- */
+#services{padding:clamp(90px,12vh,170px) 0 0;position:relative}
+.svc-row{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:20px;border-top:1px solid var(--border);padding:clamp(22px,3.4vh,38px) 0;transition:padding-left .4s var(--ease)}
+.svc-row:last-of-type{border-bottom:1px solid var(--border)}
+.svc-row:hover{padding-left:18px}
+.svc-num{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.14em}
+.svc-row h3{font-weight:800;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(26px,3.6vw,56px);transition:color .3s}
+.svc-row:hover h3{color:var(--accent-h)}
+.svc-sub{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;max-width:340px;line-height:1.9}
+.svc-row:hover .svc-sub{color:var(--muted)}
+#svcPrev{position:absolute;z-index:5;width:300px;aspect-ratio:4/3;object-fit:cover;pointer-events:none;opacity:0;transform:rotate(-3deg) scale(.9);transition:opacity .35s var(--ease),transform .35s var(--ease);box-shadow:0 24px 70px rgba(0,0,0,.6);right:8%;top:20%}
+#svcPrev.on{opacity:1;transform:rotate(-3deg) scale(1)}
+/* ---------- PROCESS ---------- */
+#process{padding:clamp(90px,12vh,170px) 0}
+.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.proc{background:var(--black);padding:clamp(24px,3vw,44px);transition:background .3s}
+.proc:hover{background:var(--surface)}
+.proc .mono{color:var(--accent)}
+.proc h4{font-weight:800;text-transform:uppercase;font-size:clamp(18px,1.8vw,26px);margin:14px 0 8px;letter-spacing:.01em}
+.proc p{color:var(--muted);font-size:14px}
+/* ---------- STUDIO ---------- */
+#studio{padding-bottom:clamp(90px,12vh,160px)}
+.studio-grid{display:grid;grid-template-columns:5fr 6fr;gap:clamp(30px,5vw,90px);align-items:center}
+.studio-copy p{color:var(--muted);max-width:520px;margin-top:22px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:44px;border-top:1px solid var(--border);padding-top:26px}
+.stats b{display:block;font-weight:800;font-size:clamp(24px,2.6vw,42px);color:var(--soft)}
+.stats .mono{font-size:10px}
+.studio-media{position:relative}
+.studio-media figure{overflow:hidden;aspect-ratio:4/3;transform:rotate(1.5deg);box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.studio-media img{width:100%;height:100%;object-fit:cover}
+.studio-media .mono{display:block;margin-top:16px;text-align:right}
+/* ---------- CLIENTS ---------- */
+#clients{border-block:1px solid var(--border);padding:clamp(70px,9vh,120px) 0}
+.quotes{display:grid;grid-template-columns:7fr 5fr;gap:clamp(26px,4vw,70px);max-width:var(--maxw);margin:clamp(50px,7vh,90px) auto 0;padding:0 var(--gut)}
+.quote{border-left:1px solid var(--border);padding-left:clamp(20px,2.5vw,40px)}
+.quote p{font-weight:700;font-size:clamp(19px,1.9vw,28px);line-height:1.35;color:var(--soft);letter-spacing:-.01em}
+.quote .mono{display:block;margin-top:18px;color:var(--dim)}
+/* ---------- BOOK / CTA ---------- */
+#book{margin-top:clamp(80px,10vh,150px);background:var(--deep);border-radius:clamp(60px,8vw,180px) clamp(60px,8vw,180px) 0 0;padding:clamp(70px,10vh,140px) 0 clamp(70px,9vh,120px)}
+.cta-title{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:.95;font-size:clamp(48px,8.5vw,150px)}
+.cta-title em{font-style:normal;color:var(--accent)}
+.book-wrap{max-width:900px;margin:clamp(50px,7vh,90px) auto 0}
+.book-head{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:30px}
+#bkAvail{color:var(--warning)}
+#bkAvail::before{content:"● ";font-size:8px;vertical-align:2px}
+.bk-step h3{font-weight:800;text-transform:uppercase;font-size:clamp(24px,3vw,44px);margin-bottom:26px;letter-spacing:-.01em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;inset:0}
+.opt .opt-body{display:flex;align-items:flex-start;gap:14px;border:1px solid var(--border);border-radius:10px;padding:18px 20px;transition:border-color .3s,background .3s;min-height:100%}
+.opt:hover .opt-body{border-color:var(--dim)}
+.opt input:checked + .opt-body{border-color:var(--accent);background:var(--surface)}
+.opt input:focus-visible + .opt-body{outline:2px solid var(--accent);outline-offset:3px}
+.opt-box{flex:0 0 12px;width:12px;height:12px;border:1px solid var(--dim);border-radius:3px;margin-top:5px;transition:background .2s,border-color .2s}
+.opt input:checked + .opt-body .opt-box{background:var(--accent);border-color:var(--accent)}
+.opt-txt{font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:14px}
+.opt-txt small{display:block;font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.1em;color:var(--dim);margin-top:6px;text-transform:uppercase;line-height:1.8}
+.field{margin-bottom:20px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.field input,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--border);color:var(--off);font-family:var(--disp);font-size:18px;padding:10px 2px 14px;border-radius:0;transition:border-color .3s}
+.field textarea{resize:vertical;min-height:110px}
+.field input:hover,.field textarea:hover{border-color:var(--dim)}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.bk-nav{display:flex;justify-content:space-between;gap:16px;margin-top:36px}
+.bk-err{color:var(--error);margin-top:16px}
+.bk-err::before{content:"▲ ";font-size:8px;vertical-align:2px}
+.review{border:1px solid var(--border);border-radius:12px;padding:26px 28px;display:grid;gap:12px}
+.review div{display:flex;justify-content:space-between;gap:20px;border-bottom:1px dashed var(--border);padding-bottom:10px}
+.review div:last-child{border:0;padding:0}
+.review .mono{color:var(--dim)}
+.review b{font-weight:600;font-size:14px;text-align:right;color:var(--soft)}
+#bkDone{border:1px solid var(--success);border-radius:14px;padding:clamp(30px,4vw,60px);text-align:left}
+#bkDone h3{font-weight:800;text-transform:uppercase;font-size:clamp(26px,3.4vw,52px)}
+#bkDone .ok{color:var(--success);font-family:var(--mono);font-size:11px;letter-spacing:.16em;display:block;margin-bottom:16px}
+#bkDone .ok::before{content:"● ";font-size:8px;vertical-align:2px}
+#bkDone p{color:var(--muted);max-width:560px;margin-top:14px}
+#bkDone .mono.ref{color:var(--accent);display:block;margin-top:22px}
+/* ---------- FOOTER ---------- */
+footer{background:var(--black);border-top:1px solid var(--border);padding:clamp(70px,9vh,120px) 0 34px}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:clamp(26px,4vw,70px)}
+.foot-grid h5{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;margin-bottom:18px}
+.foot-grid a{display:block;color:var(--muted);font-size:14px;padding:5px 0;transition:color .3s,transform .3s}
+.foot-grid a:hover{color:var(--off);transform:translateX(6px)}
+.foot-logo svg{width:min(360px,100%);color:var(--off)}
+.foot-tag{color:var(--dim);margin-top:20px;max-width:300px;font-size:14px}
+.foot-bar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;border-top:1px solid var(--border);margin-top:clamp(50px,7vh,90px);padding-top:24px}
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:1023px){
+  .nav-links,#nav .btn{display:none}
+  #menuBtn{display:block}
+  .hm-a{right:2%;top:12%;width:38%}
+  .hm-b{left:4%;top:34%;width:26%}
+  .hm-c{right:8%;bottom:20%;width:34%}
+  .works-grid .work{grid-column:1/13!important;margin-top:0!important}
+  .w2 figure,.w3 figure,.w5 figure{aspect-ratio:4/3}
+  .stmt-grid{grid-template-columns:1fr}
+  .monogram{display:none}
+  .proc-grid{grid-template-columns:1fr 1fr}
+  .studio-grid{grid-template-columns:1fr}
+  .quotes{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  #svcPrev{display:none}
+}
+@media (max-width:639px){
+  .hero{padding-top:110px}
+  .hero-meta{flex-direction:column;gap:6px}
+  .hm{position:relative;inset:auto;width:100%!important;--rot:0deg;margin-top:14px}
+  .hero-media{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+  .hm-b{grid-row:1/3}
+  .hero-title{font-size:clamp(56px,15vw,96px)}
+  .hero-title .ht-b{margin-left:12vw}
+  .opts,.frow{grid-template-columns:1fr}
+  .proc-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .svc-row{grid-template-columns:50px 1fr}
+  .svc-sub{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.15s!important}
+  .rv,.lm .line-in{opacity:1!important;transform:none!important}
+  #cursor{display:none!important}
+  .mq-track{animation:none!important}
+  #loader{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="loader" aria-hidden="true">
+  <svg viewBox="0 0 560 340" role="img" aria-label="BDJG">
+    <path pathLength="1" style="--i:0" d="M 262 86 C 168 98 74 134 62 184 C 52 226 118 256 178 262"/>
+    <path pathLength="1" style="--i:1" d="M 332 80 C 400 74 486 98 494 140 C 500 180 428 218 368 232"/>
+    <path pathLength="1" style="--i:2" d="M 186 124 C 182 158 180 192 178 224"/>
+    <path pathLength="1" style="--i:3" d="M 156 134 C 186 126 208 128 210 144 C 212 158 190 164 178 164"/>
+    <path pathLength="1" style="--i:4" d="M 178 164 C 202 162 226 170 224 186 C 222 202 196 208 180 206"/>
+    <path pathLength="1" style="--i:5" d="M 182 210 C 168 234 152 254 138 270"/>
+    <path pathLength="1" style="--i:6" d="M 246 124 C 244 154 242 184 240 212"/>
+    <path pathLength="1" style="--i:7" d="M 248 126 C 274 142 278 174 242 210"/>
+    <path pathLength="1" style="--i:8" d="M 284 132 C 304 126 328 126 340 130"/>
+    <path pathLength="1" style="--i:9" d="M 318 132 C 316 160 314 188 314 212 C 312 236 298 246 282 238 C 274 234 270 228 268 222"/>
+    <path pathLength="1" style="--i:10" d="M 374 122 C 358 142 348 164 354 182 C 360 200 382 210 394 200 C 400 194 404 186 406 178 L 386 180"/>
+    <path pathLength="1" style="--i:11" d="M 306 62 C 322 60 330 74 326 90 C 322 104 306 108 296 100 C 286 92 288 72 300 64 C 302 62 304 62 306 62"/>
+    <path pathLength="1" style="--i:12" d="M 306 74 C 302 80 302 88 306 92"/>
+    <path pathLength="1" style="--i:13" d="M 208 270 C 228 266 248 266 262 268"/>
+  </svg>
+  <div class="loader-meta"><span id="loaderTc">00:00:00:00</span><span>Loading Visuals</span></div>
+</div>
+
+<div id="cursor" aria-hidden="true"><span id="cursorTxt"></span></div>
+
+<!-- NAV -->
+<header id="nav">
+  <a class="nav-logo" href="#top">BDJG<sup>®</sup></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#works">WORKS</a><a href="#services">SERVICES</a><a href="#statement">ABOUT</a><a href="#studio">STUDIO</a><a href="#contact">CONTACT</a>
+  </nav>
+  <a class="btn" href="#book">Book a Project ↗</a>
+  <button id="menuBtn" aria-expanded="false" aria-controls="menu">MENU</button>
+</header>
+
+<div id="menu" aria-hidden="true">
+  <button id="menuClose">CLOSE ✕</button>
+  <a class="menu-link" href="#works">WORKS</a>
+  <a class="menu-link" href="#services">SERVICES</a>
+  <a class="menu-link" href="#statement">ABOUT</a>
+  <a class="menu-link" href="#studio">STUDIO</a>
+  <a class="menu-link" href="#contact">CONTACT</a>
+  <a class="menu-link" href="#book" style="color:var(--accent)">BOOK A PROJECT ↗</a>
+  <span class="mono">Padang — INDONESIA / 2026</span>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Intro">
+    <div class="hero-meta mono">
+      <span class="rv">BDJG® / Visual Studio</span>
+      <span class="rv" style="--d:.1s">Padang — Indonesia / 2026</span>
+    </div>
+    <h1 class="hero-title lm" id="heroTitle">
+      <span class="line"><span class="line-in">We Capture</span></span>
+      <span class="line"><span class="line-in ht-b">Stories<em>.</em></span></span>
+    </h1>
+    <div class="hero-media" aria-hidden="true">
+      <figure class="hm hm-a"><div class="hm-in" data-para="0.06"><img src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1df802b3b-4235-4593-b265-e760c92b1926.png" alt=""></div></figure>
+      <figure class="hm hm-b"><div class="hm-in" data-para="0.1"><img src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/19901401b-9d4f-4a6f-a60c-7334fc8ef3e6.png" alt=""></div></figure>
+      <figure class="hm hm-c"><div class="hm-in" data-para="0.08"><img src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1c52f8bd7-965d-45fb-aeea-04f1d0c03f8a.png" alt=""></div></figure>
+    </div>
+    <div class="hero-foot mono">
+      <span>Photo — Film — VFX — Post</span>
+      <span id="heroTc">00:00:00:00</span>
+      <span>Scroll ↓</span>
+    </div>
+  </section>
+
+  <!-- SELECTED WORKS -->
+  <section id="works">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title lm"><span class="line"><span class="line-in">Selected Works</span></span></h2>
+        <span class="mono rv">(05) — 2024 / 2026</span>
+      </div>
+      <div class="works-grid">
+        <article class="work w1 rv" data-cursor="VIEW">
+          <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/180cc1143-37ff-4b52-9065-0c5f4f24bb65.png" alt="Senja — wedding film still, couple on mountain ridge at dawn"></figure>
+          <div class="work-cap"><h3>Senja</h3><span class="mono">Project / 0048 — Wedding Film / 2026</span></div>
+        </article>
+        <article class="work w2 rv" data-cursor="VIEW" style="--d:.1s">
+          <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/147a7d2fb-3104-415d-91a1-a022b019c0e1.png" alt="Bara — commercial film still, sneaker on wet asphalt"></figure>
+          <div class="work-cap"><h3>Bara</h3><span class="mono">Project / 0047 — Commercial / 2025</span></div>
+        </article>
+        <article class="work w3 rv" data-cursor="VIEW">
+          <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/12ca35274-4bf2-496e-ba22-d9767239bf24.png" alt="Pelita — graduation film still, student tossing cap"></figure>
+          <div class="work-cap"><h3>Pelita</h3><span class="mono">Project / 0046 — Graduation Film / 2025</span></div>
+        </article>
+        <article class="work w4 rv" data-cursor="VIEW" style="--d:.1s">
+          <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1afda766a-2d7c-46df-ada5-3e71936e915e.png" alt="Kala — short film still, man by window in shaft of light"></figure>
+          <div class="work-cap"><h3>Kala</h3><span class="mono">Project / 0045 — Short Film / 2025</span></div>
+        </article>
+        <article class="work w5 rv" data-cursor="VIEW">
+          <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/10b6bedf7-5cf6-49c6-a863-f50ff9e8e2ce.png" alt="Aruna — portrait series, strip of light across eyes"></figure>
+          <div class="work-cap"><h3>Aruna</h3><span class="mono">Project / 0044 — Portrait Series / 2024</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section id="statement">
+    <div class="wrap">
+      <p class="mono rv" style="margin-bottom:34px">BDJG® / Manifesto</p>
+      <div class="stmt-grid">
+        <h2 class="stmt lm">
+          <span class="line"><span class="line-in">We don't just</span></span>
+          <span class="line"><span class="line-in alt">capture moments.</span></span>
+          <span class="line"><span class="line-in">We turn them</span></span>
+          <span class="line"><span class="line-in">into <em style="font-style:normal;color:var(--accent)">stories.</em></span></span>
+        </h2>
+        <div class="monogram rv" aria-hidden="true">
+          <span class="mg1">BD</span><span class="mg2">JG</span><span class="mg3">STORY</span>
+        </div>
+      </div>
+      <p class="stmt-note rv">A creative studio for photography, film, and post-production. Built in Padang, trusted by clients across Indonesia — from weddings and graduations to commercials and short films.</p>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-track">
+      <div class="mq-group"><span>Photography</span><i>✦</i><span>Film Production</span><i>✦</i><span>Post Production</span><i>✦</i><span>VFX &amp; Animation</span><i>✦</i><span>Creative Project</span><i>✦</i></div>
+      <div class="mq-group"><span>Photography</span><i>✦</i><span>Film Production</span><i>✦</i><span>Post Production</span><i>✦</i><span>VFX &amp; Animation</span><i>✦</i><span>Creative Project</span><i>✦</i></div>
+    </div>
+  </div>
+
+  <!-- FEATURED FILM -->
+  <section id="featured" aria-label="Featured film">
+    <div class="feat-media">
+      <img data-para="0.05" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1a37724a9-8513-4716-b45a-627efd4f78b5.png" alt="Featured film frame — lone figure with umbrella in foggy tea plantation">
+    </div>
+    <div class="feat-ui">
+      <div class="feat-top mono"><span>Featured Film — Cut / V03</span><span>Runtime / 08:42</span></div>
+      <button class="playbtn" data-cursor="PLAY" aria-label="Watch film">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="feat-bot">
+        <h2 class="feat-title lm"><span class="line"><span class="line-in">Senja</span></span></h2>
+        <span class="mono">A Wedding Film — Padang, 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title lm"><span class="line"><span class="line-in">Services</span></span></h2>
+        <span class="mono rv">Capability / 05</span>
+      </div>
+      <img id="svcPrev" alt="" aria-hidden="true">
+      <div class="svc-row rv" data-img="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/10b6bedf7-5cf6-49c6-a863-f50ff9e8e2ce.png" data-cursor="OPEN">
+        <span class="svc-num">01</span><h3>Photography</h3>
+        <span class="svc-sub">Wedding / Graduation / Event / Portrait / Commercial</span>
+      </div>
+      <div class="svc-row rv" data-img="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/180cc1143-37ff-4b52-9065-0c5f4f24bb65.png" data-cursor="OPEN">
+        <span class="svc-num">02</span><h3>Film Production</h3>
+        <span class="svc-sub">Wedding Film / Graduation Film / Company Profile / Music Video / Short Film</span>
+      </div>
+      <div class="svc-row rv" data-img="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1ae6284df-50a0-4502-b32c-a56be60024de.png" data-cursor="OPEN">
+        <span class="svc-num">03</span><h3>Post Production</h3>
+        <span class="svc-sub">Video Editing / Color Grading / Sound Design / Photo Editing</span>
+      </div>
+      <div class="svc-row rv" data-img="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/147a7d2fb-3104-415d-91a1-a022b019c0e1.png" data-cursor="OPEN">
+        <span class="svc-num">04</span><h3>VFX &amp; Animation</h3>
+        <span class="svc-sub">Motion Graphics / 2D / 3D / CGI / Visual Effects</span>
+      </div>
+      <div class="svc-row rv" data-img="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1df802b3b-4235-4593-b265-e760c92b1926.png" data-cursor="OPEN">
+        <span class="svc-num">05</span><h3>Creative Project</h3>
+        <span class="svc-sub">Custom Production / Creative Direction / Campaign</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title lm"><span class="line"><span class="line-in">Process</span></span></h2>
+        <span class="mono rv">Brief → Delivery</span>
+      </div>
+      <div class="proc-grid">
+        <div class="proc rv"><span class="mono">01</span><h4>Brief</h4><p>Tell us the story you want to keep.</p></div>
+        <div class="proc rv" style="--d:.05s"><span class="mono">02</span><h4>Pre-Production</h4><p>Concept, schedule, crew, equipment.</p></div>
+        <div class="proc rv" style="--d:.1s"><span class="mono">03</span><h4>Shoot</h4><p>We capture the moments, calmly.</p></div>
+        <div class="proc rv" style="--d:.15s"><span class="mono">04</span><h4>Post</h4><p>Edit, grade, sound, VFX.</p></div>
+        <div class="proc rv" style="--d:.2s"><span class="mono">05</span><h4>Review</h4><p>Client preview with timestamped revision.</p></div>
+        <div class="proc rv" style="--d:.25s"><span class="mono">06</span><h4>Delivery</h4><p>Final files, released to your portal.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDIO -->
+  <section id="studio">
+    <div class="wrap studio-grid">
+      <div class="studio-copy">
+        <p class="mono rv">The Studio / Padang</p>
+        <h2 class="sec-title lm" style="margin-top:18px"><span class="line"><span class="line-in">Small crew,</span></span><span class="line"><span class="line-in">serious craft.</span></span></h2>
+        <p class="rv">BDJG is a director-led studio. Twelve people — photographers, videographers, editors, colorists, animators — one standard: every frame earns its place.</p>
+        <div class="stats rv">
+          <div><b>2019</b><span class="mono">Founded</span></div>
+          <div><b>120+</b><span class="mono">Projects</span></div>
+          <div><b>40+</b><span class="mono">Clients</span></div>
+          <div><b>12</b><span class="mono">Crew</span></div>
+        </div>
+      </div>
+      <div class="studio-media rv">
+        <figure><img loading="lazy" src="https://image.qwenlm.ai/public_source/3f9b8dda-6598-447e-8fa0-492996603b83/1ae6284df-50a0-4502-b32c-a56be60024de.png" alt="BDJG studio editing suite at night"></figure>
+        <span class="mono">Studio / 06°54′S 107°36′E — Grade Suite</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section id="clients">
+    <div class="marquee thin rev" style="border:0;padding:0 0 26px" aria-hidden="true">
+      <div class="mq-track">
+        <div class="mq-group"><span>Parahyangan Univ.</span><span>—</span><span>SMA 3 Padang</span><span>—</span><span>Kopi Larut</span><span>—</span><span>Aruna Weddings</span><span>—</span><span>Nusantara Co.</span><span>—</span><span>Cahaya Hotel</span><span>—</span><span>Delta Music</span><span>—</span></div>
+        <div class="mq-group"><span>Parahyangan Univ.</span><span>—</span><span>SMA 3 Padang</span><span>—</span><span>Kopi Larut</span><span>—</span><span>Aruna Weddings</span><span>—</span><span>Nusantara Co.</span><span>—</span><span>Cahaya Hotel</span><span>—</span><span>Delta Music</span><span>—</span></div>
+      </div>
+    </div>
+    <div class="quotes">
+      <blockquote class="quote rv"><p>"BDJG turned our graduation into a film we will rewatch for years. Every frame feels intentional."</p><span class="mono">Pelita / Graduation Film — 2025</span></blockquote>
+      <blockquote class="quote rv" style="--d:.1s"><p>"Professional from brief to final delivery. The preview and revision flow made everything calm."</p><span class="mono">R. Anggraeni / Wedding — 2026</span></blockquote>
+    </div>
+  </section>
+
+  <!-- BOOK A PROJECT -->
+  <section id="book">
+    <div class="wrap">
+      <p class="mono rv" style="margin-bottom:26px">Book a Project ↗</p>
+      <h2 class="cta-title lm">
+        <span class="line"><span class="line-in">Have a story</span></span>
+        <span class="line"><span class="line-in">to <em>tell?</em></span></span>
+      </h2>
+
+      <div class="book-wrap">
+        <div class="book-head mono"><span id="bkStepLabel">01 / 06 — Service</span><span id="bkAvail">Availability / Limited</span></div>
+
+        <form id="bookForm" novalidate>
+          <section class="bk-step" data-step="1">
+            <h3>Choose a service</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="service" value="Photography"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Photography<small>Wedding / Graduation / Event / Portrait</small></span></span></label>
+              <label class="opt"><input type="radio" name="service" value="Film Production"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Film Production<small>Wedding Film / Graduation / Music Video</small></span></span></label>
+              <label class="opt"><input type="radio" name="service" value="Post Production"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Post Production<small>Editing / Color / Sound / Photo Edit</small></span></span></label>
+              <label class="opt"><input type="radio" name="service" value="VFX & Animation"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">VFX &amp; Animation<small>Motion / 2D / 3D / CGI</small></span></span></label>
+              <label class="opt"><input type="radio" name="service" value="Creative Project"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Creative Project<small>Custom production — tell us below</small></span></span></label>
+            </div>
+          </section>
+
+          <section class="bk-step" data-step="2" hidden>
+            <h3>Pick a package</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="package" value="Basic"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Basic<small>Simple production, core deliverables</small></span></span></label>
+              <label class="opt"><input type="radio" name="package" value="Cinematic"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Cinematic<small>Fuller crew, richer output</small></span></span></label>
+              <label class="opt"><input type="radio" name="package" value="Premium"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Premium<small>Larger production, all deliverables</small></span></span></label>
+              <label class="opt"><input type="radio" name="package" value="Custom"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Custom<small>Special scope — we'll quote it</small></span></span></label>
+            </div>
+            <p class="mono" style="margin:26px 0 14px">Add-ons (optional)</p>
+            <div class="opts">
+              <label class="opt"><input type="checkbox" name="addons" value="Drone"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Drone</span></span></label>
+              <label class="opt"><input type="checkbox" name="addons" value="Extra Camera"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Extra Camera</span></span></label>
+              <label class="opt"><input type="checkbox" name="addons" value="Extra Photographer"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Extra Photographer</span></span></label>
+              <label class="opt"><input type="checkbox" name="addons" value="Express Editing"><span class="opt-body"><span class="opt-box"></span><span class="opt-txt">Express Editing</span></span></label>
+            </div>
+          </section>
+
+          <section class="bk-step" data-step="3" hidden>
+            <h3>Project brief</h3>
+            <div class="field"><label for="fBrief">Tell us about the project</label><textarea id="fBrief" placeholder="What is the story? What must absolutely be captured?"></textarea></div>
+            <div class="field"><label for="fRef">Reference links (optional)</label><input id="fRef" type="text" placeholder="https:// …"></div>
+          </section>
+
+          <section class="bk-step" data-step="4" hidden>
+            <h3>Preferred date</h3>
+            <div class="frow">
+              <div class="field"><label for="fDate1">Preferred date</label><input id="fDate1" type="date"></div>
+              <div class="field"><label for="fDate2">Alternative date</label><input id="fDate2" type="date"></div>
+            </div>
+            <p class="mono" style="margin-top:8px">Date is not final until confirmed by our admin.</p>
+          </section>
+
+          <section class="bk-step" data-step="5" hidden>
+            <h3>Contact data</h3>
+            <div class="frow">
+              <div class="field"><label for="fName">Name</label><input id="fName" type="text" autocomplete="name"></div>
+              <div class="field"><label for="fInst">Institution / Company</label><input id="fInst" type="text"></div>
+            </div>
+            <div class="frow">
+              <div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email"></div>
+              <div class="field"><label for="fWa">Phone / WhatsApp</label><input id="fWa" type="tel" autocomplete="tel"></div>
+            </div>
+          </section>
+
+          <section class="bk-step" data-step="6" hidden>
+            <h3>Review</h3>
+            <div class="review" id="bkReview"></div>
+          </section>
+
+          <div class="bk-nav">
+            <button type="button" class="btn ghost" id="bkBack" disabled>← Back</button>
+            <button type="button" class="btn" id="bkNext">Next →</button>
+          </div>
+          <p class="bk-err mono" id="bkErr" role="alert" hidden></p>
+        </form>
+
+        <div id="bkDone" hidden>
+          <span class="ok">Inquiry Received</span>
+          <h3>Thank you.<br>We'll be in touch.</h3>
+          <p>Our admin will review your request and contact you within 1×24 hours with a quotation. Once accepted, your client portal is activated.</p>
+          <span class="mono ref" id="bkRef">BDJG-INQ-2026-0000</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-logo">
+        <svg viewBox="0 0 560 340" role="img" aria-label="BDJG logo">
+          <g fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 262 86 C 168 98 74 134 62 184 C 52 226 118 256 178 262"/>
+            <path d="M 332 80 C 400 74 486 98 494 140 C 500 180 428 218 368 232"/>
+            <path d="M 186 124 C 182 158 180 192 178 224"/>
+            <path d="M 156 134 C 186 126 208 128 210 144 C 212 158 190 164 178 164"/>
+            <path d="M 178 164 C 202 162 226 170 224 186 C 222 202 196 208 180 206"/>
+            <path d="M 182 210 C 168 234 152 254 138 270"/>
+            <path d="M 246 124 C 244 154 242 184 240 212"/>
+            <path d="M 248 126 C 274 142 278 174 242 210"/>
+            <path d="M 284 132 C 304 126 328 126 340 130"/>
+            <path d="M 318 132 C 316 160 314 188 314 212 C 312 236 298 246 282 238 C 274 234 270 228 268 222"/>
+            <path d="M 374 122 C 358 142 348 164 354 182 C 360 200 382 210 394 200 C 400 194 404 186 406 178 L 386 180"/>
+            <path d="M 306 62 C 322 60 330 74 326 90 C 322 104 306 108 296 100 C 286 92 288 72 300 64 C 302 62 304 62 306 62"/>
+            <path d="M 306 74 C 302 80 302 88 306 92"/>
+            <path d="M 208 270 C 228 266 248 266 262 268"/>
+          </g>
+        </svg>
+        <p class="foot-tag">Photo / Film / VFX / Post. We capture stories.</p>
+      </div>
+      <div>
+        <h5>Sitemap</h5>
+        <a href="#works">Works</a><a href="#services">Services</a><a href="#statement">About</a><a href="#studio">Studio</a><a href="#book">Book a Project</a>
+      </div>
+      <div>
+        <h5>Social</h5>
+        <a href="#" rel="noopener">Instagram ↗</a><a href="#" rel="noopener">YouTube ↗</a><a href="#" rel="noopener">Vimeo ↗</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="mailto:hello@bdjg.studio">hello@bdjg.studio</a>
+        <a href="tel:+6281234567890">+62 812-3456-7890</a>
+        <a href="#top">Padang — Indonesia</a>
+      </div>
+    </div>
+    <div class="foot-bar mono">
+      <span>© 2026 BDJG — All stories reserved</span>
+      <span id="bdgClock">Padang / 00:00:00 WIB</span>
+      <span>Project / 0048 — Cut / V03</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  document.documentElement.classList.remove('no-js');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  /* ---------- timecode helpers ---------- */
+  function tc(ms){
+    var t = Math.max(0, ms);
+    var f = Math.floor(t/1000*24)%24;
+    var s = Math.floor(t/1000)%60;
+    var m = Math.floor(t/60000)%60;
+    var h = Math.floor(t/3600000)%24;
+    function p(n){ return (n<10?'0':'')+n; }
+    return p(h)+':'+p(m)+':'+p(s)+':'+p(f);
+  }
+  var bootTime = performance.now();
+
+  /* ---------- preloader ---------- */
+  var loader = document.getElementById('loader');
+  var loaderTc = document.getElementById('loaderTc');
+  var heroTitle = document.getElementById('heroTitle');
+  function finishLoad(){
+    loader.classList.add('done');
+    document.body.classList.add('ready');
+    heroTitle.classList.add('in');
+    startObservers();
+    setTimeout(function(){ loader.style.display='none'; }, 900);
+  }
+  if (reduced){ finishLoad(); }
+  else {
+    var loadStart = performance.now();
+    (function tickLoad(){
+      var e = performance.now() - loadStart;
+      loaderTc.textContent = tc(e);
+      if (e < 1500){ requestAnimationFrame(tickLoad); } else { finishLoad(); }
+    })();
+  }
+
+  /* ---------- hero live timecode ---------- */
+  var heroTc = document.getElementById('heroTc');
+  if (!reduced){
+    (function tickHero(){ heroTc.textContent = tc(performance.now()-bootTime); requestAnimationFrame(tickHero); })();
+  }
+
+  /* ---------- footer clock ---------- */
+  var clock = document.getElementById('bdgClock');
+  function tickClock(){
+    try{
+      clock.textContent = 'Padang / ' + new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date()) + ' WIB';
+    }catch(err){ clock.textContent = 'Padang / Indonesia'; }
+  }
+  tickClock(); setInterval(tickClock, 1000);
+
+  /* ---------- nav ---------- */
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, {passive:true});
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn = document.getElementById('menuBtn');
+  var menu = document.getElementById('menu');
+  var menuClose = document.getElementById('menuClose');
+  function setMenu(open){
+    document.body.classList.toggle('menu-open', open);
+    menuBtn.setAttribute('aria-expanded', open);
+    menu.setAttribute('aria-hidden', !open);
+  }
+  menuBtn.addEventListener('click', function(){ setMenu(!document.body.classList.contains('menu-open')); });
+  menuClose.addEventListener('click', function(){ setMenu(false); });
+  Array.prototype.forEach.call(document.querySelectorAll('.menu-link'), function(a){
+    a.addEventListener('click', function(){ setMenu(false); });
+  });
+
+  /* ---------- reveal observers ---------- */
+  function startObservers(){
+    var targets = document.querySelectorAll('.rv, .lm');
+    if (!('IntersectionObserver' in window)){ 
+      Array.prototype.forEach.call(targets, function(el){ el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {threshold:0.15, rootMargin:'0px 0px -6% 0px'});
+    Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
+  }
+
+  /* ---------- parallax ---------- */
+  var paraEls = Array.prototype.slice.call(document.querySelectorAll('[data-para]'));
+  function runParallax(){
+    var vh = window.innerHeight;
+    paraEls.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > vh+100) return;
+      var delta = (r.top + r.height/2) - vh/2;
+      var sp = parseFloat(el.getAttribute('data-para')) || 0.06;
+      el.style.transform = 'translate3d(0,' + (delta * sp * -1).toFixed(1) + 'px,0)';
+    });
+  }
+  if (!reduced && paraEls.length){
+    window.addEventListener('scroll', function(){ requestAnimationFrame(runParallax); }, {passive:true});
+    runParallax();
+  }
+
+  /* ---------- custom cursor ---------- */
+  var cursor = document.getElementById('cursor');
+  var cursorTxt = document.getElementById('cursorTxt');
+  if (finePointer && !reduced){
+    var cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
+    window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; }, {passive:true});
+    (function loopCursor(){
+      cx += (tx-cx)*0.18; cy += (ty-cy)*0.18;
+      cursor.style.left = cx+'px'; cursor.style.top = cy+'px';
+      requestAnimationFrame(loopCursor);
+    })();
+    document.addEventListener('mouseover', function(e){
+      var t = e.target.closest ? e.target.closest('[data-cursor]') : null;
+      if (t){ cursorTxt.textContent = '[ ' + t.getAttribute('data-cursor') + ' ]'; cursor.classList.add('big'); }
+      else cursor.classList.remove('big');
+    });
+  }
+
+  /* ---------- services hover preview ---------- */
+  var svcPrev = document.getElementById('svcPrev');
+  var svcSection = document.getElementById('services');
+  if (finePointer && !reduced){
+    Array.prototype.forEach.call(document.querySelectorAll('.svc-row'), function(row){
+      row.addEventListener('mouseenter', function(){
+        svcPrev.src = row.getAttribute('data-img');
+        svcPrev.classList.add('on');
+      });
+    });
+    svcSection.addEventListener('mouseleave', function(){ svcPrev.classList.remove('on'); });
+    svcSection.addEventListener('mousemove', function(e){
+      var r = svcSection.getBoundingClientRect();
+      svcPrev.style.top = (e.clientY - r.top - 110) + 'px';
+    }, {passive:true});
+  }
+
+  /* ---------- book form (blueprint flow) ---------- */
+  var form = document.getElementById('bookForm');
+  var steps = Array.prototype.slice.call(form.querySelectorAll('.bk-step'));
+  var bkNext = document.getElementById('bkNext');
+  var bkBack = document.getElementById('bkBack');
+  var bkErr = document.getElementById('bkErr');
+  var bkLabel = document.getElementById('bkStepLabel');
+  var bkReview = document.getElementById('bkReview');
+  var bkDone = document.getElementById('bkDone');
+  var stepNames = ['Service','Package','Brief','Date','Contact','Review'];
+  var cur = 1;
+
+  function val(name){
+    var el = form.querySelector('input[name="'+name+'"]:checked');
+    return el ? el.value : '';
+  }
+  function txt(id){ var el = document.getElementById(id); return el && el.value.trim() ? el.value.trim() : '—'; }
+  function showErr(msg){ bkErr.textContent = msg; bkErr.hidden = false; }
+  function hideErr(){ bkErr.hidden = true; }
+
+  function showStep(n){
+    cur = n;
+    steps.forEach(function(s){ s.hidden = (parseInt(s.getAttribute('data-step'),10) !== n); });
+    bkLabel.textContent = '0' + n + ' / 06 — ' + stepNames[n-1];
+    bkBack.disabled = (n === 1);
+    bkNext.textContent = (n === 6) ? 'Submit Inquiry ↗' : 'Next →';
+    if (n === 6) buildReview();
+    hideErr();
+  }
+  function buildReview(){
+    var addons = Array.prototype.map.call(form.querySelectorAll('input[name="addons"]:checked'), function(i){ return i.value; });
+    var rows = [
+      ['Service', val('service') || '—'],
+      ['Package', val('package') || '—'],
+      ['Add-ons', addons.length ? addons.join(', ') : 'None'],
+      ['Brief', txt('fBrief')],
+      ['Preferred date', txt('fDate1')],
+      ['Alternative', txt('fDate2')],
+      ['Name', txt('fName')],
+      ['Contact', txt('fEmail') + ' / ' + txt('fWa')]
+    ];
+    bkReview.innerHTML = rows.map(function(r){
+      return '<div><span class="mono">'+r[0]+'</span><b>'+ (r[1].replace(/</g,'&lt;')) +'</b></div>';
+    }).join('');
+  }
+  function validate(n){
+    if (n === 1 && !val('service')) return 'Select a service to continue.';
+    if (n === 2 && !val('package')) return 'Select a package to continue.';
+    if (n === 3 && !txt('fBrief') || (n===3 && txt('fBrief')==='—')) return 'Write a short brief so we understand the story.';
+    if (n === 4 && txt('fDate1') === '—') return 'Choose a preferred date.';
+    if (n === 5){
+      if (txt('fName') === '—') return 'Your name is required.';
+      if (txt('fEmail') === '—' && txt('fWa') === '—') return 'Provide an email or WhatsApp number.';
+    }
+    return '';
+  }
+  bkNext.addEventListener('click', function(){
+    var err = validate(cur);
+    if (err){ showErr(err); return; }
+    if (cur < 6){ showStep(cur+1); return; }
+    /* submit */
+    var id = 'BDJG-INQ-2026-0' + Math.floor(100 + Math.random()*900);
+    document.getElementById('bkRef').textContent = id;
+    form.hidden = true;
+    document.querySelector('.book-head').style.visibility = 'hidden';
+    bkDone.hidden = false;
+    bkDone.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'center'});
+  });
+  bkBack.addEventListener('click', function(){ if (cur > 1) showStep(cur-1); });
+  showStep(1);
+})();
+</script>
+</body>
+</html>

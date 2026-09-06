@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexthive Studio — Agency Portfolio & Team Contributions</title>
+<meta name="description" content="Nexthive Studio membantu brand membangun website, identitas visual, dan strategi digital melalui kolaborasi tim kreatif multidisiplin.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/space-grotesk@latest/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/space-grotesk@latest/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/space-grotesk@latest/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/manrope@latest/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/manrope@latest/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/manrope@latest/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/manrope@latest/800.css">
+<style>
+:root{
+  --bg:#081120; --bg2:#0b1a2e; --panel:#0d1e33; --line:rgba(120,180,220,.16);
+  --cyan:#38c8f5; --cyan-b:#5ee1ff; --green:#1fd286; --text:#eaf4fb; --muted:#93a7bc;
+  --e:cubic-bezier(.2,.7,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,sans-serif;line-height:1.65}
+h1,h2,h3,h4,.font-disp{font-family:'Space Grotesk',sans-serif}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select,textarea{font-family:inherit}
+::selection{background:rgba(56,200,245,.35)}
+.container{width:min(1180px,92%);margin:0 auto}
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+.grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:repeating-linear-gradient(45deg,rgba(140,180,220,.05) 0 1px,transparent 1px 110px),
+  repeating-linear-gradient(-45deg,rgba(140,180,220,.05) 0 1px,transparent 1px 110px);}
+#cursor{position:fixed;z-index:120;left:0;top:0;width:10px;height:10px;border-radius:50%;
+  background:rgba(94,225,255,.85);pointer-events:none;transform:translate(-50%,-50%);
+  box-shadow:0 0 18px rgba(94,225,255,.55);mix-blend-mode:screen;
+  transition:width .3s var(--e),height .3s var(--e),background .3s;opacity:.9}
+#cursor.big{width:46px;height:46px;background:rgba(94,225,255,.14)}
+@media (hover:none){#cursor{display:none}}
+main{position:relative;z-index:1}
+/* ---------- HEADER ---------- */
+#header{position:fixed;top:0;left:0;right:0;z-index:60;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;padding:16px 4%;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+#header.scrolled{background:rgba(8,17,32,.82);backdrop-filter:blur(14px);border-color:var(--line)}
+.burger{justify-self:start;width:44px;height:40px;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center}
+.burger span{display:block;width:24px;height:2px;background:var(--text);transition:.4s var(--e)}
+.burger span:nth-child(2){width:17px}
+body.menu-open .burger span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.logo{display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1}
+.logo svg{width:34px;height:34px;filter:drop-shadow(0 0 10px rgba(94,225,255,.5))}
+.logo-name{font-family:'Space Grotesk';font-weight:700;font-size:12px;letter-spacing:.42em;margin-top:4px;color:var(--text)}
+.logo-sub{font-size:8px;letter-spacing:.6em;color:var(--cyan)}
+.header-right{justify-self:end;display:flex;align-items:center;gap:16px}
+.lang{font-size:11px;letter-spacing:.15em;color:var(--muted);display:flex;align-items:center;gap:6px}
+.lang-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:11px;
+  letter-spacing:.18em;padding:13px 22px;border-radius:4px;transition:transform .3s var(--e),box-shadow .3s,background .3s;cursor:pointer}
+.btn-green{background:var(--green);color:#04140c;box-shadow:0 0 26px rgba(31,210,134,.35)}
+.btn-green:hover{transform:translateY(-3px);box-shadow:0 8px 34px rgba(31,210,134,.5)}
+.btn-ghost{border:1px solid rgba(94,225,255,.45);color:var(--cyan-b)}
+.btn-ghost:hover{background:rgba(94,225,255,.1);transform:translateY(-3px)}
+/* ---------- MENU OVERLAY ---------- */
+#menuOverlay{position:fixed;inset:0;z-index:55;background:rgba(6,12,24,.96);backdrop-filter:blur(16px);
+  transform:translateY(-102%);transition:transform .65s var(--e);display:flex;flex-direction:column;justify-content:center;padding:8vh 8vw}
+body.menu-open #menuOverlay{transform:none}
+body.menu-open{overflow:hidden}
+.menu-link{display:block;font-family:'Space Grotesk';font-size:clamp(30px,5.4vw,58px);font-weight:700;color:var(--text);
+  padding:6px 0;opacity:0;transform:translateY(30px);transition:.6s var(--e);width:max-content;position:relative}
+.menu-link:hover{color:var(--cyan-b);letter-spacing:.04em}
+.menu-link::before{content:'';position:absolute;left:-26px;top:50%;width:14px;height:2px;background:var(--green);transform:scaleX(0);transition:.3s;transform-origin:left}
+.menu-link:hover::before{transform:scaleX(1)}
+body.menu-open .menu-link{opacity:1;transform:none}
+body.menu-open .menu-link:nth-child(1){transition-delay:.15s}body.menu-open .menu-link:nth-child(2){transition-delay:.22s}
+body.menu-open .menu-link:nth-child(3){transition-delay:.29s}body.menu-open .menu-link:nth-child(4){transition-delay:.36s}
+body.menu-open .menu-link:nth-child(5){transition-delay:.43s}body.menu-open .menu-link:nth-child(6){transition-delay:.5s}
+.menu-foot{margin-top:6vh;display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:13px;letter-spacing:.08em}
+.menu-foot a:hover{color:var(--cyan-b)}
+/* ---------- HERO ---------- */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:120px 0 80px}
+.scene{position:absolute;inset:0;pointer-events:none}
+.moon{position:absolute;right:7%;top:20%}
+.moon-in{width:118px;height:118px;border-radius:50%;
+  background:radial-gradient(circle at 64% 36%,#d5dbca 0 11%,transparent 12%),radial-gradient(circle at 40% 64%,#dde2d3 0 7%,transparent 8%),#e9ede2;
+  box-shadow:0 0 70px rgba(233,237,226,.28);animation:float 9s ease-in-out infinite}
+.saturn{position:absolute;left:9%;top:44%}
+.saturn-in{width:52px;height:52px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 32% 30%,#8fdcff,#1e88d0 70%);box-shadow:0 0 30px rgba(56,200,245,.45);animation:float 7s ease-in-out infinite}
+.saturn-in::after{content:'';position:absolute;left:50%;top:50%;width:104px;height:30px;border:2px solid rgba(140,225,255,.55);
+  border-radius:50%;transform:translate(-50%,-50%) rotate(-16deg)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.scene-bottom{position:absolute;left:50%;bottom:calc(min(1500px,170vw)*-.78);width:min(1500px,170vw);aspect-ratio:1;transform:translateX(-50%)}
+.bp{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 42% 16%,#0d1c30 0 14%,transparent 15%),radial-gradient(circle at 62% 22%,#0e2036 0 10%,transparent 11%),
+  radial-gradient(circle at 50% 10%,#14273f 0%,#0b1a2c 52%,#081120 100%);
+  box-shadow:0 -30px 140px rgba(56,200,245,.16)}
+.bp::before{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan-b);
+  transform:rotate(28deg);filter:drop-shadow(0 0 14px rgba(94,225,255,.8))}
+.orbit{position:absolute;animation:spin linear infinite}
+.orbit.o1{inset:-6.5%;animation-duration:90s}
+.orbit.o2{inset:-13.5%;animation-duration:140s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-content{position:relative;text-align:center;z-index:2}
+.hero-kicker{color:var(--cyan);letter-spacing:.55em;font-weight:600;font-size:clamp(14px,2.4vw,24px);
+  opacity:0;transform:translateY(24px);transition:.9s var(--e) .25s}
+.hero-title{font-size:clamp(60px,12vw,148px);font-weight:700;color:var(--cyan-b);letter-spacing:.05em;line-height:1.05;
+  text-shadow:0 0 60px rgba(56,200,245,.45)}
+.hero-title .hl{display:inline-block;opacity:0;transform:translateY(70px) rotate(6deg);transition:transform .9s var(--e),opacity .9s var(--e)}
+.hero-sub{color:var(--text);font-size:clamp(12px,1.5vw,15px);letter-spacing:.14em;margin-top:18px;
+  opacity:0;transform:translateY(24px);transition:.9s var(--e) .9s}
+.hero-cta{margin-top:34px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(24px);transition:.9s var(--e) 1.15s}
+.hero.loaded .hero-kicker,.hero.loaded .hero-sub,.hero.loaded .hero-cta{opacity:1;transform:none}
+.hero.loaded .hl{opacity:1;transform:none}
+.scroll-hint{margin:56px auto 0;display:flex;flex-direction:column;align-items:center;gap:5px;
+  opacity:0;transition:opacity 1s 1.6s}
+.hero.loaded .scroll-hint{opacity:1}
+.scroll-hint span{height:3px;border-radius:2px;background:var(--cyan);animation:hint 1.6s ease-in-out infinite}
+.scroll-hint span:nth-child(1){width:30px}
+.scroll-hint span:nth-child(2){width:20px;animation-delay:.15s}
+.scroll-hint span:nth-child(3){width:10px;animation-delay:.3s}
+@keyframes hint{0%,100%{opacity:.25}50%{opacity:1}}
+/* ---------- MARQUEE ---------- */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:16px 0;background:rgba(10,22,38,.5);position:relative;z-index:1}
+.marquee-track{display:flex;gap:56px;white-space:nowrap;width:max-content;animation:mar 32s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{font-family:'Space Grotesk';letter-spacing:.3em;font-size:13px;color:var(--muted)}
+.marquee-track b{color:var(--green)}
+@keyframes mar{to{transform:translateX(-50%)}}
+/* ---------- SECTIONS ---------- */
+.section{padding:110px 0;position:relative}
+.overline{color:var(--cyan);letter-spacing:.45em;font-size:11px;font-weight:700;text-transform:uppercase}
+.sec-title{font-size:clamp(28px,4vw,44px);letter-spacing:.02em;margin-top:10px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:52px;flex-wrap:wrap}
+.link-more{color:var(--green);font-weight:800;font-size:11px;letter-spacing:.2em;display:inline-flex;align-items:center;gap:8px;transition:gap .3s}
+.link-more:hover{gap:14px}
+[data-reveal]{opacity:0;transform:translateY(30px);transition:opacity .9s var(--e),transform .9s var(--e)}
+[data-reveal].in{opacity:1;transform:none}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:56px}
+.stat{border:1px solid var(--line);border-radius:14px;padding:28px 22px;text-align:center;background:linear-gradient(180deg,rgba(16,32,54,.7),rgba(10,22,38,.7));transition:.4s}
+.stat:hover{border-color:rgba(94,225,255,.4);transform:translateY(-6px)}
+.stat b{font-family:'Space Grotesk';font-size:clamp(30px,4vw,46px);color:var(--cyan-b);display:block}
+.stat span{color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.about-grid p.lead{color:var(--muted);margin-top:18px}
+.about-badge{border:1px solid var(--line);border-radius:16px;padding:34px;background:rgba(13,30,51,.6);position:relative;overflow:hidden}
+.about-badge::before{content:'';position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(31,210,134,.25),transparent 70%)}
+.about-badge h4{color:var(--green);letter-spacing:.2em;font-size:12px;margin-bottom:14px}
+.about-badge li{list-style:none;color:var(--muted);padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px;display:flex;gap:10px}
+.about-badge li::before{content:'✦';color:var(--cyan)}
+.about-badge li:last-child{border:none}
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.svc{border:1px solid var(--line);border-radius:14px;padding:32px 26px;background:linear-gradient(180deg,rgba(16,32,54,.75),rgba(10,22,38,.75));position:relative;overflow:hidden;transition:.45s var(--e)}
+.svc::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .5s var(--e)}
+.svc:hover{transform:translateY(-8px);border-color:rgba(94,225,255,.4)}
+.svc:hover::after{width:100%}
+.svc .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:var(--cyan-b);background:rgba(56,200,245,.1);border:1px solid rgba(94,225,255,.25);margin-bottom:20px}
+.svc .ico svg{width:22px;height:22px}
+.svc h3{font-size:18px;letter-spacing:.04em;margin-bottom:10px}
+.svc p{color:var(--muted);font-size:14px}
+/* cards */
+.grid.projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px}
+.p-card{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(16,32,54,.85),rgba(10,22,38,.9));transition:transform .5s var(--e),border-color .4s,box-shadow .5s;animation:cardIn .6s var(--e) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(26px) scale(.98)}to{opacity:1;transform:none}}
+.p-card:hover{transform:translateY(-9px);border-color:rgba(94,225,255,.5);box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 34px rgba(56,200,245,.14)}
+.p-thumb{aspect-ratio:16/10;overflow:hidden;position:relative}
+.p-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(8,17,32,.85))}
+.p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e)}
+.p-card:hover .p-thumb img{transform:scale(1.07)}
+.p-body{padding:22px 22px 24px}
+.p-meta{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px}
+.p-meta .yr{color:var(--muted)}
+.p-body h3{font-size:19px;letter-spacing:.02em}
+.p-client{color:var(--green);font-size:12px;letter-spacing:.12em;margin:4px 0 10px}
+.p-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:10.5px;letter-spacing:.08em;padding:5px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.tag.g{border-color:rgba(31,210,134,.4);color:var(--green)}
+.p-team-line{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:8px;letter-spacing:.06em}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex:none}
+/* team cards */
+.grid.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:24px}
+.m-card{border:1px solid var(--line);border-radius:14px;padding:30px 24px;text-align:center;background:linear-gradient(180deg,rgba(16,32,54,.85),rgba(10,22,38,.9));transition:.45s var(--e);animation:cardIn .6s var(--e) both;display:block}
+.m-card:hover{transform:translateY(-8px);border-color:rgba(94,225,255,.5);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.m-ava{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;overflow:hidden;border:2px solid rgba(94,225,255,.5);box-shadow:0 0 26px rgba(56,200,245,.3);transition:.4s}
+.m-card:hover .m-ava{box-shadow:0 0 40px rgba(94,225,255,.55)}
+.m-ava img{width:100%;height:100%;object-fit:cover}
+.m-card h3{font-size:18px}
+.m-role{color:var(--cyan);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;margin:6px 0 14px}
+.m-count{margin-top:16px;font-size:11px;letter-spacing:.16em;color:var(--green)}
+/* process */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;position:relative;margin-top:20px}
+.steps::before{content:'';position:absolute;top:27px;left:6%;right:6%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--green),transparent)}
+.step{text-align:center;position:relative}
+.step-num{width:54px;height:54px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:var(--cyan-b);background:var(--bg2);border:1px solid rgba(94,225,255,.45);box-shadow:0 0 22px rgba(56,200,245,.25);position:relative;z-index:1;transition:.35s}
+.step:hover .step-num{background:var(--cyan);color:#04202f;box-shadow:0 0 34px rgba(56,200,245,.6);transform:scale(1.08)}
+.step h4{font-size:15px;letter-spacing:.06em;margin-bottom:8px}
+.step p{color:var(--muted);font-size:12.5px}
+/* testimonials */
+.tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.tst{border:1px solid var(--line);border-radius:14px;padding:30px;background:rgba(13,30,51,.65);position:relative;transition:.4s}
+.tst:hover{transform:translateY(-6px);border-color:rgba(31,210,134,.45)}
+.tst .q{font-family:'Space Grotesk';font-size:44px;color:var(--green);line-height:1;margin-bottom:12px}
+.tst p{color:var(--muted);font-size:14px;font-style:italic}
+.tst b{display:block;margin-top:18px;color:var(--text);font-size:13px}
+.tst span{color:var(--cyan);font-size:11px;letter-spacing:.14em}
+/* contact */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.c-info li{list-style:none;display:flex;gap:14px;align-items:center;color:var(--muted);padding:14px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.c-info .ci{width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--cyan-b);background:rgba(56,200,245,.1);border:1px solid rgba(94,225,255,.25)}
+.c-info .ci svg{width:18px;height:18px}
+form.c-form{display:flex;flex-direction:column;gap:16px}
+.c-form input,.c-form textarea{background:rgba(10,22,38,.75);border:1px solid var(--line);border-radius:10px;padding:15px 16px;color:var(--text);font-size:14px;outline:none;transition:.3s;resize:vertical}
+.c-form input:focus,.c-form textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,200,245,.15)}
+/* filters */
+.filter-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.search{flex:1;min-width:220px;background:rgba(10,22,38,.75);border:1px solid var(--line);border-radius:999px;padding:13px 22px;color:var(--text);font-size:14px;outline:none;transition:.3s}
+.search:focus{border-color:var(--cyan)}
+.select{background:rgba(10,22,38,.75);border:1px solid var(--line);border-radius:999px;padding:13px 20px;color:var(--muted);font-size:13px;outline:none;cursor:pointer}
+.select option{background:var(--bg2)}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.chip{padding:9px 18px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;letter-spacing:.08em;transition:.3s;cursor:pointer}
+.chip:hover{color:var(--text);border-color:rgba(94,225,255,.45)}
+.chip.active{background:rgba(56,200,245,.14);border-color:var(--cyan);color:var(--cyan-b)}
+.empty{padding:70px 0;text-align:center;color:var(--muted);letter-spacing:.1em}
+/* page head */
+.page-head{padding:170px 0 40px;position:relative}
+.page-title{font-size:clamp(40px,6vw,72px);letter-spacing:.03em;margin-top:12px}
+.page-title em{color:var(--cyan-b);font-style:normal}
+.page-desc{color:var(--muted);max-width:640px;margin-top:14px}
+/* detail */
+.detail{padding-top:150px}
+.back-link{display:inline-flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;letter-spacing:.2em;margin-bottom:34px;transition:.3s}
+.back-link:hover{color:var(--cyan-b);gap:14px}
+.pj-title{font-size:clamp(32px,5vw,58px);letter-spacing:.02em;margin:14px 0 8px}
+.pj-cover{border-radius:18px;border:1px solid var(--line);overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55),0 0 60px rgba(56,200,245,.1);margin:44px 0}
+.pj-cover img{width:100%;max-height:560px;object-fit:cover}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;border:1px solid var(--line);border-radius:14px;padding:26px;background:rgba(13,30,51,.6);margin-bottom:64px}
+.meta-grid .mg span{display:block;font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.meta-grid .mg b{font-family:'Space Grotesk';font-size:15px;color:var(--cyan-b);letter-spacing:.04em}
+.case-block{display:grid;grid-template-columns:220px 1fr;gap:34px;padding:44px 0;border-top:1px solid var(--line)}
+.case-num{font-family:'Space Grotesk';font-size:13px;color:var(--green);letter-spacing:.3em}
+.case-block h3{font-size:clamp(20px,2.6vw,28px);margin:6px 0 0}
+.case-body p{color:var(--muted);font-size:15.5px;max-width:760px}
+.proc-chips{display:flex;flex-wrap:wrap;gap:12px;counter-reset:pc}
+.proc-chips .pc{counter-increment:pc;border:1px solid rgba(94,225,255,.3);border-radius:999px;padding:10px 20px;font-size:12.5px;letter-spacing:.1em;color:var(--text);position:relative;transition:.3s}
+.proc-chips .pc::before{content:counter(pc,decimal-leading-zero);color:var(--green);margin-right:10px;font-weight:800}
+.proc-chips .pc:hover{background:rgba(94,225,255,.1);transform:translateY(-3px)}
+.contrib-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.contrib{border:1px solid var(--line);border-radius:14px;padding:26px;background:linear-gradient(180deg,rgba(16,32,54,.8),rgba(10,22,38,.85));transition:.4s;display:flex;gap:18px}
+.contrib:hover{transform:translateY(-6px);border-color:rgba(31,210,134,.5)}
+.contrib .cava{width:60px;height:60px;border-radius:50%;overflow:hidden;flex:none;border:2px solid rgba(94,225,255,.4)}
+.contrib .cava img{width:100%;height:100%;object-fit:cover}
+.contrib h4{font-size:16px}
+.contrib .crole{color:var(--cyan);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;margin:3px 0 8px}
+.contrib .ctitle{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.1em;margin-bottom:6px}
+.contrib p{color:var(--muted);font-size:13px}
+.contrib .ctools{margin-top:10px;font-size:11px;color:var(--cyan-b);letter-spacing:.06em}
+/* member detail */
+.mem-head{display:flex;gap:40px;align-items:center;flex-wrap:wrap}
+.mem-ava{width:170px;height:170px;border-radius:50%;overflow:hidden;border:3px solid rgba(94,225,255,.55);box-shadow:0 0 50px rgba(56,200,245,.35);flex:none}
+.mem-ava img{width:100%;height:100%;object-fit:cover}
+.mem-head h1{font-size:clamp(32px,4.6vw,54px)}
+.mem-head .mrole{color:var(--cyan);letter-spacing:.3em;font-size:12px;text-transform:uppercase;margin:8px 0 12px}
+.mem-head .mhead-line{color:var(--muted);max-width:560px}
+.mem-stats{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
+.mem-stats .ms{border:1px solid var(--line);border-radius:10px;padding:12px 20px;text-align:center}
+.mem-stats .ms b{font-family:'Space Grotesk';color:var(--cyan-b);font-size:20px;display:block}
+.mem-stats .ms span{font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:.3s}
+.socials a:hover{color:var(--cyan-b);border-color:var(--cyan);transform:translateY(-4px)}
+.socials svg{width:17px;height:17px}
+.m-contrib{display:grid;grid-template-columns:250px 1fr;gap:26px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(13,30,51,.6);margin-bottom:24px;transition:.4s}
+.m-contrib:hover{border-color:rgba(94,225,255,.45);transform:translateY(-5px)}
+.m-contrib .mc-thumb{overflow:hidden;min-height:190px}
+.m-contrib .mc-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--e)}
+.m-contrib:hover .mc-thumb img{transform:scale(1.06)}
+.m-contrib .mc-body{padding:26px 26px 26px 0}
+/* footer */
+.footer{border-top:1px solid var(--line);background:rgba(6,12,22,.72);padding:64px 0 30px;margin-top:60px;position:relative;z-index:1}
+.f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:44px}
+.f-grid h5{font-size:11px;letter-spacing:.3em;color:var(--cyan);margin-bottom:18px;text-transform:uppercase}
+.f-grid a,.f-grid button{display:block;color:var(--muted);font-size:13.5px;padding:5px 0;transition:.3s;text-align:left}
+.f-grid a:hover,.f-grid button:hover{color:var(--cyan-b);padding-left:6px}
+.f-brand p{color:var(--muted);font-size:13.5px;margin-top:14px;max-width:300px}
+.f-bottom{margin-top:52px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;letter-spacing:.1em}
+.f-bottom b{color:var(--green)}
+/* toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,80px);z-index:130;background:var(--green);color:#04140c;font-weight:800;font-size:13px;letter-spacing:.06em;padding:14px 26px;border-radius:999px;box-shadow:0 10px 40px rgba(31,210,134,.45);transition:transform .5s var(--e);pointer-events:none}
+#toast.show{transform:translate(-50%,0)}
+/* responsive */
+@media(max-width:960px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .svc-grid,.tst-grid{grid-template-columns:1fr 1fr}
+  .about-grid,.contact-wrap{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(3,1fr);row-gap:44px}
+  .steps::before{display:none}
+  .meta-grid{grid-template-columns:repeat(2,1fr)}
+  .case-block{grid-template-columns:1fr;gap:14px}
+  .contrib-grid{grid-template-columns:1fr}
+  .m-contrib{grid-template-columns:1fr}
+  .m-contrib .mc-body{padding:0 26px 26px}
+  .f-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .svc-grid,.tst-grid,.steps{grid-template-columns:1fr}
+  .header-cta{display:none}
+  .moon-in{width:80px;height:80px}
+  .f-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+<div class="grid-overlay"></div>
+<div id="cursor"></div>
+
+<header id="header">
+  <button class="burger" id="burger" aria-label="Buka menu"><span></span><span></span><span></span></button>
+  <a class="logo" href="#/" aria-label="Nexthive home">
+    <svg viewBox="0 0 48 48" fill="none"><path d="M24 4 41 14v20L24 44 7 34V14z" stroke="#5ee1ff" stroke-width="2.4"/><path d="M17 31V17l14 14V17" stroke="#1fd286" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="8" r="2" fill="#5ee1ff"/></svg>
+    <span class="logo-name">NEXTHIVE</span>
+    <span class="logo-sub">STUDIO</span>
+  </a>
+  <div class="header-right">
+    <button class="btn btn-green header-cta" data-goto="contact">MULAI PROJECT</button>
+    <span class="lang">ID <i class="lang-dot"></i></span>
+  </div>
+</header>
+
+<div id="menuOverlay">
+  <nav>
+    <a class="menu-link" href="#/">Home</a>
+    <a class="menu-link" href="#/projects">Projects</a>
+    <a class="menu-link" href="#/team">Team</a>
+    <button class="menu-link" data-goto="services">Layanan</button>
+    <button class="menu-link" data-goto="process">Process</button>
+    <button class="menu-link" data-goto="contact">Contact</button>
+  </nav>
+  <div class="menu-foot">
+    <a href="mailto:hello@nexthive.studio">hello@nexthive.studio</a>
+    <a href="#" onclick="return false">Instagram</a>
+    <a href="#" onclick="return false">LinkedIn</a>
+    <a href="#" onclick="return false">GitHub</a>
+  </div>
+</div>
+
+<main id="app"></main>
+<div id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+const IMG = {
+  majujaya:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/151d512d2-498d-4063-b4d5-2ee4787d1cfe.png',
+  klinik:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/1b0e96315-3a01-47ae-8b8d-fb351ce27f52.png',
+  brandx:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/1dd8af35a-f9a0-461b-8c3f-55d386cbca24.png',
+  kopi:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/15f930757-ea56-41db-a607-80a2e435636c.png',
+  fittrack:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/1b67e873a-4741-41b5-9464-bb37dacf8088.png',
+  artisania:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/19b8c4ad7-2c0f-4a9a-9684-dcf18d282285.png',
+  raka:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/11fe0e340-59f8-40c7-8afb-8319625d34ba.png',
+  dinda:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/1cd0aa794-9eb5-4559-9854-b6f2d574a8cc.png',
+  bima:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/156f92647-f389-4e5c-8f12-77951bd140b9.png',
+  sari:'https://image.qwenlm.ai/public_source/9c1e71d1-a9db-4749-a540-cb6b838c039f/1cde4de3e-6c67-481a-ab96-8d1a34f1b6a7.png'
+};
+const MEMBERS = [
+ {username:'raka-pratama',name:'Raka Pratama',role:'Frontend Developer',avatar:IMG.raka,
+  headline:'Frontend developer yang fokus pada website interaktif, responsive layout, dan performance.',
+  bio:'Raka adalah frontend developer yang berpengalaman membangun website company profile, landing page, dan dashboard menggunakan React, Next.js, dan Tailwind CSS. Ia percaya website yang baik harus terasa hidup: cepat, responsif, dan menyenangkan untuk digunakan.',
+  skills:['React','Next.js','Tailwind CSS','TypeScript','Framer Motion','API Integration'],
+  socials:{website:'#',github:'#',linkedin:'#',instagram:'#'}},
+ {username:'dinda-putri',name:'Dinda Putri',role:'UI/UX Designer',avatar:IMG.dinda,
+  headline:'Designer yang mengubah masalah kompleks menjadi pengalaman digital yang sederhana dan indah.',
+  bio:'Dinda menangani riset pengguna, wireframe, design system, sampai high-fidelity UI. Baginya, desain yang baik bukan hanya soal tampilan, tetapi soal bagaimana pengguna merasa dibantu di setiap langkah.',
+  skills:['Figma','Design System','Wireframing','Prototyping','User Research','Illustrator'],
+  socials:{website:'#',github:'#',linkedin:'#',instagram:'#'}},
+ {username:'bima-ardi',name:'Bima Ardi',role:'Backend Developer',avatar:IMG.bima,
+  headline:'Backend engineer yang membangun sistem stabil, aman, dan siap scale.',
+  bio:'Bima berpengalaman merancang database schema, REST API, authentication, dan dashboard admin. Ia senang merapikan hal-hal yang tidak terlihat: struktur data, permission, dan performance query.',
+  skills:['Laravel','Node.js','PostgreSQL','REST API','Firebase','Docker'],
+  socials:{website:'#',github:'#',linkedin:'#',instagram:'#'}},
+ {username:'sari-wulandari',name:'Sari Wulandari',role:'Marketing Strategist',avatar:IMG.sari,
+  headline:'Strategist yang menghubungkan brand dengan audiens lewat copy dan data.',
+  bio:'Sari menyusun positioning brand, copywriting, dan strategi campaign yang terukur. Ia percaya kata yang tepat di tempat yang tepat bisa mengubah visitor menjadi customer.',
+  skills:['Copywriting','SEO','Content Strategy','Google Analytics','Brand Strategy'],
+  socials:{website:'#',github:'#',linkedin:'#',instagram:'#'}}
+];
+const PROJECTS = [
+ {slug:'website-pt-maju-jaya',title:'Website Company Profile PT Maju Jaya',client:'PT Maju Jaya',category:'Company Profile',year:2025,featured:true,thumb:IMG.majujaya,
+  short:'Website company profile modern untuk meningkatkan kredibilitas brand dan memudahkan calon customer memahami layanan perusahaan.',
+  problem:'Website lama tidak responsive, informasi layanan tidak terstruktur, dan belum memiliki form inquiry yang efektif.',
+  solution:'Tim membuat struktur konten baru, UI modern, frontend responsive, dashboard pengelolaan konten, dan form inquiry yang terhubung ke email sales.',
+  result:'Website baru lebih cepat, mudah diakses dari mobile, dan memiliki alur informasi yang lebih jelas. Inquiry kini masuk langsung ke tim sales.',
+  process:['Discovery','Content Planning','Wireframe','UI Design','Development','Testing','Launch'],
+  services:['UI/UX Design','Web Development','Copywriting'],tools:['Next.js','Tailwind CSS','Framer Motion','Laravel','Figma'],
+  team:[
+   {user:'dinda-putri',role:'UI/UX Designer',title:'Design System & UI',desc:'Membuat user flow, wireframe, design system, high-fidelity UI, dan prototype interaktif menggunakan Figma.',tools:'Figma, FigJam, Design System'},
+   {user:'raka-pratama',role:'Frontend Developer',title:'Frontend Implementation',desc:'Membangun responsive layout, reusable component, animasi section, dan integrasi API serta optimasi loading performance.',tools:'Next.js, Tailwind CSS, Framer Motion'},
+   {user:'bima-ardi',role:'Backend Developer',title:'Backend & CMS',desc:'Membuat database schema, REST API, authentication, dan dashboard admin untuk pengelolaan konten.',tools:'Laravel, MySQL, REST API'},
+   {user:'sari-wulandari',role:'Copywriter',title:'Content & Copywriting',desc:'Menyusun headline, service copy, CTA, dan struktur konten halaman yang mendukung conversion.',tools:'Copywriting, Content Strategy'}]},
+ {slug:'ecommerce-artisania',title:'E-commerce Artisania',client:'Artisania',category:'E-commerce',year:2025,featured:true,thumb:IMG.artisania,
+  short:'Toko online untuk produk kriya lokal dengan katalog, checkout, dan dashboard seller.',
+  problem:'Penjualan hanya berjalan lewat media sosial sehingga stok dan pesanan sulit dikelola.',
+  solution:'Membangun platform e-commerce dengan katalog produk, payment gateway, dan dashboard seller yang mudah digunakan.',
+  result:'Proses pesanan lebih cepat, stok terpantau real-time, dan penjualan online naik 3x dalam 6 bulan.',
+  process:['Planning','UI Design','Development','Payment Integration','Testing','Launch'],
+  services:['Web Development','UI/UX Design','SEO'],tools:['Next.js','Laravel','MySQL','Midtrans'],
+  team:[
+   {user:'dinda-putri',role:'UI/UX Designer',title:'Commerce UX',desc:'Mendesain alur belanja, halaman produk, checkout flow, dan dashboard seller.',tools:'Figma, Prototyping'},
+   {user:'raka-pratama',role:'Frontend Developer',title:'Storefront Development',desc:'Membangun katalog interaktif, cart, dan checkout UI dengan optimasi performa.',tools:'Next.js, Tailwind CSS'},
+   {user:'bima-ardi',role:'Backend Developer',title:'Commerce Backend',desc:'Membangun API katalog, order management, integrasi payment gateway, dan dashboard seller.',tools:'Laravel, MySQL, Midtrans'},
+   {user:'sari-wulandari',role:'SEO Specialist',title:'SEO & Content',desc:'Riset keyword, optimasi SEO on-page, dan menyusun konten katalog produk.',tools:'SEO, Google Search Console'}]},
+ {slug:'mobile-app-fittrack',title:'Mobile App FitTrack',client:'FitTrack',category:'Mobile App',year:2023,featured:true,thumb:IMG.fittrack,
+  short:'Aplikasi mobile fitness tracking dengan dashboard aktivitas dan program workout personal.',
+  problem:'Pengguna sulit memantau progres workout karena data tersebar di beberapa aplikasi berbeda.',
+  solution:'Aplikasi all-in-one dengan tracking aktivitas, program workout, dan ringkasan progres mingguan.',
+  result:'Rating 4.7 di app store dengan 10K+ download pada 3 bulan pertama setelah rilis.',
+  process:['Discovery','UX Flow','UI Design','Development','Beta','Release'],
+  services:['UI/UX Design','Web Development'],tools:['Flutter','Firebase','Node.js'],
+  team:[
+   {user:'dinda-putri',role:'UI/UX Designer',title:'Mobile UI Design',desc:'Mendesain user flow, design system mobile, dan prototype high-fidelity untuk iOS & Android.',tools:'Figma, Prototyping'},
+   {user:'bima-ardi',role:'Backend Developer',title:'Backend & Sync',desc:'Membangun API, authentication, dan real-time sync data aktivitas pengguna.',tools:'Node.js, Firebase'}]},
+ {slug:'dashboard-klinik-sehat',title:'Dashboard Internal Klinik Sehat',client:'Klinik Sehat',category:'Dashboard System',year:2024,featured:false,thumb:IMG.klinik,
+  short:'Dashboard internal untuk manajemen data pasien, jadwal dokter, dan laporan harian klinik.',
+  problem:'Pencatatan pasien masih manual menggunakan spreadsheet, rentan kesalahan dan sulit merekap laporan.',
+  solution:'Membangun dashboard dengan role-based access, CRUD data pasien, jadwal dokter, dan laporan otomatis.',
+  result:'Waktu rekap laporan berkurang drastis, data pasien lebih rapi, dan admin bekerja lebih efisien.',
+  process:['Requirement','UX Flow','UI Design','Development','Testing','Rollout'],
+  services:['UI/UX Design','Web Development'],tools:['React','Node.js','PostgreSQL'],
+  team:[
+   {user:'dinda-putri',role:'UI/UX Designer',title:'Dashboard UX',desc:'Menyusun information architecture, wireframe, dan UI dashboard yang mudah dibaca staf klinik.',tools:'Figma, Design System'},
+   {user:'raka-pratama',role:'Fullstack Developer',title:'Dashboard & Integration',desc:'Membangun UI dashboard, authentication, CRUD data pasien, dan integrasi API.',tools:'React, TypeScript, REST API'},
+   {user:'bima-ardi',role:'Backend Developer',title:'API & Database',desc:'Merancang schema database pasien, API endpoint, dan permission role-based access.',tools:'Node.js, PostgreSQL'}]},
+ {slug:'landing-page-brand-x',title:'Landing Page Campaign Brand X',client:'Brand X',category:'Landing Page',year:2024,featured:false,thumb:IMG.brandx,
+  short:'Landing page campaign dengan animasi interaktif untuk peluncuran produk baru Brand X.',
+  problem:'Campaign sebelumnya memiliki conversion rate rendah dan halaman lambat di perangkat mobile.',
+  solution:'Landing page single-page dengan animasi interaktif, form tracking, dan optimasi loading speed.',
+  result:'Loading time turun 60% dan conversion rate naik 2x lipat selama periode campaign.',
+  process:['Concept','Design','Development','A/B Testing','Launch'],
+  services:['Web Development','Digital Marketing'],tools:['Next.js','Framer Motion','Google Analytics'],
+  team:[
+   {user:'dinda-putri',role:'UI/UX Designer',title:'Campaign Design',desc:'Mendesain visual campaign, layout landing page, dan micro-interaction.',tools:'Figma, After Effects'},
+   {user:'raka-pratama',role:'Frontend Developer',title:'Interactive Build',desc:'Membuat landing page campaign dengan animasi interaktif, form tracking, dan optimasi loading speed.',tools:'Next.js, Framer Motion'},
+   {user:'sari-wulandari',role:'Marketing Strategist',title:'Campaign & Copy',desc:'Menyusun campaign angle, copy landing page, dan setup tracking event bersama tim.',tools:'Google Analytics, Copywriting'}]},
+ {slug:'brand-identity-kopi-nusantara',title:'Brand Identity Kopi Nusantara',client:'Kopi Nusantara',category:'Branding',year:2023,featured:false,thumb:IMG.kopi,
+  short:'Identitas visual lengkap untuk brand kopi lokal: logo, kemasan, dan brand guideline.',
+  problem:'Brand belum memiliki identitas visual yang konsisten meski kualitas produk unggul.',
+  solution:'Merancang logo, palet warna, tipografi, kemasan, dan brand guideline yang siap dipakai lintas media.',
+  result:'Brand tampil lebih profesional dan mudah dikenali; penjualan retail naik setelah rebranding.',
+  process:['Research','Moodboard','Logo Design','Packaging','Guideline'],
+  services:['Brand Identity','Content Production'],tools:['Illustrator','Photoshop','Figma'],
+  team:[
+   {user:'dinda-putri',role:'Brand Designer',title:'Visual Identity',desc:'Membuat logo, palet warna, tipografi, kemasan, dan brand guideline lengkap.',tools:'Illustrator, Photoshop'},
+   {user:'sari-wulandari',role:'Marketing Strategist',title:'Brand Positioning',desc:'Menyusun positioning, tone of voice, dan strategi peluncuran brand.',tools:'Brand Strategy, Copywriting'}]}
+];
+const SERVICES = [
+ {icon:'code',name:'Web Development',desc:'Website company profile, landing page, e-commerce, dan dashboard dengan performa cepat dan responsive.'},
+ {icon:'pen',name:'UI/UX Design',desc:'Riset pengguna, wireframe, design system, sampai prototype yang siap di-development.'},
+ {icon:'hex',name:'Brand Identity',desc:'Logo, palet warna, kemasan, dan brand guideline yang konsisten di semua media.'},
+ {icon:'chart',name:'SEO & Digital Marketing',desc:'Strategi SEO, campaign, dan analytics untuk mendatangkan traffic yang berkualitas.'},
+ {icon:'cam',name:'Content Production',desc:'Foto produk, video, dan konten visual yang membuat brand terlihat hidup.'},
+ {icon:'mega',name:'Social Media Management',desc:'Perencanaan konten dan pengelolaan media sosial yang terukur dan konsisten.'}
+];
+const PROCESS = [
+ {t:'Discovery',d:'Memahami bisnis client, target audiens, dan tujuan project.'},
+ {t:'Strategy',d:'Menyusun struktur konten, roadmap, dan metrik keberhasilan.'},
+ {t:'Design',d:'Wireframe hingga high-fidelity UI dan identitas visual.'},
+ {t:'Development',d:'Membangun produk dengan kode rapi, cepat, dan teruji.'},
+ {t:'Launch',d:'Rilis, monitoring, dan optimasi berkelanjutan.'}
+];
+const TESTIMONIALS = [
+ {q:'Proses kerja Nexthive rapi dan transparan. Kami tahu siapa mengerjakan apa, dan hasilnya melebihi ekspektasi.',n:'Hendra S.',r:'MANAGER — PT MAJU JAYA'},
+ {q:'Landing page dari Nexthive menaikkan conversion campaign kami dua kali lipat. Luar biasa.',n:'Maya K.',r:'BRAND MANAGER — BRAND X'},
+ {q:'Tim profesional dari discovery sampai launch. Dashboard memudahkan kerja admin kami setiap hari.',n:'dr. Andi P.',r:'PEMILIK — KLINIK SEHAT'}
+];
+const ICONS = {
+ code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 3 12l5 6M16 6l5 6-5 6"/></svg>',
+ pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5z"/></svg>',
+ hex:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8 5v10l-8 5-8-5V7z"/><circle cx="12" cy="12" r="2.5"/></svg>',
+ chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/></svg>',
+ cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7l1.5-3h3L15 7"/><circle cx="12" cy="13" r="3.5"/></svg>',
+ mega:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10v4l12 4V6z"/><path d="M15 8l6-3v14l-6-3M7 14v6h3v-5"/></svg>',
+ mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+ pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+ phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>',
+ globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>',
+ gh:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-5A3.9 3.9 0 0 1 6.8 8.7a3.6 3.6 0 0 1 .1-2.7s.9-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>',
+ li:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4v16H4zM6 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM10 8h4v2a4.4 4.4 0 0 1 4-2.2c3 0 5 2 5 5.7V20h-4v-6c0-1.7-.8-2.8-2.2-2.8-1.5 0-2.8 1.1-2.8 3V20h-4z"/></svg>',
+ ig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg>'
+};
+/* ============ HELPERS ============ */
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const memberByUser=u=>MEMBERS.find(m=>m.username===u);
+const projectsOf=u=>PROJECTS.filter(p=>p.team.some(t=>t.user===u));
+const uniq=a=>[...new Set(a)];
+/* ============ STARFIELD CANVAS ============ */
+(function(){
+  const cv=$('#starfield'),ctx=cv.getContext('2d');
+  let W,H,stars=[],comets=[],mouse={x:.5,y:.5},lastComet=0;
+  function resize(){const d=Math.min(2,window.devicePixelRatio||1);W=cv.width=innerWidth*d;H=cv.height=innerHeight*d;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';makeStars();}
+  function makeStars(){stars=[];const n=Math.floor(innerWidth*innerHeight/9000);
+    for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.3+.3)*(W/innerWidth),p:Math.random()*Math.PI*2,s:.5+Math.random()*1.6,d:Math.random()});}
+  addEventListener('resize',resize);resize();
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/innerWidth;mouse.y=e.clientY/innerHeight;});
+  function spawnComet(t){const d=W/innerWidth;const fromLeft=Math.random()>.5;
+    comets.push({x:fromLeft?Math.random()*W*.4:Math.random()*W,y:Math.random()*H*.35,vx:(2.2+Math.random()*1.6)*d,vy:(2.2+Math.random()*1.6)*d,life:0,max:140+Math.random()*60,hue:Math.random()>.35});}
+  function loop(t){
+    ctx.clearRect(0,0,W,H);
+    const d=W/innerWidth,px=(mouse.x-.5),py=(mouse.y-.5);
+    for(const st of stars){
+      const a=.35+.65*Math.abs(Math.sin(st.p+t*.001*st.s));
+      const ox=px*30*st.d*d,oy=py*30*st.d*d;
+      ctx.globalAlpha=a;ctx.fillStyle=st.r>1.1*d?'#bfeaff':'#eaf4fb';
+      ctx.beginPath();ctx.arc(st.x+ox,st.y+oy,st.r,0,7);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    if(t-lastComet>2100&&comets.length<4){lastComet=t;spawnComet(t);}
+    comets=comets.filter(c=>c.life<c.max&&c.x<W+300&&c.y<H+300);
+    for(const c of comets){
+      c.life++;c.x+=c.vx;c.y+=c.vy;
+      const len=170*d,fade=Math.sin(Math.PI*Math.min(1,c.life/c.max));
+      const tx=c.x-c.vx/Math.hypot(c.vx,c.vy)*len,ty=c.y-c.vy/Math.hypot(c.vx,c.vy)*len;
+      const g=ctx.createLinearGradient(c.x,c.y,tx,ty);
+      if(c.hue){g.addColorStop(0,'rgba(46,230,160,'+(.9*fade)+')');g.addColorStop(1,'rgba(46,230,160,0)');}
+      else{g.addColorStop(0,'rgba(160,225,255,'+(.8*fade)+')');g.addColorStop(1,'rgba(160,225,255,0)');}
+      ctx.strokeStyle=g;ctx.lineWidth=2*d;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(tx,ty);ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,'+fade+')';ctx.beginPath();ctx.arc(c.x,c.y,2.2*d,0,7);ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+/* ============ CURSOR ============ */
+(function(){
+  const cur=$('#cursor');let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy;
+  addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
+  document.addEventListener('mouseover',e=>{cur.classList.toggle('big',!!e.target.closest('a,button,.chip,input,select,.p-card,.m-card'));});
+  (function fol(){cx+=(tx-cx)*.18;cy+=(ty-cy)*.18;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(fol);})();
+})();
+/* ============ GLOBAL UI ============ */
+addEventListener('scroll',()=>{$('#header').classList.toggle('scrolled',scrollY>40);},{passive:true});
+$('#burger').addEventListener('click',()=>document.body.classList.toggle('menu-open'));
+function closeMenu(){document.body.classList.remove('menu-open');}
+function gotoSection(id){closeMenu();
+  const go=()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});};
+  if((location.hash.replace(/^#\/?/,'').split('/').filter(Boolean))[0]){location.hash='#/';setTimeout(go,420);}else go();}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-goto]');if(g){e.preventDefault();gotoSection(g.dataset.goto);}
+});
+function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),3200);}
+document.addEventListener('submit',e=>{
+  if(e.target.id==='contactForm'){e.preventDefault();showToast('Terima kasih! Pesan kamu sudah kami terima 🚀');e.target.reset();}
+});
+/* ============ REVEAL / COUNT ============ */
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');
+  if(en.target.hasAttribute('data-count')&&!en.target.dataset.done){en.target.dataset.done=1;countUp(en.target);}
+  io.unobserve(en.target);}});},{threshold:.15});
+function observeReveals(root){$$('[data-reveal]',root).forEach(el=>io.observe(el));}
+function countUp(el){const target=+el.dataset.count,suf=el.dataset.suffix||'',t0=performance.now();
+  (function tick(t){const p=Math.min(1,(t-t0)/1500),e=1-Math.pow(1-p,3);
+  el.textContent=Math.round(target*e)+suf;if(p<1)requestAnimationFrame(tick);})(t0);}
+/* ============ TEMPLATES ============ */
+function projectCard(p,i){
+  const roles=uniq(p.team.map(t=>t.role)).join(' · ');
+  return `<a class="p-card" style="animation-delay:${i*70}ms" href="#/projects/${p.slug}">
+    <div class="p-thumb"><img src="${p.thumb}" alt="${p.title}" loading="lazy"></div>
+    <div class="p-body">
+      <div class="p-meta"><span>${p.category}</span><span class="yr">${p.year}</span></div>
+      <h3>${p.title}</h3><p class="p-client">${p.client}</p>
+      <p class="p-desc">${p.short}</p>
+      <div class="tags">${p.services.map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+      <div class="p-team-line"><span class="dot"></span>${roles}</div>
+    </div></a>`;
+}
+function memberCard(m,i){
+  const count=projectsOf(m.username).length;
+  return `<a class="m-card" style="animation-delay:${i*70}ms" href="#/team/${m.username}">
+    <div class="m-ava"><img src="${m.avatar}" alt="${m.name}" loading="lazy"></div>
+    <h3>${m.name}</h3><p class="m-role">${m.role}</p>
+    <div class="tags" style="justify-content:center">${m.skills.slice(0,3).map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+    <p class="m-count">✦ ${count} PROJECT${count>1?'S':''}</p></a>`;
+}
+function footerHTML(){
+  return `<footer class="footer"><div class="container">
+    <div class="f-grid">
+      <div class="f-brand">
+        <a class="logo" href="#/" style="align-items:flex-start">
+          <svg viewBox="0 0 48 48" fill="none" style="width:38px;height:38px"><path d="M24 4 41 14v20L24 44 7 34V14z" stroke="#5ee1ff" stroke-width="2.4"/><path d="M17 31V17l14 14V17" stroke="#1fd286" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="logo-name">NEXTHIVE</span><span class="logo-sub">STUDIO</span></a>
+        <p>Kami membantu brand membangun website, identitas visual, dan strategi digital melalui kolaborasi tim kreatif multidisiplin.</p>
+      </div>
+      <div><h5>Navigate</h5>
+        <a href="#/">Home</a><a href="#/projects">Projects</a><a href="#/team">Team</a>
+        <button data-goto="services">Layanan</button><button data-goto="contact">Contact</button></div>
+      <div><h5>Connect</h5>
+        <a href="mailto:hello@nexthive.studio">hello@nexthive.studio</a>
+        <a href="#" onclick="return false">Instagram — @nexthive.studio</a>
+        <a href="#" onclick="return false">LinkedIn — Nexthive Studio</a>
+        <a href="#" onclick="return false">Jakarta, Indonesia</a></div>
+    </div>
+    <div class="f-bottom"><span>© 2025 NEXTHIVE STUDIO — ALL RIGHTS RESERVED</span><span>BUILT WITH <b>✦</b> BY NEXTHIVE TEAM</span></div>
+  </div></footer>`;
+}
+/* ============ PAGES ============ */
+function pageHome(){
+  const feat=PROJECTS.filter(p=>p.featured).slice(0,3);
+  const marq=['WEB DEVELOPMENT','UI/UX DESIGN','BRAND IDENTITY','SEO & MARKETING','CONTENT PRODUCTION','MOBILE APP'];
+  const marqHTML=marq.map(m=>`<span>${m} <b>✦</b></span>`).join('');
+  return `
+  <section class="hero" id="home">
+    <div class="scene">
+      <div class="moon" data-depth="22"><div class="moon-in"></div></div>
+      <div class="saturn" data-depth="34"><div class="saturn-in"></div></div>
+      <div class="scene-bottom" data-depth="10">
+        <svg class="orbit o1" viewBox="0 0 200 200"><circle cx="100" cy="100" r="98" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".5" stroke-dasharray=".6 4"/><circle cx="100" cy="2" r="2" fill="#eaf4fb"/><circle cx="20" cy="140" r="1.3" fill="#5ee1ff"/></svg>
+        <svg class="orbit o2" viewBox="0 0 200 200"><circle cx="100" cy="100" r="98" fill="none" stroke="rgba(255,255,255,.28)" stroke-width=".45" stroke-dasharray=".5 5"/><circle cx="170" cy="50" r="1.6" fill="#1fd286"/></svg>
+        <div class="bp"></div>
+      </div>
+    </div>
+    <div class="hero-content container">
+      <p class="hero-kicker">WE HELP YOU</p>
+      <h1 class="hero-title" data-split>LAUNCH</h1>
+      <p class="hero-sub">NEXTHIVE STUDIO — WEBSITE, BRAND IDENTITY &amp; DIGITAL STRATEGY</p>
+      <div class="hero-cta">
+        <a class="btn btn-green" href="#/projects">LIHAT PORTFOLIO</a>
+        <button class="btn btn-ghost" data-goto="contact">HUBUNGI KAMI</button>
+      </div>
+      <div class="scroll-hint"><span></span><span></span><span></span></div>
+    </div>
+  </section>
+  <div class="marquee"><div class="marquee-track">${marqHTML}${marqHTML}</div></div>
+  <section class="section" id="about"><div class="container">
+    <div class="about-grid">
+      <div data-reveal>
+        <p class="overline">ABOUT NEXTHIVE</p>
+        <h2 class="sec-title">Tim kreatif multidisiplin.<br>Satu misi: karya yang berdampak.</h2>
+        <p class="lead">Biasanya portfolio hanya menampilkan gambar hasil akhir. Di Nexthive, setiap project didokumentasikan secara transparan — siapa yang terlibat, apa role mereka, kontribusi spesifiknya, dan dampak nyata untuk client. Satu project, dua manfaat: portfolio agensi dan portfolio personal setiap anggota tim.</p>
+      </div>
+      <div class="about-badge" data-reveal>
+        <h4>✦ WHY NEXTHIVE</h4>
+        <ul><li>Project didokumentasikan dengan problem → solution → result</li>
+        <li>Kontribusi setiap anggota tim terlihat jelas</li>
+        <li>Proses kerja transparan dari discovery sampai launch</li>
+        <li>Tim multidisiplin: design, development, marketing</li></ul>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat" data-reveal><b data-count="32" data-suffix="+">0</b><span>Projects Delivered</span></div>
+      <div class="stat" data-reveal><b data-count="15">0</b><span>Team Members</span></div>
+      <div class="stat" data-reveal><b data-count="6">0</b><span>Years Experience</span></div>
+      <div class="stat" data-reveal><b data-count="98" data-suffix="%">0</b><span>Client Satisfaction</span></div>
+    </div>
+  </div></section>
+  <section class="section" id="services"><div class="container">
+    <div class="sec-head" data-reveal><div><p class="overline">SERVICES</p><h2 class="sec-title">Layanan utama kami</h2></div>
+    <button class="link-more" data-goto="contact">DISKUSIKAN PROJECT →</button></div>
+    <div class="svc-grid">${SERVICES.map((s,i)=>`<div class="svc" data-reveal style="transition-delay:${i*80}ms"><div class="ico">${ICONS[s.icon]}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('')}</div>
+  </div></section>
+  <section class="section" id="featured"><div class="container">
+    <div class="sec-head" data-reveal><div><p class="overline">FEATURED PROJECTS</p><h2 class="sec-title">Karya unggulan</h2></div>
+    <a class="link-more" href="#/projects">SEMUA PROJECT →</a></div>
+    <div class="grid projects">${feat.map(projectCard).join('')}</div>
+  </div></section>
+  <section class="section" id="team"><div class="container">
+    <div class="sec-head" data-reveal><div><p class="overline">THE HIVE</p><h2 class="sec-title">Tim di balik layar</h2></div>
+    <a class="link-more" href="#/team">SEMUA TIM →</a></div>
+    <div class="grid team">${MEMBERS.map(memberCard).join('')}</div>
+  </div></section>
+  <section class="section" id="process"><div class="container">
+    <div class="sec-head" data-reveal><div><p class="overline">HOW WE WORK</p><h2 class="sec-title">Proses kerja kami</h2></div></div>
+    <div class="steps">${PROCESS.map((s,i)=>`<div class="step" data-reveal style="transition-delay:${i*90}ms"><div class="step-num">0${i+1}</div><h4>${s.t}</h4><p>${s.d}</p></div>`).join('')}</div>
+  </div></section>
+  <section class="section" id="testimonials"><div class="container">
+    <div class="sec-head" data-reveal><div><p class="overline">TESTIMONIALS</p><h2 class="sec-title">Kata client kami</h2></div></div>
+    <div class="tst-grid">${TESTIMONIALS.map((t,i)=>`<div class="tst" data-reveal style="transition-delay:${i*90}ms"><div class="q">“</div><p>${t.q}</p><b>${t.n}</b><span>${t.r}</span></div>`).join('')}</div>
+  </div></section>
+  <section class="section" id="contact"><div class="container">
+    <div class="contact-wrap">
+      <div data-reveal>
+        <p class="overline">CONTACT</p><h2 class="sec-title">Mari luncurkan ide kamu 🚀</h2>
+        <p class="page-desc" style="margin:14px 0 30px">Ceritakan kebutuhan project kamu — website, branding, atau campaign. Tim kami akan membalas dalam 1×24 jam.</p>
+        <ul class="c-info">
+          <li><span class="ci">${ICONS.mail}</span>hello@nexthive.studio</li>
+          <li><span class="ci">${ICONS.phone}</span>+62 812 3456 7890</li>
+          <li><span class="ci">${ICONS.pin}</span>Jakarta, Indonesia</li>
+        </ul>
+      </div>
+      <form class="c-form" id="contactForm" data-reveal>
+        <input required placeholder="Nama kamu" aria-label="Nama">
+        <input required type="email" placeholder="Email" aria-label="Email">
+        <textarea required rows="5" placeholder="Ceritakan project kamu..." aria-label="Pesan"></textarea>
+        <button class="btn btn-green" type="submit" style="align-self:flex-start">KIRIM PESAN</button>
+      </form>
+    </div>
+  </div></section>`;
+}
+function pageProjects(){
+  return `<section class="page-head"><div class="container">
+    <p class="overline">LIVE PORTFOLIO</p><h1 class="page-title">Semua <em>Projects</em></h1>
+    <p class="page-desc">Jelajahi karya kami berdasarkan kategori dan tahun. Setiap project dilengkapi case study lengkap: problem, solution, result, dan kontribusi tim.</p>
+  </div></section>
+  <section class="section" style="padding-top:20px"><div class="container">
+    <div class="filter-bar" data-reveal>
+      <input class="search" id="pjSearch" placeholder="🔍  Cari nama project atau client...">
+      <select class="select" id="pjYear"><option value="All">Semua Tahun</option>${uniq(PROJECTS.map(p=>p.year)).sort((a,b)=>b-a).map(y=>`<option>${y}</option>`).join('')}</select>
+    </div>
+    <div class="chips" id="pjChips"></div>
+    <div class="grid projects" id="pjGrid"></div>
+  </div></section>`;
+}
+function pageTeam(){
+  return `<section class="page-head"><div class="container">
+    <p class="overline">THE HIVE</p><h1 class="page-title">Our <em>Team</em></h1>
+    <p class="page-desc">Kenalan dengan tim Nexthive. Klik profil untuk melihat portfolio personal dan kontribusi nyata mereka di setiap project.</p>
+  </div></section>
+  <section class="section" style="padding-top:20px"><div class="container">
+    <div class="filter-bar" data-reveal><input class="search" id="tSearch" placeholder="🔍  Cari nama anggota..."></div>
+    <div class="chips" id="tChips"></div>
+    <div class="grid team" id="tGrid"></div>
+  </div></section>`;
+}
+function pageProject(slug){
+  const p=PROJECTS.find(x=>x.slug===slug);
+  if(!p) return pageProjects();
+  const rel=PROJECTS.filter(x=>x.slug!==slug&&(x.category===p.category||x.team.some(t=>p.team.some(pt=>pt.user===t.user)))).slice(0,3);
+  return `<section class="detail"><div class="container">
+    <a class="back-link" href="#/projects">← KEMBALI KE PROJECTS</a>
+    <div class="p-meta" style="font-size:12px"><span>${p.category}</span><span class="yr">${p.year}</span></div>
+    <h1 class="pj-title">${p.title}</h1>
+    <p class="page-desc">${p.short}</p>
+    <div class="pj-cover" data-reveal><img src="${p.thumb}" alt="${p.title}"></div>
+    <div class="meta-grid" data-reveal>
+      <div class="mg"><span>Client</span><b>${p.client}</b></div>
+      <div class="mg"><span>Tahun</span><b>${p.year}</b></div>
+      <div class="mg"><span>Kategori</span><b>${p.category}</b></div>
+      <div class="mg"><span>Durasi</span><b>${p.process.length} Minggu</b></div>
+    </div>
+    <div class="case-block" data-reveal><div><span class="case-num">01 / PROBLEM</span><h3>Masalah</h3></div><div class="case-body"><p>${p.problem}</p></div></div>
+    <div class="case-block" data-reveal><div><span class="case-num">02 / SOLUTION</span><h3>Solusi</h3></div><div class="case-body"><p>${p.solution}</p></div></div>
+    <div class="case-block" data-reveal><div><span class="case-num">03 / RESULT</span><h3>Hasil</h3></div><div class="case-body"><p>${p.result}</p></div></div>
+    <div class="case-block" data-reveal><div><span class="case-num">04 / PROCESS</span><h3>Proses</h3></div><div class="case-body"><div class="proc-chips">${p.process.map(s=>`<span class="pc">${s}</span>`).join('')}</div></div></div>
+    <div class="case-block" data-reveal><div><span class="case-num">05 / STACK</span><h3>Services &amp; Tools</h3></div><div class="case-body">
+      <div class="tags" style="margin-bottom:12px">${p.services.map(s=>`<span class="tag g">${s}</span>`).join('')}</div>
+      <div class="tags">${p.tools.map(s=>`<span class="tag">${s}</span>`).join('')}</div></div></div>
+    <div class="case-block" data-reveal style="border-bottom:1px solid var(--line)"><div><span class="case-num">06 / TEAM</span><h3>Team Contributions</h3></div>
+      <div class="case-body"><div class="contrib-grid">${p.team.map(t=>{const m=memberByUser(t.user);return `
+        <a class="contrib" href="#/team/${m.username}">
+          <div class="cava"><img src="${m.avatar}" alt="${m.name}" loading="lazy"></div>
+          <div><h4>${m.name}</h4><p class="crole">${t.role}</p><p class="ctitle">✦ ${t.title}</p>
+          <p>${t.desc}</p><p class="ctools">Tools: ${t.tools}</p></div>
+        </a>`;}).join('')}</div></div></div>
+    ${rel.length?`<div class="sec-head" style="margin-top:80px" data-reveal><div><p class="overline">RELATED</p><h2 class="sec-title">Project terkait</h2></div></div>
+    <div class="grid projects">${rel.map(projectCard).join('')}</div>`:''}
+  </div></section>`;
+}
+function pageMember(username){
+  const m=MEMBERS.find(x=>x.username===username);
+  if(!m) return pageTeam();
+  const projs=projectsOf(username);
+  const roles=uniq(projs.map(p=>p.team.find(t=>t.user===username).role));
+  const tools=uniq(projs.flatMap(p=>p.team.find(t=>t.user===username).tools.split(', ')));
+  return `<section class="detail"><div class="container">
+    <a class="back-link" href="#/team">← KEMBALI KE TEAM</a>
+    <div class="mem-head" data-reveal>
+      <div class="mem-ava"><img src="${m.avatar}" alt="${m.name}"></div>
+      <div>
+        <p class="overline">PERSONAL PORTFOLIO</p>
+        <h1>${m.name}</h1><p class="mrole">${m.role}</p>
+        <p class="mhead-line">${m.headline}</p>
+        <div class="mem-stats">
+          <div class="ms"><b>${projs.length}</b><span>Projects</span></div>
+          <div class="ms"><b>${roles.length}</b><span>Roles</span></div>
+          <div class="ms"><b>${tools.length}</b><span>Tools</span></div>
+        </div>
+        <div class="socials">
+          <a href="${m.socials.website}" aria-label="Website">${ICONS.globe}</a>
+          <a href="${m.socials.github}" aria-label="GitHub">${ICONS.gh}</a>
+          <a href="${m.socials.linkedin}" aria-label="LinkedIn">${ICONS.li}</a>
+          <a href="${m.socials.instagram}" aria-label="Instagram">${ICONS.ig}</a>
+        </div>
+      </div>
+    </div>
+    <div class="case-block" data-reveal style="margin-top:60px"><div><span class="case-num">ABOUT</span><h3>Bio</h3></div><div class="case-body"><p>${m.bio}</p>
+      <div class="tags" style="margin-top:18px">${m.skills.map(s=>`<span class="tag g">${s}</span>`).join('')}</div></div></div>
+    <div class="sec-head" style="margin-top:50px" data-reveal><div><p class="overline">CONTRIBUTIONS</p><h2 class="sec-title">Project &amp; kontribusi</h2></div></div>
+    ${projs.map((p,i)=>{const t=p.team.find(x=>x.user===username);return `
+      <div class="m-contrib" data-reveal style="transition-delay:${i*80}ms">
+        <a class="mc-thumb" href="#/projects/${p.slug}"><img src="${p.thumb}" alt="${p.title}" loading="lazy"></a>
+        <div class="mc-body">
+          <div class="p-meta"><span>${p.category}</span><span class="yr">${p.year}</span></div>
+          <h3 style="font-size:20px"><a href="#/projects/${p.slug}">${p.title}</a></h3>
+          <p class="crole" style="color:var(--cyan);font-size:11px;letter-spacing:.2em;margin:6px 0 10px">ROLE: ${t.role.toUpperCase()}</p>
+          <p style="color:var(--muted);font-size:14px">${t.desc}</p>
+          <div class="tags" style="margin-top:14px">${t.tools.split(', ').map(x=>`<span class="tag">${x}</span>`).join('')}</div>
+        </div>
+      </div>`;}).join('')}
+  </div></section>`;
+}
+/* ============ FILTERS ============ */
+let pjState={q:'',cat:'All',year:'All'},tState={q:'',role:'All'};
+function renderPjChips(){const cats=['All',...uniq(PROJECTS.map(p=>p.category))];
+  $('#pjChips').innerHTML=cats.map(c=>`<button class="chip ${pjState.cat===c?'active':''}" data-cat="${c}">${c==='All'?'Semua':c}</button>`).join('');}
+function applyPj(){const list=PROJECTS.filter(p=>
+  (pjState.cat==='All'||p.category===pjState.cat)&&
+  (pjState.year==='All'||String(p.year)===pjState.year)&&
+  (p.title+' '+p.client).toLowerCase().includes(pjState.q));
+  $('#pjGrid').innerHTML=list.length?list.map(projectCard).join(''):`<p class="empty">✦ Tidak ada project yang cocok.</p>`;}
+function renderTChips(){const roles=['All',...uniq(MEMBERS.map(m=>m.role))];
+  $('#tChips').innerHTML=roles.map(r=>`<button class="chip ${tState.role===r?'active':''}" data-role="${r}">${r==='All'?'Semua Role':r}</button>`).join('');}
+function applyTeam(){const list=MEMBERS.filter(m=>(tState.role==='All'||m.role===tState.role)&&m.name.toLowerCase().includes(tState.q))
+  .sort((a,b)=>projectsOf(b.username).length-projectsOf(a.username).length);
+  $('#tGrid').innerHTML=list.length?list.map(memberCard).join(''):`<p class="empty">✦ Tidak ada anggota yang cocok.</p>`;}
+document.addEventListener('input',e=>{
+  if(e.target.id==='pjSearch'){pjState.q=e.target.value.toLowerCase().trim();applyPj();}
+  if(e.target.id==='tSearch'){tState.q=e.target.value.toLowerCase().trim();applyTeam();}
+});
+document.addEventListener('change',e=>{if(e.target.id==='pjYear'){pjState.year=e.target.value;applyPj();}});
+document.addEventListener('click',e=>{
+  const chip=e.target.closest('.chip');if(!chip)return;
+  if(chip.parentElement.id==='pjChips'){pjState.cat=chip.dataset.cat;renderPjChips();applyPj();}
+  if(chip.parentElement.id==='tChips'){tState.role=chip.dataset.role;renderTChips();applyTeam();}
+});
+/* ============ HERO MOTION ============ */
+function initHero(){
+  const hero=$('.hero');if(!hero)return;
+  const title=$('[data-split]',hero);
+  if(title){const txt=title.textContent.trim();title.textContent='';
+    [...txt].forEach((ch,i)=>{const s=document.createElement('span');s.className='hl';s.style.transitionDelay=(0.35+i*0.07)+'s';s.textContent=ch;title.appendChild(s);});}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>hero.classList.add('loaded')));
+  let mx=.5,my=.5,raf=null;
+  hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();
+    mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height;
+    if(!raf)raf=requestAnimationFrame(()=>{raf=null;
+      $$('[data-depth]',hero).forEach(el=>{const d=+el.dataset.depth;
+        el.style.transform=`translate(${(mx-.5)*d}px,${(my-.5)*d}px)`;});});});
+}
+/* ============ ROUTER ============ */
+function render(){
+  closeMenu();
+  const parts=location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
+  let html;
+  if(!parts.length)html=pageHome();
+  else if(parts[0]==='projects'&&parts[1])html=pageProject(decodeURIComponent(parts[1]));
+  else if(parts[0]==='projects')html=pageProjects();
+  else if(parts[0]==='team'&&parts[1])html=pageMember(decodeURIComponent(parts[1]));
+  else if(parts[0]==='team')html=pageTeam();
+  else html=pageHome();
+  $('#app').innerHTML=html+footerHTML();
+  scrollTo({top:0,behavior:'instant'});
+  observeReveals($('#app'));
+  if(!parts.length)initHero();
+  if(parts[0]==='projects'&&!parts[1]){pjState={q:'',cat:'All',year:'All'};renderPjChips();applyPj();}
+  if(parts[0]==='team'&&!parts[1]){tState={q:'',role:'All'};renderTChips();applyTeam();}
+}
+addEventListener('hashchange',render);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "bdjg",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel -r run dev",
+    "dev:web": "pnpm --filter @bdjg/web run dev",
+    "dev:api": "cd apps/api && php artisan serve",
+    "build": "pnpm --filter @bdjg/web run build",
+    "lint": "pnpm --filter @bdjg/web run lint",
+    "typecheck": "pnpm --filter @bdjg/web run typecheck",
+    "test": "cd apps/api && vendor/bin/pest"
+  }
+}
