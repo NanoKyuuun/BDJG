@@ -15,17 +15,17 @@ const NAV = [
 ];
 
 export default function WorkerLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, authorized } = useAuth(["WORKER"]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
-        <span className="text-sm" style={{ color: "var(--muted)" }}>Loading...</span>
+        <span className="text-sm" style={{ color: "var(--muted)" }}>Verifying authorization...</span>
       </div>
     );
   }
 
-  if (!user) return null;
+  if (!user || !authorized) return null;
 
   return (
     <DashboardShell

@@ -243,6 +243,5 @@ it('denies worker from accessing invoices', function () {
     $response->assertForbidden();
 
     $clientPortalResponse = $this->getJson('/api/v1/client/invoices');
-    $clientPortalResponse->assertOk()
-        ->assertJsonCount(0, 'data');
+    $clientPortalResponse->assertForbidden();
 });

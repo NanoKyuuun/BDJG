@@ -113,6 +113,8 @@ test('Release B Golden Path: Full End-to-End Media Workflow (Upload -> Transcode
     // =========================================================================
     // STEP 2: Worker finalizes direct upload
     // =========================================================================
+    Storage::disk('media')->put($pending->storage_key, '4K_SOURCE_VIDEO_PAYLOAD');
+
     $finalizeResponse = $this->postJson('/api/v1/worker/media/finalize-upload', [
         'pending_upload_public_id' => $pendingPublicId,
         'metadata' => ['fps' => 24, 'resolution' => '3840x2160'],
@@ -126,7 +128,6 @@ test('Release B Golden Path: Full End-to-End Media Workflow (Upload -> Transcode
     // =========================================================================
     // STEP 3: Asynchronous FFmpeg transcode & thumbnail pipeline executes
     // =========================================================================
-    Storage::disk('media')->put($mediaAsset->storage_key, '4K_SOURCE_VIDEO_PAYLOAD');
     $ffmpeg = app(FFmpegProcessorService::class);
     $storageService = app(MediaStorageService::class);
     $job = new ProcessVideoMediaJob($mediaAsset);

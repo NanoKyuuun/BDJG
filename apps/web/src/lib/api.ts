@@ -46,16 +46,61 @@ export interface DashboardMetrics {
   }>;
 }
 
+function getXsrfToken(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 export async function fetchApi<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const res = await fetch(path, {
+  const method = (options.method || "GET").toUpperCase();
+  const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string> || {}),
+  };
+
+  if (isMutation && typeof window !== "undefined") {
+    let token = getXsrfToken();
+    if (!token) {
+      // Initialize CSRF cookie if not already set
+      try {
+        await fetch("/sanctum/csrf-cookie", { credentials: "include" });
+        token = getXsrfToken();
+      } catch {
+        // Continue and let server validate
+      }
+    }
+    if (token) {
+      headers["X-XSRF-TOKEN"] = token;
+    }
+  }
+
+  let res = await fetch(path, {
     ...options,
     credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers,
   });
+
+  // Handle CSRF expiration (419) with one automatic retry
+  if (res.status === 419 && isMutation && typeof window !== "undefined") {
+    try {
+      await fetch("/sanctum/csrf-cookie", { credentials: "include" });
+      const refreshedToken = getXsrfToken();
+      if (refreshedToken) {
+        headers["X-XSRF-TOKEN"] = refreshedToken;
+      }
+      res = await fetch(path, {
+        ...options,
+        credentials: "include",
+        headers,
+      });
+    } catch {
+      // fallback to original error handling
+    }
+  }
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({ message: res.statusText }));

@@ -109,6 +109,7 @@ beforeEach(function () {
 
 it('activates project from accepted quotation with snapshot contract values', function () {
     $quotation = Quotation::where('quotation_number', 'QT-2026-001')->first();
+    $quotation->update(['status' => \App\Domains\Commercial\Enums\QuotationStatus::Accepted]);
 
     $project = (new ActivateProjectAction)->execute($quotation, $this->admin);
 

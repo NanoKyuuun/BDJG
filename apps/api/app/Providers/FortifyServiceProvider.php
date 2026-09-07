@@ -17,12 +17,25 @@ use Laravel\Fortify\Fortify;
 
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 
 class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->singleton(RegisterResponseContract::class, function () {
+            return new class implements RegisterResponseContract {
+                public function toResponse($request)
+                {
+                    return response()->json([
+                        'message' => 'Registered successfully.',
+                        'user' => $request->user(),
+                    ], 201);
+                }
+            };
+        });
+
         $this->app->singleton(LoginResponseContract::class, function () {
             return new class implements LoginResponseContract {
                 public function toResponse($request)

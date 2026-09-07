@@ -157,6 +157,8 @@ it('allows admin and assigned worker to initiate direct upload intent and finali
     expect($pending->status)->toBe(UploadStatus::Pending);
 
     // 2. Finalize upload
+    Storage::disk('media')->put($pending->storage_key, 'DUMMY_BINARY_DATA');
+
     $finalizeResponse = $this->postJson('/api/v1/worker/media/finalize-upload', [
         'pending_upload_public_id' => $pendingUploadPublicId,
         'metadata' => ['duration_seconds' => 180, 'resolution' => '3840x2160'],

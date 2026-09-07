@@ -47,25 +47,27 @@ class ProcessVideoMediaJob implements ShouldQueue
         $tempDir = storage_path('app/temp/media_' . $asset->id . '_' . Str::random(8));
         File::ensureDirectoryExists($tempDir);
 
-        $tempInputPath = $tempDir . '/source_' . $asset->filename;
-        $tempThumbPath = $tempDir . '/thumb_' . Str::slug(pathinfo($asset->filename, PATHINFO_FILENAME)) . '.jpg';
-        $tempPreviewPath = $tempDir . '/preview_' . Str::slug(pathinfo($asset->filename, PATHINFO_FILENAME)) . '.mp4';
+        $extension = pathinfo($asset->filename, PATHINFO_EXTENSION);
+        $safeExtension = preg_replace('/[^a-zA-Z0-9]/', '', $extension) ?: 'tmp';
+        $tempInputPath = $tempDir . '/source_input.' . $safeExtension;
+        $tempThumbPath = $tempDir . '/thumb_output.jpg';
+        $tempPreviewPath = $tempDir . '/preview_output.mp4';
 
         try {
             // 1. Download original file from storage disk to temp working directory
             $disk = Storage::disk($asset->disk);
-            if ($disk->exists($asset->storage_key)) {
-                $stream = $disk->readStream($asset->storage_key);
-                if ($stream) {
-                    $localHandle = fopen($tempInputPath, 'wb');
-                    stream_copy_to_stream($stream, $localHandle);
-                    fclose($localHandle);
-                    fclose($stream);
-                } else {
-                    File::put($tempInputPath, $disk->get($asset->storage_key));
-                }
+            if (! $disk->exists($asset->storage_key)) {
+                throw new \RuntimeException("Source media file does not exist on disk: {$asset->storage_key}");
+            }
+
+            $stream = $disk->readStream($asset->storage_key);
+            if ($stream) {
+                $localHandle = fopen($tempInputPath, 'wb');
+                stream_copy_to_stream($stream, $localHandle);
+                fclose($localHandle);
+                fclose($stream);
             } else {
-                File::put($tempInputPath, "BDJG_SIMULATED_SOURCE_VIDEO_PAYLOAD");
+                File::put($tempInputPath, $disk->get($asset->storage_key));
             }
 
             // 2. Extract technical metadata (duration, resolution, fps, codec)

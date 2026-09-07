@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Domains\Clients\Enums\ClientStatus;
+use App\Domains\Clients\Models\Client;
 use App\Domains\Users\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -16,7 +18,7 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
         ]);
 
-        $owner = User::firstOrCreate(
+        User::firstOrCreate(
             ['email' => 'owner@gmail.com'],
             [
                 'name' => 'BDJG Owner',
@@ -24,8 +26,7 @@ class DatabaseSeeder extends Seeder
                 'status' => UserStatus::Active,
                 'email_verified_at' => now(),
             ],
-        );
-        $owner->syncRoles('OWNER');
+        )->syncRoles('OWNER');
 
         User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
@@ -47,7 +48,8 @@ class DatabaseSeeder extends Seeder
             ],
         )->syncRoles('WORKER');
 
-        User::firstOrCreate(
+        // CLIENT seed user — auto-create Client record + link (mirrors CreateNewUser Fortify action)
+        $clientUser = User::firstOrCreate(
             ['email' => 'client@gmail.com'],
             [
                 'name' => 'BDJG Client',
@@ -55,7 +57,20 @@ class DatabaseSeeder extends Seeder
                 'status' => UserStatus::Active,
                 'email_verified_at' => now(),
             ],
-        )->syncRoles('CLIENT');
+        );
+        $clientUser->syncRoles('CLIENT');
+
+        // Ensure Client domain record exists and is linked
+        $clientRecord = Client::firstOrCreate(
+            ['email' => 'client@gmail.com'],
+            [
+                'display_name' => 'BDJG Client',
+                'billing_name' => 'BDJG Client',
+                'billing_email' => 'client@gmail.com',
+                'status' => ClientStatus::Active,
+            ]
+        );
+        $clientUser->clients()->syncWithoutDetaching([$clientRecord->id => ['is_primary' => true]]);
 
         $this->call([
             ClientSeeder::class,

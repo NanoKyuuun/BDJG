@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getDefaultPortalForRoles } from "@/lib/use-auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -12,6 +13,23 @@ export default function RegisterPage() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/v1/me", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        if (data?.data?.roles) {
+          const target = getDefaultPortalForRoles(data.data.roles);
+          router.replace(target);
+        }
+      })
+      .catch(() => {});
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

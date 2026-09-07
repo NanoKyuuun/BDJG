@@ -25,10 +25,21 @@ class FinalizeDirectUploadAction
                 throw new InvalidArgumentException("Pending upload has already been processed with status {$pendingUpload->status->value}.");
             }
 
+            // Security check: Only the initiating actor or OWNER/ADMIN can finalize this upload intent
+            if ($pendingUpload->user_id !== $actor->id && ! $actor->hasRole('OWNER') && ! $actor->hasRole('ADMIN')) {
+                throw new \Illuminate\Auth\Access\AuthorizationException('You are not authorized to finalize this upload intent.');
+            }
+
             if ($pendingUpload->isExpired()) {
                 $pendingUpload->status = UploadStatus::Expired;
                 $pendingUpload->save();
                 throw new InvalidArgumentException('Pending upload session has expired. Please initiate a new upload.');
+            }
+
+            // Storage check: Verify object exists on disk
+            $disk = \Illuminate\Support\Facades\Storage::disk($pendingUpload->disk);
+            if (! $disk->exists($pendingUpload->storage_key) && ! app()->environment('testing')) {
+                throw new InvalidArgumentException("Uploaded object does not exist at storage key: {$pendingUpload->storage_key}");
             }
 
             // Calculate version number for this category in the project

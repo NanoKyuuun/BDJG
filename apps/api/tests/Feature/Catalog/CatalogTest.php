@@ -105,7 +105,7 @@ it('allows admin to list and create services', function () {
 
 it('allows admin to update and delete services', function () {
     $this->actingAs($this->admin);
-    $service = Service::where('slug', 'photography')->first();
+    $service = Service::first();
 
     $response = $this->putJson("/api/v1/admin/catalog/services/{$service->id}", [
         'name' => 'Photography & Visuals',
@@ -196,8 +196,8 @@ it('validates unique slug on service', function () {
     $this->actingAs($this->admin);
 
     $response = $this->postJson('/api/v1/admin/catalog/services', [
-        'name' => 'Photography Duplicate',
-        'slug' => 'photography', // already seeded
+        'name' => 'Happiness Duplicate',
+        'slug' => 'happiness-package', // already seeded
     ]);
 
     $response->assertStatus(422)

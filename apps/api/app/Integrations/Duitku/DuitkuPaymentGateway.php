@@ -127,19 +127,19 @@ class DuitkuPaymentGateway implements PaymentGateway
         $reference = $payload['reference'] ?? null;
         $paymentMethod = $payload['paymentCode'] ?? ($payload['paymentMethod'] ?? null);
 
-        if (empty($merchantOrderId) || empty($signature)) {
+        if (empty($merchantOrderId) || empty($signature) || empty($merchantCode) || $amount <= 0) {
             return new VerifiedPaymentEvent(
                 isValid: false,
                 merchantOrderId: $merchantOrderId,
                 status: PaymentStatus::Failed,
                 amount: $amount,
-                errorMessage: 'Missing required callback fields.',
+                errorMessage: 'Missing or invalid required callback fields.',
                 rawPayload: $payload,
             );
         }
 
-        // Verify Merchant Code matches config
-        if ($merchantCode !== $this->config->merchantCode && ! empty($merchantCode)) {
+        // Verify Merchant Code strictly matches config
+        if ($merchantCode !== $this->config->merchantCode) {
             return new VerifiedPaymentEvent(
                 isValid: false,
                 merchantOrderId: $merchantOrderId,

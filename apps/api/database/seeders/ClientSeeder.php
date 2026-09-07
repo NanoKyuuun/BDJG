@@ -11,9 +11,8 @@ class ClientSeeder extends Seeder
 {
     public function run(): void
     {
-        $clientUser = User::where('email', 'client@bdjg.studio')->first();
-
-        $c1 = Client::firstOrCreate(
+        // Sample client records for dev/test data
+        Client::firstOrCreate(
             ['email' => 'aruna.karya@example.com'],
             [
                 'display_name' => 'PT Aruna Karya',
@@ -27,10 +26,6 @@ class ClientSeeder extends Seeder
                 'notes_internal' => 'VIP Corporate client. Preferred shooting location in SCBD.',
             ]
         );
-
-        if ($clientUser) {
-            $c1->users()->syncWithoutDetaching([$clientUser->id => ['is_primary' => true]]);
-        }
 
         Client::firstOrCreate(
             ['email' => 'dhea.arya@example.com'],

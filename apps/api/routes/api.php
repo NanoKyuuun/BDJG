@@ -65,7 +65,7 @@ Route::prefix('v1')->group(function () {
 });
 
 // Authenticated Endpoints
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'active.user'])->group(function () {
     Route::get('/v1/me', MeController::class);
 
     // Notifications Center
@@ -76,8 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [\App\Domains\Notifications\Controllers\NotificationController::class, 'destroy']);
     });
 
-    // Admin Operations
-    Route::prefix('v1/admin')->group(function () {
+    // Admin Operations (Restricted to OWNER and ADMIN roles)
+    Route::prefix('v1/admin')->middleware('role:OWNER|ADMIN')->group(function () {
         // Dashboard Metrics
         Route::get('dashboard/metrics', [AdminDashboardController::class, 'metrics']);
 
@@ -98,16 +98,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('inquiries/{inquiry}/convert-to-client', [InquiryController::class, 'convertToClient']);
         Route::apiResource('inquiries', InquiryController::class);
 
+        // Service Orders (Client Self-Service & Hybrid Ordering)
+        Route::get('service-orders', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'index']);
+        Route::get('service-orders/{serviceOrder}', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'show']);
+        Route::post('service-orders/{serviceOrder}/request-information', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'requestInformation']);
+        Route::post('service-orders/{serviceOrder}/attach-quotation', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'attachQuotation']);
+        Route::post('service-orders/{serviceOrder}/confirm-availability', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'confirmAvailability']);
+        Route::post('service-orders/{serviceOrder}/messages', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'sendMessage']);
+        Route::post('service-orders/{serviceOrder}/cancel', [\App\Domains\Orders\Controllers\Admin\AdminServiceOrderController::class, 'cancel']);
+
         // Commercial / Quotations
         Route::post('quotations/{quotation}/versions', [QuotationController::class, 'createRevision']);
         Route::post('quotations/{quotation}/send', [QuotationController::class, 'send']);
         Route::post('quotations/{quotation}/generate-dp-invoice', [InvoiceController::class, 'generateDpInvoice']);
-        Route::apiResource('quotations', QuotationController::class);
+        Route::apiResource('quotations', QuotationController::class)->except(['update']);
 
         // Billing / Invoices
         Route::post('invoices/{invoice}/issue', [InvoiceController::class, 'issue']);
         Route::post('invoices/{invoice}/void', [InvoiceController::class, 'void']);
-        Route::apiResource('invoices', InvoiceController::class);
+        Route::apiResource('invoices', InvoiceController::class)->except(['update']);
 
         // Payments
         Route::get('payments', [PaymentTransactionController::class, 'index']);
@@ -119,7 +128,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('projects/{project}/assignments', [ProjectAssignmentController::class, 'index']);
         Route::post('projects/{project}/assignments', [ProjectAssignmentController::class, 'assign']);
         Route::delete('projects/{project}/assignments/{assignment}', [ProjectAssignmentController::class, 'remove']);
-        Route::apiResource('projects', ProjectController::class);
+        Route::apiResource('projects', ProjectController::class)->except(['update']);
 
         // Media Management
         Route::get('projects/{project}/media', [AdminMediaAssetController::class, 'index']);
@@ -149,10 +158,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Tasks
         Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus']);
-        Route::apiResource('tasks', TaskController::class);
+        Route::apiResource('tasks', TaskController::class)->except(['update']);
 
         // Schedules
-        Route::apiResource('schedules', ScheduleController::class);
+        Route::apiResource('schedules', ScheduleController::class)->except(['update']);
 
         // Finance & Expenses
         Route::prefix('finance')->group(function () {
@@ -167,13 +176,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('system')->group(function () {
             Route::get('roles', [UserManagementController::class, 'roles']);
             Route::patch('users/{user}/status', [UserManagementController::class, 'updateStatus']);
-            Route::apiResource('users', UserManagementController::class);
+            Route::apiResource('users', UserManagementController::class)->except(['destroy']);
             Route::get('activity', [AuditLogController::class, 'index']);
         });
     });
 
-    // Worker Portal
-    Route::prefix('v1/worker')->group(function () {
+    // Worker Portal (Restricted to WORKER, OWNER, and ADMIN roles)
+    Route::prefix('v1/worker')->middleware('role:WORKER|OWNER|ADMIN')->group(function () {
         Route::get('projects', [WorkerProjectController::class, 'index']);
         Route::get('projects/{project}', [WorkerProjectController::class, 'show']);
         Route::get('tasks', [WorkerProjectController::class, 'tasks']);
@@ -198,10 +207,27 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('revision-comments/{comment}/resolve', [WorkerRevisionController::class, 'resolveComment']);
     });
 
-    // Client Portal
-    Route::prefix('v1/client')->group(function () {
+    // Client Portal (Restricted to CLIENT, OWNER, and ADMIN roles)
+    Route::prefix('v1/client')->middleware('role:CLIENT|OWNER|ADMIN')->group(function () {
         Route::get('/profile', [ClientProfileController::class, 'show']);
         Route::put('/profile', [ClientProfileController::class, 'update']);
+
+        // Client Catalog Browsing
+        Route::get('/catalog/services', [\App\Domains\Orders\Controllers\Client\ClientCatalogController::class, 'services']);
+        Route::get('/catalog/packages/{package}', [\App\Domains\Orders\Controllers\Client\ClientCatalogController::class, 'showPackage']);
+
+        // Client Service Orders & Briefs
+        Route::get('/service-orders', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'index']);
+        Route::post('/service-orders', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'store']);
+        Route::get('/service-orders/{serviceOrder}', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'show']);
+        Route::patch('/service-orders/{serviceOrder}/brief', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'updateBrief']);
+        Route::post('/service-orders/{serviceOrder}/submit', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'submit']);
+        Route::post('/service-orders/{serviceOrder}/attachments', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'uploadAttachment']);
+        Route::post('/service-orders/{serviceOrder}/messages', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'sendMessage']);
+        Route::post('/service-orders/{serviceOrder}/accept-quotation', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'acceptQuotation']);
+        Route::post('/service-orders/{serviceOrder}/request-quotation-revision', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'requestQuotationRevision']);
+        Route::post('/service-orders/{serviceOrder}/decline-quotation', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'declineQuotation']);
+        Route::post('/projects/{project}/reorder', [\App\Domains\Orders\Controllers\Client\ClientServiceOrderController::class, 'reorder']);
 
         // Quotations
         Route::get('/quotations', [ClientQuotationController::class, 'index']);
@@ -221,6 +247,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/projects/{project}', [ClientProjectController::class, 'show']);
         Route::get('/projects/{project}/media', [ClientMediaController::class, 'index']);
         Route::get('/media/{mediaAsset}/signed-url', [ClientMediaController::class, 'signedUrl']);
+
+        // Client Schedules & Itinerary
+        Route::get('/schedules', [\App\Domains\Schedules\Controllers\ClientPortal\ClientScheduleController::class, 'index']);
 
         // Client Revisions & Feedback
         Route::get('/projects/{project}/revisions', [ClientRevisionController::class, 'index']);

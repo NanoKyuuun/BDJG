@@ -45,43 +45,29 @@ class PaymentTransactionController extends Controller
         return new PaymentTransactionResource($transaction->load(['invoice.client', 'statusHistories']));
     }
 
-    public function checkStatus(PaymentTransaction $transaction, PaymentGateway $gateway): PaymentTransactionResource|JsonResponse
-    {
+    public function checkStatus(
+        PaymentTransaction $transaction,
+        PaymentGateway $gateway,
+        \App\Domains\Payments\Actions\ProcessPaymentProviderEventAction $processPayment
+    ): PaymentTransactionResource|JsonResponse {
         Gate::authorize('update', $transaction);
 
         $statusResult = $gateway->checkTransaction($transaction->merchant_order_id);
 
-        if ($statusResult->status !== $transaction->status) {
-            DB::transaction(function () use ($transaction, $statusResult) {
-                $oldStatus = $transaction->status;
-                $transaction->status = $statusResult->status;
-                if ($statusResult->reference) {
-                    $transaction->provider_reference = $statusResult->reference;
-                }
-                if ($statusResult->status === PaymentStatus::Paid) {
-                    $transaction->paid_at = now();
-                }
-                $transaction->raw_response = $statusResult->rawResponse;
-                $transaction->save();
+        try {
+            $updated = $processPayment->execute(
+                merchantOrderId: $transaction->merchant_order_id,
+                targetStatus: $statusResult->status,
+                reportedAmount: $statusResult->amount > 0 ? $statusResult->amount : null,
+                providerReference: $statusResult->reference,
+                paymentMethod: null,
+                source: 'ADMIN_STATUS_CHECK',
+                rawPayload: $statusResult->rawResponse ?? []
+            );
 
-                PaymentStatusHistory::create([
-                    'payment_transaction_id' => $transaction->id,
-                    'from_status' => $oldStatus,
-                    'to_status' => $statusResult->status,
-                    'source' => 'ADMIN_STATUS_CHECK',
-                    'payload' => $statusResult->rawResponse,
-                ]);
-
-                if ($statusResult->status === PaymentStatus::Paid && $transaction->invoice) {
-                    $transaction->invoice->update([
-                        'status' => InvoiceStatus::Paid,
-                        'paid_amount' => $transaction->amount,
-                        'paid_at' => now(),
-                    ]);
-                }
-            });
+            return new PaymentTransactionResource($updated->load(['invoice.client', 'statusHistories']));
+        } catch (\DomainException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
         }
-
-        return new PaymentTransactionResource($transaction->fresh()->load(['invoice.client', 'statusHistories']));
     }
 }

@@ -277,6 +277,31 @@ export default function ClientProjectReviewHub() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={async () => {
+              if (!confirm("Buat pesanan baru dengan menduplikasi rincian brief project ini?")) return;
+              try {
+                const res = await fetch(`/api/v1/client/projects/${projectId}/reorder`, {
+                  method: "POST",
+                  credentials: "include",
+                  headers: { Accept: "application/json" },
+                });
+                if (res.ok) {
+                  const json = await res.json();
+                  const newOrderId = json.data?.id;
+                  router.push(`/client/orders/${newOrderId}/brief`);
+                } else {
+                  alert("Gagal melakukan re-order.");
+                }
+              } catch (e) {
+                console.error(e);
+                alert("Terjadi kesalahan.");
+              }
+            }}
+            className="px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-amber-500/30 transition-colors flex items-center gap-1.5"
+          >
+            <span>🔄</span> Pesan Lagi (Re-order)
+          </button>
           <span className="px-3 py-1.5 text-xs font-semibold rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
             {project.status}
           </span>

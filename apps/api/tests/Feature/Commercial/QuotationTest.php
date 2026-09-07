@@ -277,6 +277,5 @@ it('denies worker from accessing quotations', function () {
     $response->assertForbidden();
 
     $clientPortalResponse = $this->getJson('/api/v1/client/quotations');
-    $clientPortalResponse->assertOk()
-        ->assertJsonCount(0, 'data');
+    $clientPortalResponse->assertForbidden();
 });

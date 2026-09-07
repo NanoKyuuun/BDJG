@@ -5,7 +5,8 @@ import DashboardShell from "@/components/dashboard-shell";
 
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
-  { href: "/admin/sales/inquiries", label: "Inquiries", icon: "📥", group: "SALES" },
+  { href: "/admin/sales/orders", label: "Client Orders", icon: "🛍️", group: "SALES" },
+  { href: "/admin/sales/inquiries", label: "Inquiries", icon: "📥" },
   { href: "/admin/sales/quotations", label: "Quotations", icon: "🧾" },
   { href: "/admin/sales/clients", label: "Clients", icon: "👥" },
   { href: "/admin/projects", label: "All Projects", icon: "🎬", group: "PROJECTS" },
@@ -25,17 +26,17 @@ const NAV = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, authorized } = useAuth(["OWNER", "ADMIN"]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
-        <span className="text-sm" style={{ color: "var(--muted)" }}>Loading...</span>
+        <span className="text-sm" style={{ color: "var(--muted)" }}>Verifying authorization...</span>
       </div>
     );
   }
 
-  if (!user) return null;
+  if (!user || !authorized) return null;
 
   return (
     <DashboardShell

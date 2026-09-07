@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getDefaultPortalForRoles } from "@/lib/use-auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +11,28 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/v1/me", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        if (data?.data?.roles) {
+          const target = getDefaultPortalForRoles(data.data.roles);
+          router.replace(target);
+        } else {
+          setCheckingAuth(false);
+        }
+      })
+      .catch(() => {
+        setCheckingAuth(false);
+      });
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,15 +68,8 @@ export default function LoginPage() {
           if (meRes.ok) {
             const meData = await meRes.json();
             const roles: string[] = meData?.data?.roles || [];
-            if (roles.includes("OWNER") || roles.includes("ADMIN")) {
-              router.push("/admin/dashboard");
-            } else if (roles.includes("WORKER")) {
-              router.push("/worker/dashboard");
-            } else if (roles.includes("CLIENT")) {
-              router.push("/client/dashboard");
-            } else {
-              router.push("/admin/dashboard");
-            }
+            const target = getDefaultPortalForRoles(roles);
+            router.push(target);
             return;
           }
         } catch {
