@@ -5,9 +5,34 @@
   --font-heading: var(--font-sora), 'Sora', sans-serif;
 }
 
+@theme static {
+  --color-public-canvas: #171717;
+  --color-public-inset: #101010;
+  --color-public-panel: #211f1d;
+  --color-public-raised: #2b2724;
+  --color-public-ink: #f4efe7;
+  --color-public-muted: #bab1a6;
+  --color-public-subtle: #a69c91;
+  --color-public-line: #3b352f;
+  --color-public-control: #7e7267;
+  --color-public-accent: #ff5445;
+  --color-public-accent-hover: #ff8175;
+  --color-public-success: #65bd90;
+}
+
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
   --font-sora: 'Sora', system-ui, sans-serif;
+  --public-gutter: 25px;
+  --public-nav-height: 4.5rem;
+}
+
+@media (min-width: 810px) {
+  :root { --public-gutter: 50px; }
+}
+
+@media (min-width: 1200px) {
+  :root { --public-gutter: 100px; }
 }
 
 html {

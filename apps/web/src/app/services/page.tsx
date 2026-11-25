@@ -73,17 +73,17 @@ export default function ServicesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090909] text-[#f2f1ed] selection:bg-[#5c7cff] selection:text-black font-sans">
+    <div className="min-h-screen bg-public-canvas text-public-ink selection:bg-public-accent selection:text-black font-sans">
       <PublicNav />
 
       {/* Header */}
-      <section className="pt-36 pb-16 px-6 sm:px-12 border-b border-[#222222] max-w-7xl mx-auto">
+      <section className="pt-36 pb-16 px-6 sm:px-12 border-b border-public-line max-w-7xl mx-auto">
         <div className="max-w-3xl">
-          <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest mb-2">Capabilities Matrix</div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#f2f1ed] mb-6">
+          <div className="font-mono text-xs text-public-accent uppercase tracking-widest mb-2">Capabilities Matrix</div>
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-public-ink mb-6">
             Production Disciplines & Service Tiers
           </h1>
-          <p className="text-base sm:text-lg text-[#a3a3a3] leading-relaxed">
+          <p className="text-base sm:text-lg text-public-muted leading-relaxed">
             Every production at BDJG is managed with strict quality gates, dedicated director oversight, and guaranteed technical specifications.
           </p>
         </div>
@@ -94,30 +94,30 @@ export default function ServicesPage() {
         {serviceDisciplines.map((d, idx) => (
           <div
             key={d.id}
-            className="p-8 sm:p-12 rounded-2xl bg-[#111111] border border-[#222222] grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hover:border-[#333333] transition-colors"
+            className="p-8 sm:p-12 rounded-2xl bg-public-panel border border-public-line grid grid-cols-1 lg:grid-cols-12 gap-8 items-start hover:border-public-control transition-colors"
           >
             <div className="lg:col-span-5 space-y-4">
-              <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest">Discipline 0{idx + 1}</div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#f2f1ed]">{d.title}</h2>
-              <p className="text-sm text-[#a3a3a3] leading-relaxed">{d.tagline}</p>
+              <div className="font-mono text-xs text-public-accent uppercase tracking-widest">Discipline 0{idx + 1}</div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-public-ink">{d.title}</h2>
+              <p className="text-sm text-public-muted leading-relaxed">{d.tagline}</p>
 
               <div className="pt-4">
                 <Link
                   href="/book"
-                  className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-[#5c7cff] text-[#090909] hover:bg-[#7590ff] transition-colors"
+                  className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover transition-colors"
                 >
                   Commission Discipline ↗
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-7 space-y-6 lg:border-l lg:border-[#222222] lg:pl-8">
+            <div className="lg:col-span-7 space-y-6 lg:border-l lg:border-public-line lg:pl-8">
               <div>
-                <h4 className="font-mono text-xs uppercase tracking-widest text-[#777777] mb-3">Included Scope & Standards</h4>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#cccccc]">
+                <h4 className="font-mono text-xs uppercase tracking-widest text-public-subtle mb-3">Included Scope & Standards</h4>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-public-muted">
                   {d.scope.map((s) => (
                     <li key={s} className="flex items-start gap-2">
-                      <span className="text-[#3e9b6c] font-bold">✓</span>
+                      <span className="text-public-success font-bold">✓</span>
                       <span>{s}</span>
                     </li>
                   ))}
@@ -125,13 +125,13 @@ export default function ServicesPage() {
               </div>
 
               <div>
-                <h4 className="font-mono text-xs uppercase tracking-widest text-[#777777] mb-3">Standard Package Tiers</h4>
+                <h4 className="font-mono text-xs uppercase tracking-widest text-public-subtle mb-3">Standard Package Tiers</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {d.packages.map((pkg) => (
-                    <div key={pkg.name} className="p-4 rounded-lg bg-[#171717] border border-[#262626]">
-                      <div className="font-bold text-sm text-[#f2f1ed]">{pkg.name}</div>
-                      <div className="font-mono text-xs text-[#5c7cff] font-semibold my-1">{pkg.price}</div>
-                      <div className="font-mono text-[10px] text-[#888888]">{pkg.days} • {pkg.team}</div>
+                    <div key={pkg.name} className="p-4 rounded-lg bg-public-raised border border-public-line">
+                      <div className="font-bold text-sm text-public-ink">{pkg.name}</div>
+                      <div className="font-mono text-xs text-public-accent font-semibold my-1">{pkg.price}</div>
+                      <div className="font-mono text-[10px] text-public-subtle">{pkg.days} • {pkg.team}</div>
                     </div>
                   ))}
                 </div>
@@ -142,15 +142,15 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 sm:px-12 bg-[#0c0c0c] border-t border-[#222222] text-center">
+      <section className="py-20 px-6 sm:px-12 bg-public-inset border-t border-public-line text-center">
         <div className="max-w-2xl mx-auto space-y-6">
-          <h2 className="text-3xl font-extrabold text-[#f2f1ed]">Require a Custom Commercial Proposal?</h2>
-          <p className="text-sm text-[#a3a3a3]">
+          <h2 className="text-3xl font-extrabold text-public-ink">Require a Custom Commercial Proposal?</h2>
+          <p className="text-sm text-public-muted">
             Submit your multi-day itinerary or bespoke agency script. We generate customized quotation lines with clear DP milestone schedules.
           </p>
           <Link
             href="/book"
-            className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-8 py-4 rounded bg-[#5c7cff] text-[#090909] hover:bg-[#7590ff] transition-all"
+            className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-8 py-4 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover transition-all"
           >
             Start Project Consultation ↗
           </Link>

@@ -46,45 +46,45 @@ export default function StudioPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090909] text-[#f2f1ed] selection:bg-[#5c7cff] selection:text-black font-sans">
+    <div className="min-h-screen bg-public-canvas text-public-ink selection:bg-public-accent selection:text-black font-sans">
       <PublicNav />
 
       {/* Hero */}
-      <section className="pt-36 pb-20 px-6 sm:px-12 border-b border-[#222222] max-w-7xl mx-auto">
+      <section className="pt-36 pb-20 px-6 sm:px-12 border-b border-public-line max-w-7xl mx-auto">
         <div className="max-w-3xl space-y-4">
-          <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest">Physical & Technical Infrastructure</div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#f2f1ed]">
+          <div className="font-mono text-xs text-public-accent uppercase tracking-widest">Physical & Technical Infrastructure</div>
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-public-ink">
             Studio Facilities & Optics Inventory
           </h1>
-          <p className="text-base sm:text-lg text-[#a3a3a3] leading-relaxed">
+          <p className="text-base sm:text-lg text-public-muted leading-relaxed">
             Our purpose-built production facility in Padang houses an acoustic sound stage, cyc-wall cyclorama, dedicated color grading theater, and calibrated camera prep bays.
           </p>
         </div>
       </section>
 
       {/* Facilities Grid */}
-      <section className="py-20 px-6 sm:px-12 max-w-7xl mx-auto border-b border-[#222222]">
+      <section className="py-20 px-6 sm:px-12 max-w-7xl mx-auto border-b border-public-line">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-xl bg-[#121212] border border-[#222222] space-y-3">
-            <div className="font-mono text-xs text-[#5c7cff] uppercase">Stage 01</div>
-            <h3 className="text-xl font-bold text-[#f2f1ed]">Infinity Cyclorama Stage</h3>
-            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+          <div className="p-8 rounded-xl bg-public-panel border border-public-line space-y-3">
+            <div className="font-mono text-xs text-public-accent uppercase">Stage 01</div>
+            <h3 className="text-xl font-bold text-public-ink">Infinity Cyclorama Stage</h3>
+            <p className="text-xs text-public-muted leading-relaxed">
               120 sqm soundproof studio with 5-meter ceiling grid, pre-rigged RGBWW spacelights, seamless white corner curve, and 3-phase 30kW generator power supply.
             </p>
           </div>
 
-          <div className="p-8 rounded-xl bg-[#121212] border border-[#222222] space-y-3">
-            <div className="font-mono text-xs text-[#5c7cff] uppercase">Suite 02</div>
-            <h3 className="text-xl font-bold text-[#f2f1ed]">DaVinci Master Grading Theater</h3>
-            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+          <div className="p-8 rounded-xl bg-public-panel border border-public-line space-y-3">
+            <div className="font-mono text-xs text-public-accent uppercase">Suite 02</div>
+            <h3 className="text-xl font-bold text-public-ink">DaVinci Master Grading Theater</h3>
+            <p className="text-xs text-public-muted leading-relaxed">
               Neutral grey 18% ambient light room with calibrated Flanders Scientific QD-OLED monitoring, DaVinci Advanced Panels, and client lounge seating.
             </p>
           </div>
 
-          <div className="p-8 rounded-xl bg-[#121212] border border-[#222222] space-y-3">
-            <div className="font-mono text-xs text-[#5c7cff] uppercase">Bay 03</div>
-            <h3 className="text-xl font-bold text-[#f2f1ed]">Camera Prep & Optical Check</h3>
-            <p className="text-xs text-[#a3a3a3] leading-relaxed">
+          <div className="p-8 rounded-xl bg-public-panel border border-public-line space-y-3">
+            <div className="font-mono text-xs text-public-accent uppercase">Bay 03</div>
+            <h3 className="text-xl font-bold text-public-ink">Camera Prep & Optical Check</h3>
+            <p className="text-xs text-public-muted leading-relaxed">
               Collimator optical bench, focus chart testing lanes, and clean-air sensor cleaning facilities to guarantee spotless multi-cam setups before every shoot day.
             </p>
           </div>
@@ -94,20 +94,20 @@ export default function StudioPage() {
       {/* Equipment List */}
       <section className="py-20 px-6 sm:px-12 max-w-7xl mx-auto">
         <div className="mb-12">
-          <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest mb-2">Internal Gear Arsenal</div>
-          <h2 className="text-3xl font-extrabold text-[#f2f1ed]">Production Equipment Roster</h2>
+          <div className="font-mono text-xs text-public-accent uppercase tracking-widest mb-2">Internal Gear Arsenal</div>
+          <h2 className="text-3xl font-extrabold text-public-ink">Production Equipment Roster</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {equipmentCategories.map((eq) => (
-            <div key={eq.category} className="p-8 rounded-xl bg-[#121212] border border-[#222222]">
-              <h3 className="font-mono text-xs uppercase tracking-widest text-[#5c7cff] mb-4 pb-3 border-b border-[#222222]">
+            <div key={eq.category} className="p-8 rounded-xl bg-public-panel border border-public-line">
+              <h3 className="font-mono text-xs uppercase tracking-widest text-public-accent mb-4 pb-3 border-b border-public-line">
                 {eq.category}
               </h3>
-              <ul className="space-y-3 font-mono text-xs text-[#cccccc]">
+              <ul className="space-y-3 font-mono text-xs text-public-muted">
                 {eq.items.map((item) => (
                   <li key={item} className="flex items-start gap-3">
-                    <span className="text-[#666666]">▪</span>
+                    <span className="text-public-subtle">▪</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -118,17 +118,17 @@ export default function StudioPage() {
       </section>
 
       {/* Studio Location Footer CTA */}
-      <section className="py-16 px-6 sm:px-12 bg-[#0c0c0c] border-t border-[#222222] text-center">
+      <section className="py-16 px-6 sm:px-12 bg-public-inset border-t border-public-line text-center">
         <div className="max-w-xl mx-auto space-y-4">
-          <div className="font-mono text-xs text-[#5c7cff] uppercase">Studio Rental & Bookings</div>
-          <h2 className="text-2xl font-bold text-[#f2f1ed]">Inquire for Studio Stage & Gear Hire</h2>
-          <p className="text-xs text-[#a3a3a3]">
+          <div className="font-mono text-xs text-public-accent uppercase">Studio Rental & Bookings</div>
+          <h2 className="text-2xl font-bold text-public-ink">Inquire for Studio Stage & Gear Hire</h2>
+          <p className="text-xs text-public-muted">
             Our soundstage and cinema packages are available for visiting international and national commercial directors.
           </p>
           <div className="pt-2">
             <Link
               href="/contact"
-              className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-[#f2f1ed] text-black hover:bg-white"
+              className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-public-ink text-black hover:bg-white"
             >
               Contact Studio Manager ↗
             </Link>

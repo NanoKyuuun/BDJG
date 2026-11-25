@@ -1,89 +1,71 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 
+const navLinks = [
+  { label: "Works", href: "/works" },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "Studio", href: "/studio" },
+  { label: "Contact", href: "/contact" },
+];
+
+const bookLinkClass = "inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-full bg-public-accent px-4 font-mono text-[11px] font-bold uppercase tracking-wide text-public-inset transition-colors hover:bg-public-ink";
+
 export function PublicNav() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const navLinks = [
-    { label: "Works", href: "/works" },
-    { label: "Services", href: "/services" },
-    { label: "About", href: "/about" },
-    { label: "Studio", href: "/studio" },
-    { label: "Contact", href: "/contact" },
-  ];
-
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#090909]/90 backdrop-blur-md border-b border-[#222222] py-3.5 px-6 sm:px-12"
-            : "bg-transparent py-6 px-6 sm:px-12"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-extrabold text-xl tracking-tight text-[#f2f1ed] group-hover:text-[#5c7cff] transition-colors">
-              BDJG<sup className="text-[10px] font-mono ml-0.5 text-[#5c7cff]">®</sup>
-            </span>
-            <span className="hidden sm:inline-block text-[11px] font-mono tracking-widest text-[#777777] uppercase ml-3 pl-3 border-l border-[#2a2a2a]">
-              Visual Studio / Padang
-            </span>
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-public-line bg-public-canvas">
+        <div className="flex h-[var(--public-nav-height)] items-center justify-between gap-3 px-[var(--public-gutter)] lg:grid lg:grid-cols-[1fr_auto_1fr]">
+          <Link
+            href="/"
+            aria-label="BDJG Studio — Home"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="w-fit text-xl font-extrabold tracking-tight text-public-ink transition-colors hover:text-public-accent"
+          >
+            BDJG<sup className="ml-0.5 font-mono text-[10px] text-public-accent">®</sup>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 font-mono text-[11px] tracking-widest uppercase">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`transition-colors relative py-1 ${
-                  pathname === link.href
-                    ? "text-[#5c7cff] font-semibold"
-                    : "text-[#a3a3a3] hover:text-[#f2f1ed]"
-                }`}
-              >
-                {link.label}
-                {pathname === link.href && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#5c7cff]" />
-                )}
-              </Link>
-            ))}
+          <nav aria-label="Public navigation" className="hidden items-center gap-1.5 font-mono text-xs lg:flex">
+            {navLinks.map(({ href, label }) => {
+              const active = pathname === href || pathname.startsWith(`${href}/`);
+
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-full border px-3 py-1.5 transition-colors hover:border-public-ink hover:text-public-ink ${
+                    active ? "border-public-accent text-public-accent" : "border-public-line text-public-ink"
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-[11px] font-mono tracking-widest uppercase text-[#a3a3a3] hover:text-[#f2f1ed] px-3 py-2 transition-colors"
-            >
+          <div className="flex items-center gap-2 sm:gap-3 lg:justify-self-end">
+            <Link href="/login" className="hidden whitespace-nowrap px-2 py-2 font-mono text-[11px] uppercase tracking-wide text-public-muted transition-colors hover:text-public-ink lg:inline-flex">
               Client Portal
             </Link>
-            <Link
-              href="/book"
-              className="inline-flex items-center justify-center font-mono text-[11px] font-bold tracking-widest uppercase px-4 py-2.5 rounded bg-[#5c7cff] text-[#090909] hover:bg-[#7590ff] active:scale-[0.98] transition-all"
-            >
+            <Link href="/book" aria-current={pathname === "/book" ? "page" : undefined} className={bookLinkClass}>
               Book Project ↗
             </Link>
             <button
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 text-[#a3a3a3] hover:text-[#f2f1ed] border border-[#2a2a2a] rounded"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-public-line text-public-muted hover:text-public-ink lg:hidden"
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls={menuOpen ? "public-mobile-menu" : undefined}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 {menuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -95,39 +77,34 @@ export function PublicNav() {
         </div>
       </header>
 
-      {/* Mobile Drawer */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#090909]/95 backdrop-blur-xl flex flex-col justify-center px-8 md:hidden">
-          <div className="space-y-6 font-bold text-3xl text-[#f2f1ed]">
-            {navLinks.map((link) => (
-              <div key={link.href}>
+        <nav id="public-mobile-menu" aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 top-[calc(var(--public-nav-height)+1px)] z-40 flex flex-col overflow-y-auto bg-public-canvas/95 px-[var(--public-gutter)] py-8 backdrop-blur-xl lg:hidden">
+          <div className="my-auto space-y-4 text-2xl font-bold text-public-ink">
+            {navLinks.map(({ href, label }) => {
+              const active = pathname === href || pathname.startsWith(`${href}/`);
+
+              return (
                 <Link
-                  href={link.href}
+                  key={href}
+                  href={href}
+                  aria-current={active ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className="block hover:text-[#5c7cff] transition-colors"
+                  className="block w-fit py-1 transition-colors hover:text-public-accent aria-[current=page]:text-public-accent"
                 >
-                  {link.label}
+                  {label}
                 </Link>
-              </div>
-            ))}
-            <div className="pt-6 border-t border-[#222222]">
-              <Link
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                className="block text-xl text-[#a3a3a3] hover:text-[#f2f1ed] mb-4"
-              >
+              );
+            })}
+            <div className="space-y-4 border-t border-public-line pt-5">
+              <Link href="/login" onClick={() => setMenuOpen(false)} className="block w-fit text-lg text-public-muted hover:text-public-ink">
                 Client Portal ↗
               </Link>
-              <Link
-                href="/book"
-                onClick={() => setMenuOpen(false)}
-                className="inline-block font-mono text-sm font-bold tracking-widest uppercase px-6 py-3 rounded bg-[#5c7cff] text-[#090909]"
-              >
+              <Link href="/book" aria-current={pathname === "/book" ? "page" : undefined} onClick={() => setMenuOpen(false)} className={bookLinkClass}>
                 Book a Project ↗
               </Link>
             </div>
           </div>
-        </div>
+        </nav>
       )}
     </>
   );

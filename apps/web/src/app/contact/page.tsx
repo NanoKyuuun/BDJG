@@ -6,17 +6,17 @@ import { PublicFooter } from "@/components/public-footer";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#090909] text-[#f2f1ed] selection:bg-[#5c7cff] selection:text-black font-sans">
+    <div className="min-h-screen bg-public-canvas text-public-ink selection:bg-public-accent selection:text-black font-sans">
       <PublicNav />
 
       {/* Header */}
-      <section className="pt-36 pb-16 px-6 sm:px-12 border-b border-[#222222] max-w-7xl mx-auto">
+      <section className="pt-36 pb-16 px-6 sm:px-12 border-b border-public-line max-w-7xl mx-auto">
         <div className="max-w-3xl space-y-4">
-          <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest">Connect with Us</div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#f2f1ed]">
+          <div className="font-mono text-xs text-public-accent uppercase tracking-widest">Connect with Us</div>
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-public-ink">
             Studio Desk & Coordinates
           </h1>
-          <p className="text-base sm:text-lg text-[#a3a3a3] leading-relaxed">
+          <p className="text-base sm:text-lg text-public-muted leading-relaxed">
             Have an upcoming project, press inquiry, or equipment collaboration? Reach our production team directly or visit our studio in Padang.
           </p>
         </div>
@@ -27,48 +27,48 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Info Side */}
           <div className="lg:col-span-5 space-y-8">
-            <div className="p-8 rounded-xl bg-[#121212] border border-[#222222] space-y-6">
+            <div className="p-8 rounded-xl bg-public-panel border border-public-line space-y-6">
               <div>
-                <div className="font-mono text-[10px] text-[#5c7cff] uppercase tracking-widest mb-1">Studio Location</div>
-                <h3 className="font-bold text-lg text-[#f2f1ed]">BDJG Creative Studio HQ</h3>
-                <p className="text-sm text-[#a3a3a3] mt-1 leading-relaxed">
+                <div className="font-mono text-[10px] text-public-accent uppercase tracking-widest mb-1">Studio Location</div>
+                <h3 className="font-bold text-lg text-public-ink">BDJG Creative Studio HQ</h3>
+                <p className="text-sm text-public-muted mt-1 leading-relaxed">
                   Jl. Khatib Sulaiman No. 48, Lolong Belanti, Kec. Padang Utara, Kota Padang, Sumatera Barat 25136, Indonesia
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#1f1f1f]">
-                <div className="font-mono text-[10px] text-[#5c7cff] uppercase tracking-widest mb-1">Direct Communication</div>
+              <div className="pt-4 border-t border-public-line">
+                <div className="font-mono text-[10px] text-public-accent uppercase tracking-widest mb-1">Direct Communication</div>
                 <div className="space-y-1 text-sm font-mono">
                   <div>
-                    <a href="mailto:hello@bdjg.studio" className="text-[#f2f1ed] hover:text-[#5c7cff] transition-colors">
+                    <a href="mailto:hello@bdjg.studio" className="text-public-ink hover:text-public-accent transition-colors">
                       hello@bdjg.studio
                     </a>
                   </div>
                   <div>
-                    <a href="tel:+6281234567890" className="text-[#f2f1ed] hover:text-[#5c7cff] transition-colors">
+                    <a href="tel:+6281234567890" className="text-public-ink hover:text-public-accent transition-colors">
                       +62 812-3456-7890 (WhatsApp & Phone)
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#1f1f1f]">
-                <div className="font-mono text-[10px] text-[#5c7cff] uppercase tracking-widest mb-1">Operational Hours</div>
-                <p className="text-xs text-[#a3a3a3] font-mono">
+              <div className="pt-4 border-t border-public-line">
+                <div className="font-mono text-[10px] text-public-accent uppercase tracking-widest mb-1">Operational Hours</div>
+                <p className="text-xs text-public-muted font-mono">
                   Monday – Saturday: 09:00 – 18:00 WIB <br />
                   Sunday: Reserved for Scheduled Shoots
                 </p>
               </div>
             </div>
 
-            <div className="p-8 rounded-xl bg-[#171717] border border-[#262626] space-y-4">
-              <h4 className="font-bold text-base text-[#f2f1ed]">Planning a Production?</h4>
-              <p className="text-xs text-[#a3a3a3] leading-relaxed">
+            <div className="p-8 rounded-xl bg-public-raised border border-public-line space-y-4">
+              <h4 className="font-bold text-base text-public-ink">Planning a Production?</h4>
+              <p className="text-xs text-public-muted leading-relaxed">
                 For detailed quotation requests, treatment pitches, and timeline reservations, use our streamlined 6-step project booking wizard.
               </p>
               <Link
                 href="/book"
-                className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-[#5c7cff] text-[#090909] hover:bg-[#7590ff] transition-colors"
+                className="inline-block font-mono text-xs font-bold uppercase tracking-widest px-6 py-3 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover transition-colors"
               >
                 Go to Project Booking Form ↗
               </Link>
@@ -76,9 +76,9 @@ export default function ContactPage() {
           </div>
 
           {/* Quick Contact Form */}
-          <div className="lg:col-span-7 p-8 sm:p-12 rounded-xl bg-[#121212] border border-[#222222]">
-            <h3 className="text-2xl font-bold text-[#f2f1ed] mb-2">Direct Message</h3>
-            <p className="text-xs text-[#888888] font-mono mb-8">Direct transmission to studio management inbox.</p>
+          <div className="lg:col-span-7 p-8 sm:p-12 rounded-xl bg-public-panel border border-public-line">
+            <h3 className="text-2xl font-bold text-public-ink mb-2">Direct Message</h3>
+            <p className="text-xs text-public-subtle font-mono mb-8">Direct transmission to studio management inbox.</p>
 
             <form
               onSubmit={(e) => {
@@ -89,48 +89,48 @@ export default function ContactPage() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-[#a3a3a3] uppercase mb-2">Your Name</label>
+                  <label className="block font-mono text-xs text-public-muted uppercase mb-2">Your Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Maya Indah"
-                    className="w-full bg-[#171717] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+                    className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-[#a3a3a3] uppercase mb-2">Email Address</label>
+                  <label className="block font-mono text-xs text-public-muted uppercase mb-2">Email Address</label>
                   <input
                     type="email"
                     required
                     placeholder="maya@example.com"
-                    className="w-full bg-[#171717] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+                    className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-mono text-xs text-[#a3a3a3] uppercase mb-2">Subject / Topic</label>
+                <label className="block font-mono text-xs text-public-muted uppercase mb-2">Subject / Topic</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Studio Visit / Equipment Inquiry / Commercial Pitch"
-                  className="w-full bg-[#171717] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+                  className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-xs text-[#a3a3a3] uppercase mb-2">Message</label>
+                <label className="block font-mono text-xs text-public-muted uppercase mb-2">Message</label>
                 <textarea
                   rows={5}
                   required
                   placeholder="Write your note here..."
-                  className="w-full bg-[#171717] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+                  className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full font-mono text-xs font-bold uppercase tracking-widest py-3.5 rounded bg-[#f2f1ed] text-black hover:bg-white transition-colors"
+                className="w-full font-mono text-xs font-bold uppercase tracking-widest py-3.5 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover transition-colors"
               >
                 Send Message ↗
               </button>

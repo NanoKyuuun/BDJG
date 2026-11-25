@@ -129,21 +129,21 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
 
   if (inquiryResult) {
     return (
-      <div className="bg-[#111111] border border-[#2a2a2a] p-8 sm:p-12 rounded-xl text-center max-w-2xl mx-auto shadow-2xl">
-        <div className="w-16 h-16 bg-[#5c7cff]/10 border border-[#5c7cff] rounded-full flex items-center justify-center mx-auto mb-6 text-[#5c7cff]">
+      <div className="bg-public-panel border border-public-line p-8 sm:p-12 rounded-xl text-center max-w-2xl mx-auto shadow-2xl">
+        <div className="w-16 h-16 bg-public-success/10 border border-public-success rounded-full flex items-center justify-center mx-auto mb-6 text-public-success">
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-widest mb-2">Inquiry Confirmed</div>
-        <h3 className="text-3xl font-extrabold text-[#f2f1ed] mb-4">Story Received</h3>
-        <p className="text-[#a3a3a3] text-sm leading-relaxed mb-6">
-          Thank you, <strong className="text-[#f2f1ed]">{formData.client_name}</strong>. Your project inquiry has been lodged in our studio management queue under reference:
+        <div className="font-mono text-xs text-public-success uppercase tracking-widest mb-2">Inquiry Confirmed</div>
+        <h3 className="text-3xl font-extrabold text-public-ink mb-4">Story Received</h3>
+        <p className="text-public-muted text-sm leading-relaxed mb-6">
+          Thank you, <strong className="text-public-ink">{formData.client_name}</strong>. Your project inquiry has been lodged in our studio management queue under reference:
         </p>
-        <div className="inline-block font-mono text-xl font-bold bg-[#171717] border border-[#333333] px-6 py-3 rounded-lg text-[#5c7cff] tracking-wider mb-8">
+        <div className="inline-block font-mono text-xl font-bold bg-public-raised border border-public-control px-6 py-3 rounded-lg text-public-accent tracking-wider mb-8">
           {inquiryResult.ref}
         </div>
-        <p className="text-xs text-[#777777] max-w-md mx-auto mb-8">
+        <p className="text-xs text-public-subtle max-w-md mx-auto mb-8">
           Our producer will review your requirements and follow up via WhatsApp ({formData.phone}) and email ({formData.email}) within 24 operational hours.
         </p>
         <button
@@ -152,7 +152,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
             setInquiryResult(null);
             setStep(1);
           }}
-          className="font-mono text-xs uppercase tracking-wider px-6 py-3 rounded bg-[#222222] hover:bg-[#333333] text-[#f2f1ed] transition-colors"
+          className="font-mono text-xs uppercase tracking-wider px-6 py-3 rounded bg-public-line hover:bg-public-control text-public-ink transition-colors"
         >
           Submit Another Request
         </button>
@@ -163,14 +163,14 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
   const stepTitles = ["Service Discipline", "Package & Scope", "Creative Brief", "Production Schedule", "Contact Info", "Review & Confirm"];
 
   return (
-    <div className="bg-[#111111] border border-[#222222] rounded-xl p-6 sm:p-10 shadow-2xl">
+    <div className="bg-public-panel border border-public-line rounded-xl p-6 sm:p-10 shadow-2xl">
       {/* Step Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-[#222222]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-public-line">
         <div>
-          <span className="font-mono text-xs uppercase tracking-widest text-[#5c7cff]">
+          <span className="font-mono text-xs uppercase tracking-widest text-public-accent">
             Step 0{step} / 06 — {stepTitles[step - 1]}
           </span>
-          <h3 className="text-xl font-bold text-[#f2f1ed] mt-1">
+          <h3 className="text-xl font-bold text-public-ink mt-1">
             {step === 1 && "Choose Your Production Discipline"}
             {step === 2 && "Select Deliverable Tier & Add-ons"}
             {step === 3 && "Tell Us About Your Vision & Scope"}
@@ -184,7 +184,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
             <div
               key={s}
               className={`h-1.5 w-6 rounded-full transition-all ${
-                s === step ? "bg-[#5c7cff]" : s < step ? "bg-[#3e9b6c]" : "bg-[#2a2a2a]"
+                s === step ? "bg-public-accent" : s < step ? "bg-public-success" : "bg-public-line"
               }`}
             />
           ))}
@@ -207,13 +207,13 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               onClick={() => setFormData({ ...formData, service: svc.id })}
               className={`p-6 rounded-lg text-left border transition-all ${
                 formData.service === svc.id
-                  ? "bg-[#171717] border-[#5c7cff] shadow-lg shadow-[#5c7cff]/5 ring-1 ring-[#5c7cff]"
-                  : "bg-[#141414] border-[#222222] hover:border-[#3a3a3a]"
+                  ? "bg-public-raised border-public-accent shadow-lg shadow-public-accent/5 ring-1 ring-public-accent"
+                  : "bg-public-inset border-public-line hover:border-public-control"
               }`}
             >
-              <div className="font-mono text-xs text-[#5c7cff] uppercase tracking-wider mb-1.5">0{services.indexOf(svc) + 1}</div>
-              <div className="font-bold text-lg text-[#f2f1ed] mb-2">{svc.name}</div>
-              <p className="text-xs text-[#a3a3a3] leading-relaxed">{svc.desc}</p>
+              <div className="font-mono text-xs text-public-accent uppercase tracking-wider mb-1.5">0{services.indexOf(svc) + 1}</div>
+              <div className="font-bold text-lg text-public-ink mb-2">{svc.name}</div>
+              <p className="text-xs text-public-muted leading-relaxed">{svc.desc}</p>
             </button>
           ))}
         </div>
@@ -230,19 +230,19 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
                 onClick={() => setFormData({ ...formData, package_name: pkg.name })}
                 className={`p-5 rounded-lg text-left border transition-all ${
                   formData.package_name === pkg.name
-                    ? "bg-[#171717] border-[#5c7cff] ring-1 ring-[#5c7cff]"
-                    : "bg-[#141414] border-[#222222] hover:border-[#3a3a3a]"
+                    ? "bg-public-raised border-public-accent ring-1 ring-public-accent"
+                    : "bg-public-inset border-public-line hover:border-public-control"
                 }`}
               >
-                <div className="font-bold text-sm text-[#f2f1ed] mb-1">{pkg.name}</div>
-                <div className="font-mono text-xs font-semibold text-[#5c7cff] mb-2">{pkg.price}</div>
-                <p className="text-[11px] text-[#888888] leading-relaxed">{pkg.desc}</p>
+                <div className="font-bold text-sm text-public-ink mb-1">{pkg.name}</div>
+                <div className="font-mono text-xs font-semibold text-public-accent mb-2">{pkg.price}</div>
+                <p className="text-[11px] text-public-subtle leading-relaxed">{pkg.desc}</p>
               </button>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-[#222222]">
-            <label className="block font-mono text-xs uppercase tracking-widest text-[#a3a3a3] mb-3">
+          <div className="pt-4 border-t border-public-line">
+            <label className="block font-mono text-xs uppercase tracking-widest text-public-muted mb-3">
               Optional Add-on Enhancements
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -255,16 +255,16 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
                     onClick={() => toggleAddon(add.name)}
                     className={`p-3.5 rounded border text-left flex items-center justify-between transition-colors ${
                       checked
-                        ? "bg-[#1c223a] border-[#5c7cff] text-[#f2f1ed]"
-                        : "bg-[#141414] border-[#262626] text-[#a3a3a3] hover:border-[#3a3a3a]"
+                        ? "bg-public-accent/10 border-public-accent text-public-ink"
+                        : "bg-public-inset border-public-line text-public-muted hover:border-public-control"
                     }`}
                   >
                     <div>
                       <div className="text-xs font-semibold">{add.name}</div>
-                      <div className="font-mono text-[10px] text-[#5c7cff]">{add.price}</div>
+                      <div className="font-mono text-[10px] text-public-accent">{add.price}</div>
                     </div>
                     <div className={`w-4 h-4 rounded border flex items-center justify-center font-mono text-[10px] ${
-                      checked ? "bg-[#5c7cff] border-[#5c7cff] text-black font-bold" : "border-[#444444]"
+                      checked ? "bg-public-accent border-public-accent text-public-inset font-bold" : "border-public-control"
                     }`}>
                       {checked && "✓"}
                     </div>
@@ -280,7 +280,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
       {step === 3 && (
         <div className="space-y-4">
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Project Brief & Vision *
             </label>
             <textarea
@@ -288,18 +288,18 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.project_brief}
               onChange={(e) => setFormData({ ...formData, project_brief: e.target.value })}
               placeholder="Describe the mood, target audience, reference aesthetic, deliverable formats (e.g. 9:16 Reels + 16:9 4K Master), or story notes..."
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-4 text-sm text-[#f2f1ed] placeholder-[#555555] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-4 text-sm text-public-ink placeholder-public-subtle focus:outline-none focus:border-public-accent"
             />
           </div>
 
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Estimated Budget Target (IDR)
             </label>
             <select
               value={formData.estimated_budget}
               onChange={(e) => setFormData({ ...formData, estimated_budget: e.target.value })}
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             >
               <option value="15000000">Rp 15.000.000 - Rp 25.000.000</option>
               <option value="25000000">Rp 25.000.000 - Rp 40.000.000</option>
@@ -314,29 +314,29 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
       {step === 4 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Target Shoot / Event Date *
             </label>
             <input
               type="date"
               value={formData.preferred_date}
               onChange={(e) => setFormData({ ...formData, preferred_date: e.target.value })}
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Alternative Backup Date
             </label>
             <input
               type="date"
               value={formData.alternative_date}
               onChange={(e) => setFormData({ ...formData, alternative_date: e.target.value })}
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Shooting Location / Venue
             </label>
             <input
@@ -344,7 +344,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="e.g. Padang Studio, Bukittinggi Highlands, Mentawai, Jakarta..."
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
         </div>
@@ -354,7 +354,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
       {step === 5 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Your Full Name *
             </label>
             <input
@@ -362,11 +362,11 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.client_name}
               onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
               placeholder="e.g. Raden Mas Danang"
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Company / Brand (Optional)
             </label>
             <input
@@ -374,11 +374,11 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               placeholder="e.g. PT Sinar Mahakarya"
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               Email Address *
             </label>
             <input
@@ -386,11 +386,11 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="danang@example.com"
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
           <div>
-            <label className="block font-mono text-xs uppercase tracking-wider text-[#a3a3a3] mb-2">
+            <label className="block font-mono text-xs uppercase tracking-wider text-public-muted mb-2">
               WhatsApp / Phone *
             </label>
             <input
@@ -398,7 +398,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               placeholder="081234567890"
-              className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg p-3 text-sm text-[#f2f1ed] focus:outline-none focus:border-[#5c7cff]"
+              className="w-full bg-public-inset border border-public-control rounded-lg p-3 text-sm text-public-ink focus:outline-none focus:border-public-accent"
             />
           </div>
         </div>
@@ -406,36 +406,36 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
 
       {/* Step 6: Review */}
       {step === 6 && (
-        <div className="bg-[#141414] border border-[#262626] rounded-lg p-6 space-y-4">
+        <div className="bg-public-inset border border-public-control rounded-lg p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
             <div>
-              <span className="text-[#666666] uppercase block">Discipline</span>
-              <span className="text-[#f2f1ed] font-semibold">{formData.service}</span>
+              <span className="text-public-subtle uppercase block">Discipline</span>
+              <span className="text-public-ink font-semibold">{formData.service}</span>
             </div>
             <div>
-              <span className="text-[#666666] uppercase block">Package</span>
-              <span className="text-[#f2f1ed] font-semibold">{formData.package_name}</span>
+              <span className="text-public-subtle uppercase block">Package</span>
+              <span className="text-public-ink font-semibold">{formData.package_name}</span>
             </div>
             <div>
-              <span className="text-[#666666] uppercase block">Add-ons</span>
-              <span className="text-[#f2f1ed]">{formData.addons.join(", ") || "None"}</span>
+              <span className="text-public-subtle uppercase block">Add-ons</span>
+              <span className="text-public-ink">{formData.addons.join(", ") || "None"}</span>
             </div>
             <div>
-              <span className="text-[#666666] uppercase block">Target Date</span>
-              <span className="text-[#5c7cff] font-semibold">{formData.preferred_date}</span>
+              <span className="text-public-subtle uppercase block">Target Date</span>
+              <span className="text-public-accent font-semibold">{formData.preferred_date}</span>
             </div>
             <div>
-              <span className="text-[#666666] uppercase block">Location</span>
-              <span className="text-[#f2f1ed]">{formData.location}</span>
+              <span className="text-public-subtle uppercase block">Location</span>
+              <span className="text-public-ink">{formData.location}</span>
             </div>
             <div>
-              <span className="text-[#666666] uppercase block">Contact</span>
-              <span className="text-[#f2f1ed]">{formData.client_name} ({formData.phone})</span>
+              <span className="text-public-subtle uppercase block">Contact</span>
+              <span className="text-public-ink">{formData.client_name} ({formData.phone})</span>
             </div>
           </div>
-          <div className="pt-4 border-t border-[#222222]">
-            <span className="font-mono text-[11px] text-[#666666] uppercase block mb-1">Brief Summary</span>
-            <p className="text-xs text-[#a3a3a3] italic bg-[#0f0f0f] p-3 rounded border border-[#222222]">
+          <div className="pt-4 border-t border-public-line">
+            <span className="font-mono text-[11px] text-public-subtle uppercase block mb-1">Brief Summary</span>
+            <p className="text-xs text-public-muted italic bg-public-inset p-3 rounded border border-public-line">
               &ldquo;{formData.project_brief}&rdquo;
             </p>
           </div>
@@ -443,12 +443,12 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
       )}
 
       {/* Actions */}
-      <div className="flex items-center justify-between gap-4 pt-8 mt-8 border-t border-[#222222]">
+      <div className="flex items-center justify-between gap-4 pt-8 mt-8 border-t border-public-line">
         <button
           type="button"
           disabled={step === 1 || submitting}
           onClick={() => setStep((s) => Math.max(s - 1, 1))}
-          className="font-mono text-xs uppercase tracking-wider px-5 py-2.5 rounded border border-[#333333] text-[#a3a3a3] hover:text-[#f2f1ed] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+          className="font-mono text-xs uppercase tracking-wider px-5 py-2.5 rounded border border-public-control text-public-muted hover:text-public-ink disabled:opacity-30 disabled:pointer-events-none transition-colors"
         >
           ← Back
         </button>
@@ -457,7 +457,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
           <button
             type="button"
             onClick={handleNext}
-            className="font-mono text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded bg-[#5c7cff] text-[#090909] hover:bg-[#7590ff] active:scale-[0.98] transition-all"
+            className="font-mono text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover active:scale-[0.98] transition-all"
           >
             Next Step →
           </button>
@@ -466,7 +466,7 @@ export function BookingWizard({ initialService = "COMMERCIAL_FILM", onSuccess }:
             type="button"
             disabled={submitting}
             onClick={handleSubmit}
-            className="font-mono text-xs font-bold uppercase tracking-wider px-8 py-3 rounded bg-[#3e9b6c] text-white hover:bg-[#4dbd83] active:scale-[0.98] disabled:opacity-50 transition-all flex items-center gap-2"
+            className="font-mono text-xs font-bold uppercase tracking-wider px-8 py-3 rounded bg-public-accent text-public-inset hover:bg-public-accent-hover active:scale-[0.98] disabled:opacity-50 transition-all flex items-center gap-2"
           >
             {submitting ? "Submitting to Queue..." : "Confirm & Send Inquiry ↗"}
           </button>
